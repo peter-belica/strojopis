@@ -17,6 +17,7 @@ assets/
     profiles.js
     keyboard-models.js
     keyboard-layouts.js
+    lessons.js
     typing-engine.js
     hand-guide.js
 docs/
@@ -40,6 +41,7 @@ assets/
     profiles.js
     keyboard-models.js
     keyboard-layouts.js
+    lessons.js
     typing-engine.js
     hand-guide.js
 docs/
@@ -154,11 +156,39 @@ Poznamka: ostatne jazykove layouty boli z MVP vyhodene. Ak sa vratia neskor, maj
 
 Zodpoveda za:
 
-- cvicenie pre US layout s home-row a hornym radom,
+- beh aktivnej lekcie,
 - spracovanie `keydown`,
 - posun aktualnej pozicie,
 - pocitanie chyb a presnosti,
-- reset cvicenia.
+- reset cvicenia,
+- prepnutie lekcie cez `setLesson`.
+
+### `lessons.js`
+
+Zodpoveda za:
+
+- definiciu postupnosti lekcii,
+- mapovanie textu lekcie na `{ char, code }` targety,
+- oddelenie obsahu lekcie od typing engine.
+
+Aktualna postupnost lekcii:
+
+1. Home row: `A S D F J K L ;`
+2. Upper row: pohyb z home klavesov na `Q W E R U I O P`
+3. Lower row: spodny riadok a navrat na home row
+4. All letters: vsetky pismena v kratkych skupinach
+5. Simple words: kratke slova
+6. Word flow: dlhsie jednoduche slova
+7. Short phrases: jednoduche frazy
+8. Numbers and signs: cisla a zakladne znamienka
+9. Sentences: jednoduche vety so znamienkami
+
+Princip pre dalsie lekcie:
+
+- nova lekcia nikdy nema zaviest viac ako malu skupinu novych klaves,
+- slova maju pouzivat hlavne uz precvicene klavesy,
+- cisla a znamienka pridu az po vsetkych pismenach,
+- vety su az posledna faza, ked uz pouzivatel pozna medzery, ciarky, bodky, cisla a zakladne znamienka.
 
 ### `hand-guide.js`
 

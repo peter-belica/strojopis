@@ -241,3 +241,55 @@ Rozpracovane:
 Najblizsi dalsi krok:
 
 - Dokoncit Loop 6 vizualnym doladenim: presnejsi tvar dlani, jemnejsi press efekt a kontrola mobile/desktop layoutu.
+
+## Checkpoint 2026-06-28 22:15
+
+Funguje:
+
+- Loop 7 bol zacaty.
+- Pridany je modul `assets/js/lessons.js`.
+- Typing engine uz nepouziva jeden pevny zoznam znakov, ale aktivnu lekciu.
+- UI ma select `Lekcia`.
+- Lekcie su rozdelene do postupnosti:
+  - home row,
+  - upper row,
+  - lower row,
+  - all letters,
+  - simple words,
+  - word flow,
+  - short phrases,
+  - numbers and signs,
+  - sentences.
+- Riadok znakov na pisanie je uz jeden horizontalny riadok s posuvom, nie zalamovana mriezka.
+- Aktualny token sa po renderi posunie do viditelnej oblasti.
+- Medzera sa zobrazuje ako sirsi token `space`.
+
+Princip lekcii:
+
+- Najprv sa postupne pridavaju fyzicke riadky klavesnice.
+- Po prejdeni pismen sa pridaju jednoduche slova.
+- Slova prechadzaju do fraz.
+- Cisla a znamienka su samostatna faza po pismenach.
+- Posledna faza su jednoduche zmysluplne vety s cislami a interpunkciou.
+
+Rozpracovane:
+
+- Posledna aktivna lekcia sa este neuklada do profilu.
+- Progres lekcii este nie je zamknuty/odomykany podla presnosti.
+- Lekcie zatial nemaju automaticke odporucanie dalsieho kroku.
+
+Overene:
+
+- `node --check` presiel pre `app.js`, `typing-engine.js`, `lessons.js` a `hand-guide.js`.
+- HTTP server vracia `index.html` aj `assets/js/lessons.js`.
+- In-app browser po reloade potvrdil:
+  - existuje 9 lekcii,
+  - typing strip ma `display: flex`,
+  - tokeny v home-row lekcii maju jeden riadok,
+  - sentence lekcia ma medzery, cislo, ciarku a bodku,
+  - sentence lekcia ma horizontalny overflow,
+  - sentence lekcia ma stale iba jeden vizualny riadok.
+
+Najblizsi dalsi krok:
+
+- Ukladat poslednu aktivnu lekciu k profilu a pridat minimalne pravidlo odporucania dalsiej lekcie po dokonceni aktualnej s dobrou presnostou.

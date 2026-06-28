@@ -152,21 +152,35 @@ body {
 }
 
 .typing-strip {
-  display: grid;
-  grid-template-columns: repeat(16, minmax(28px, 1fr));
+  display: flex;
   gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 0 0 10px;
   margin-bottom: 18px;
+  white-space: nowrap;
+  scrollbar-width: thin;
 }
 
 .typing-token {
-  display: grid;
+  display: inline-grid;
+  min-width: 44px;
   min-height: 44px;
+  flex: 0 0 44px;
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfcfe;
   font-size: 20px;
   font-weight: 700;
+}
+
+.typing-token.is-space-token {
+  min-width: 64px;
+  flex-basis: 64px;
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
 }
 
 .typing-token.is-current {

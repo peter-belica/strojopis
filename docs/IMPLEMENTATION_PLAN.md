@@ -271,12 +271,21 @@ DoD:
 
 Vystup:
 
-- viac typov lekcii,
+- viac typov lekcii:
+  - riadky klavesnice,
+  - kombinacie vsetkych pismen,
+  - jednoduche slova,
+  - dlhsie slova,
+  - frazy,
+  - cisla a znamienka,
+  - zmysluplne vety,
 - jednoduche ukladanie poslednej lekcie a zakladneho progresu,
 - volitelne zakladne grafy.
 
 DoD:
 
+- typing strip ostava iba v jednom horizontalnom riadku,
+- aktualny znak sa automaticky udrziava vo viditelnom strede riadku,
 - cookies nie su pretazene velkymi statistikami,
 - vacsie statistiky su oddelene ako buduci kandidat na localStorage.
 

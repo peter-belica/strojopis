@@ -4,6 +4,7 @@ import { KEYBOARD_MODELS, getKeyboardModel } from "./keyboard-models.js";
 import { getKeyboardLayout, US_LAYOUT_ID } from "./keyboard-layouts.js";
 import { createTypingEngine } from "./typing-engine.js";
 import { getHomeFingerForCode, updateHandGuide } from "./hand-guide.js";
+import { LESSONS } from "./lessons.js";
 
 const storage = createStorage();
 const profiles = createProfileManager(storage);
@@ -16,6 +17,8 @@ const dom = {
   activeProfileChip: document.querySelector("#activeProfileChip span"),
   storageStatus: document.querySelector("#storageStatus"),
   keyboardModel: document.querySelector("#keyboardModel"),
+  lessonSelect: document.querySelector("#lessonSelect"),
+  lessonMeta: document.querySelector("#lessonMeta"),
   typingStrip: document.querySelector("#typingStrip"),
   feedbackLine: document.querySelector("#feedbackLine"),
   keyboardWorkbench: document.querySelector(".keyboard-workbench"),
@@ -92,9 +95,18 @@ function renderTypingStrip() {
       if (state.typing.results[index] === "error") {
         classes.push("is-error");
       }
-      return `<span class="${classes.join(" ")}">${escapeHtml(target.char)}</span>`;
+      const label = target.char === " " ? "space" : target.char;
+      if (target.char === " ") {
+        classes.push("is-space-token");
+      }
+      return `<span class="${classes.join(" ")}">${escapeHtml(label)}</span>`;
     })
     .join("");
+
+  const currentToken = dom.typingStrip.querySelector(".typing-token.is-current");
+  if (currentToken) {
+    currentToken.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }
 }
 
 function keyClasses(code) {
@@ -187,9 +199,17 @@ function renderFeedback() {
   dom.feedbackLine.className = "feedback-line is-error";
 }
 
+function renderLessonMeta() {
+  dom.lessonMeta.textContent = `${state.typing.lesson.phase}: ${state.typing.lesson.description}`;
+}
+
 function renderSettingsOptions() {
   dom.keyboardModel.innerHTML = Object.values(KEYBOARD_MODELS)
     .map((model) => `<option value="${escapeHtml(model.id)}">${escapeHtml(model.name)}</option>`)
+    .join("");
+
+  dom.lessonSelect.innerHTML = LESSONS
+    .map((lesson) => `<option value="${escapeHtml(lesson.id)}">${escapeHtml(lesson.name)}</option>`)
     .join("");
 
   setControlsFromProfile(state.activeProfile);
@@ -199,6 +219,7 @@ function render() {
   renderStorageStatus();
   renderProfileSelect();
   renderStats();
+  renderLessonMeta();
   renderFeedback();
   renderTypingStrip();
   renderKeyboard();
@@ -244,6 +265,11 @@ function bindEvents() {
   });
 
   dom.keyboardModel.addEventListener("change", updateCurrentProfileSettings);
+
+  dom.lessonSelect.addEventListener("change", () => {
+    state.typing = typing.setLesson(dom.lessonSelect.value);
+    render();
+  });
 
   dom.resetButton.addEventListener("click", () => {
     state.typing = typing.reset();

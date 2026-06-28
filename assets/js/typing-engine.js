@@ -1,46 +1,24 @@
-const FINGER_REACH_EXERCISE = [
-  { char: "q", code: "KeyQ" },
-  { char: "a", code: "KeyA" },
-  { char: "w", code: "KeyW" },
-  { char: "s", code: "KeyS" },
-  { char: "e", code: "KeyE" },
-  { char: "d", code: "KeyD" },
-  { char: "r", code: "KeyR" },
-  { char: "f", code: "KeyF" },
-  { char: "u", code: "KeyU" },
-  { char: "j", code: "KeyJ" },
-  { char: "i", code: "KeyI" },
-  { char: "k", code: "KeyK" },
-  { char: "o", code: "KeyO" },
-  { char: "l", code: "KeyL" },
-  { char: "p", code: "KeyP" },
-  { char: ";", code: "Semicolon" },
-  { char: "a", code: "KeyA" },
-  { char: "f", code: "KeyF" },
-  { char: "j", code: "KeyJ" },
-  { char: "l", code: "KeyL" },
-  { char: "s", code: "KeyS" },
-  { char: "d", code: "KeyD" },
-  { char: "k", code: "KeyK" },
-  { char: ";", code: "Semicolon" }
-];
+import { getLesson } from "./lessons.js";
 
-function emptyResults() {
-  return FINGER_REACH_EXERCISE.map(() => "pending");
+function emptyResults(targets) {
+  return targets.map(() => "pending");
 }
 
 export function createTypingEngine() {
   const state = {
+    lesson: getLesson("home-row"),
     currentIndex: 0,
     attempts: 0,
     errors: 0,
     completed: 0,
     lastError: null,
-    results: emptyResults()
+    results: []
   };
 
+  state.results = emptyResults(state.lesson.targets);
+
   function currentTarget() {
-    return FINGER_REACH_EXERCISE[state.currentIndex] || FINGER_REACH_EXERCISE[FINGER_REACH_EXERCISE.length - 1];
+    return state.lesson.targets[state.currentIndex] || state.lesson.targets[state.lesson.targets.length - 1];
   }
 
   function accuracy() {
@@ -53,7 +31,8 @@ export function createTypingEngine() {
 
   function snapshot() {
     return {
-      exercise: FINGER_REACH_EXERCISE,
+      lesson: state.lesson,
+      exercise: state.lesson.targets,
       currentIndex: state.currentIndex,
       currentTarget: currentTarget(),
       attempts: state.attempts,
@@ -73,16 +52,17 @@ export function createTypingEngine() {
     const target = currentTarget();
     const typed = event.key.toLowerCase();
     const expected = target.char.toLowerCase();
+    const codeMatches = target.code ? event.code === target.code : true;
     state.attempts += 1;
 
-    if (typed === expected && event.code === target.code) {
+    if (typed === expected && codeMatches) {
       state.results[state.currentIndex] = "done";
-      state.currentIndex = (state.currentIndex + 1) % FINGER_REACH_EXERCISE.length;
+      state.currentIndex = (state.currentIndex + 1) % state.lesson.targets.length;
       state.completed += 1;
       state.lastError = null;
 
       if (state.currentIndex === 0) {
-        state.results = emptyResults();
+        state.results = emptyResults(state.lesson.targets);
       }
 
       return snapshot();
@@ -104,13 +84,25 @@ export function createTypingEngine() {
     state.errors = 0;
     state.completed = 0;
     state.lastError = null;
-    state.results = emptyResults();
+    state.results = emptyResults(state.lesson.targets);
+    return snapshot();
+  }
+
+  function setLesson(id) {
+    state.lesson = getLesson(id);
+    state.currentIndex = 0;
+    state.attempts = 0;
+    state.errors = 0;
+    state.completed = 0;
+    state.lastError = null;
+    state.results = emptyResults(state.lesson.targets);
     return snapshot();
   }
 
   return {
     handleKeydown,
     reset,
+    setLesson,
     snapshot
   };
 }
