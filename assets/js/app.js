@@ -3,6 +3,7 @@ import { createProfileManager } from "./profiles.js";
 import { KEYBOARD_MODELS, getKeyboardModel } from "./keyboard-models.js";
 import { getKeyboardLayout, US_LAYOUT_ID } from "./keyboard-layouts.js";
 import { createTypingEngine } from "./typing-engine.js";
+import { getHomeFingerForCode, updateHandGuide } from "./hand-guide.js";
 
 const storage = createStorage();
 const profiles = createProfileManager(storage);
@@ -17,6 +18,7 @@ const dom = {
   keyboardModel: document.querySelector("#keyboardModel"),
   typingStrip: document.querySelector("#typingStrip"),
   feedbackLine: document.querySelector("#feedbackLine"),
+  keyboardWorkbench: document.querySelector(".keyboard-workbench"),
   keyboardPreview: document.querySelector("#keyboardPreview"),
   statProfile: document.querySelector("#statProfile"),
   statKeyboard: document.querySelector("#statKeyboard"),
@@ -118,6 +120,11 @@ function keyClasses(code) {
     classes.push("is-home");
   }
 
+  const homeFinger = getHomeFingerForCode(code);
+  if (homeFinger) {
+    classes.push(`home-${homeFinger}`);
+  }
+
   if (code === state.typing.currentTarget.code) {
     classes.push("is-active");
   }
@@ -141,6 +148,8 @@ function renderKeyboard() {
       return `<div class="keyboard-row">${keys}</div>`;
     })
     .join("");
+
+  updateHandGuide(dom.keyboardWorkbench, state.typing.currentTarget.code);
 }
 
 function renderStorageStatus() {

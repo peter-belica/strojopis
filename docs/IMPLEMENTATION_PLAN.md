@@ -243,7 +243,8 @@ Vystup:
 
 - mapovanie klavesov na prsty,
 - home-row defaultna poloha,
-- zvyraznenie odporucaneho prsta a cieloveho klavesu.
+- zvyraznenie odporucaneho prsta a cieloveho klavesu,
+- kazdy prst ma byt viditelny na svojom vychodzom home pismene.
 
 DoD:
 
@@ -255,12 +256,14 @@ DoD:
 Vystup:
 
 - jednoduchy CSS/SVG obrys ruk,
-- vizualna linka alebo animacia z defaultnej pozicie prsta na cielovy klaves,
+- animacia z defaultnej pozicie prsta na cielovy klaves,
+- kratke naznacenie stlacenia klavesu,
 - jasne odlisena lava a prava ruka.
 
 DoD:
 
 - pohyb vychadza vzdy z defaultnej polohy,
+- neaktivne prsty ostavaju na svojich home klavesoch,
 - UI ostava citatelne,
 - animacia nerusi samotne pisanie.
 

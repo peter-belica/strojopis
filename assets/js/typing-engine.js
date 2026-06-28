@@ -1,11 +1,19 @@
-const HOME_ROW_EXERCISE = [
+const FINGER_REACH_EXERCISE = [
+  { char: "q", code: "KeyQ" },
   { char: "a", code: "KeyA" },
+  { char: "w", code: "KeyW" },
   { char: "s", code: "KeyS" },
+  { char: "e", code: "KeyE" },
   { char: "d", code: "KeyD" },
+  { char: "r", code: "KeyR" },
   { char: "f", code: "KeyF" },
+  { char: "u", code: "KeyU" },
   { char: "j", code: "KeyJ" },
+  { char: "i", code: "KeyI" },
   { char: "k", code: "KeyK" },
+  { char: "o", code: "KeyO" },
   { char: "l", code: "KeyL" },
+  { char: "p", code: "KeyP" },
   { char: ";", code: "Semicolon" },
   { char: "a", code: "KeyA" },
   { char: "f", code: "KeyF" },
@@ -18,7 +26,7 @@ const HOME_ROW_EXERCISE = [
 ];
 
 function emptyResults() {
-  return HOME_ROW_EXERCISE.map(() => "pending");
+  return FINGER_REACH_EXERCISE.map(() => "pending");
 }
 
 export function createTypingEngine() {
@@ -32,7 +40,7 @@ export function createTypingEngine() {
   };
 
   function currentTarget() {
-    return HOME_ROW_EXERCISE[state.currentIndex] || HOME_ROW_EXERCISE[HOME_ROW_EXERCISE.length - 1];
+    return FINGER_REACH_EXERCISE[state.currentIndex] || FINGER_REACH_EXERCISE[FINGER_REACH_EXERCISE.length - 1];
   }
 
   function accuracy() {
@@ -45,7 +53,7 @@ export function createTypingEngine() {
 
   function snapshot() {
     return {
-      exercise: HOME_ROW_EXERCISE,
+      exercise: FINGER_REACH_EXERCISE,
       currentIndex: state.currentIndex,
       currentTarget: currentTarget(),
       attempts: state.attempts,
@@ -69,7 +77,7 @@ export function createTypingEngine() {
 
     if (typed === expected && event.code === target.code) {
       state.results[state.currentIndex] = "done";
-      state.currentIndex = (state.currentIndex + 1) % HOME_ROW_EXERCISE.length;
+      state.currentIndex = (state.currentIndex + 1) % FINGER_REACH_EXERCISE.length;
       state.completed += 1;
       state.lastError = null;
 

@@ -18,13 +18,14 @@ assets/
     keyboard-models.js
     keyboard-layouts.js
     typing-engine.js
+    hand-guide.js
 docs/
   IMPLEMENTATION_PLAN.md
   PROGRESS.md
   ARCHITECTURE.md
 ```
 
-Aktualna verzia uz ma oddelenu profilovu, storage, keyboard konfiguraciu a typing engine. Hand-guide je zatial CSS/HTML overlay bez samostatneho JS modulu.
+Aktualna verzia uz ma oddelenu profilovu, storage, keyboard konfiguraciu, typing engine a hand-guide modul.
 
 ## Cielova struktura
 
@@ -58,7 +59,8 @@ Aktualne je hlavny orchestrator UI:
 - prepojenie profilov, storage, klavesnice, US layoutu a typing engine,
 - render profiloveho selectu,
 - render typing stripu so stavmi,
-- render vizualnej klavesnice.
+- render vizualnej klavesnice,
+- vyvolanie hand-guide aktualizacie po kazdom renderi klavesnice.
 
 Typing stav je uz presunuty do `typing-engine.js`.
 
@@ -152,7 +154,7 @@ Poznamka: ostatne jazykove layouty boli z MVP vyhodene. Ak sa vratia neskor, maj
 
 Zodpoveda za:
 
-- home-row cvicenie pre US layout,
+- cvicenie pre US layout s home-row a hornym radom,
 - spracovanie `keydown`,
 - posun aktualnej pozicie,
 - pocitanie chyb a presnosti,
@@ -160,14 +162,33 @@ Zodpoveda za:
 
 ### `hand-guide.js`
 
-Zatial neexistuje ako samostatny subor. Obrys ruk je zatial staticky CSS placeholder.
-
 Zodpoveda za:
 
 - mapovanie klavesu na prst,
 - urcenie home-row pozicie prsta,
 - zvyraznenie cieloveho klavesu,
-- instrukciu pre vizualizaciu pohybu ruky.
+- vypocet stredov home a cielovej klavesy z DOM,
+- nastavenie CSS premennych pre animaciu prsta.
+
+Aktualny princip:
+
+- kazdy prst ma vlastny element s `data-finger`,
+- vsetky prsty su priehladne a sedia na svojej home klavese,
+- aktivny prst dostane `--finger-x`, `--finger-y`, `--target-x`, `--target-y`,
+- CSS animacia ho posunie z home klavesy na cielovu klavesu, naznaci stlacenie a vrati ho naspat.
+
+Home pozicie:
+
+```text
+left-pinky  -> A
+left-ring   -> S
+left-middle -> D
+left-index  -> F
+right-index -> J
+right-middle-> K
+right-ring  -> L
+right-pinky -> ;
+```
 
 ## Dolezite datove oddelenie
 

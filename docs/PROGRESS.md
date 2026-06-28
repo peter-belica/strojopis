@@ -200,3 +200,44 @@ Najblizsi dalsi krok:
 Rizika:
 
 - Aktuala kontrola znaku je prisna: znak aj fyzicky `code` musia sediet. To je dobre pre US layout, ale bude potrebne prehodnotit, ak sa v buducnosti vratia ine layouty.
+
+## Checkpoint 2026-06-28 22:45
+
+Funguje:
+
+- Loop 5 a zaciatok Loop 6 boli implementovane pre hand-guide.
+- Pridany je modul `assets/js/hand-guide.js`.
+- Kazdy prst ma vlastny transparentny element s `data-finger`.
+- Prsty sedia na spravnych home klavesoch:
+  - lavy malicek na `A`,
+  - lavy prstennik na `S`,
+  - lavy prostrednik na `D`,
+  - lavy ukazovak na `F`,
+  - pravy ukazovak na `J`,
+  - pravy prostrednik na `K`,
+  - pravy prstennik na `L`,
+  - pravy malicek na `;`.
+- Aktivny prst sa animuje z home pozicie na cielovy klaves a naznaci stlacenie.
+- Cvicenie bolo rozsirene o horny riadok, aby bol pohyb prstov viditelny:
+  - `Q/W/E/R`
+  - `U/I/O/P`
+
+Overene:
+
+- `node --check` presiel pre `app.js`, `typing-engine.js` a `hand-guide.js`.
+- In-app browser po reloade potvrdil:
+  - prvy aktivny klaves je `KeyQ`,
+  - aktivny prst je `left-pinky`,
+  - home pozicia laveho malicka je stred `KeyA`,
+  - cielova pozicia laveho malicka je stred `KeyQ`,
+  - po stlaceni `q` sa cvicenie posunie na `KeyA`,
+  - po stlaceni `a` sa cvicenie posunie na `KeyW` a aktivny je `left-ring`.
+
+Rozpracovane:
+
+- Obrys dlani je zatial jednoduchy CSS tvar.
+- Animacia je nekonecna pulzujuca slucka pre aktualny ciel; neskor moze byt naviazana na konkretny keydown event.
+
+Najblizsi dalsi krok:
+
+- Dokoncit Loop 6 vizualnym doladenim: presnejsi tvar dlani, jemnejsi press efekt a kontrola mobile/desktop layoutu.
