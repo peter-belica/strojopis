@@ -2,7 +2,7 @@
 
 ## Ciel
 
-Vytvorit staticku aplikaciu na ucenie strojopisu s viacerymi profilmi, fyzickymi modelmi klavesnic, jazykovymi rozlozeniami a vizualnym navodom prstov vychadzajucim z defaultnej polohy ruk.
+Vytvorit staticku aplikaciu na ucenie strojopisu s viacerymi profilmi, fyzickymi modelmi klavesnic, jednym pevnym US English rozlozenim a vizualnym navodom prstov vychadzajucim z defaultnej polohy ruk.
 
 Projekt musi byt priebezne udrziavany v spustitelnom stave. Pri vycerpani tokenov alebo preruseni prace musi byt jasne, co funguje, kde sme skoncili a aky je dalsi krok.
 
@@ -127,7 +127,7 @@ Tento agent nema robit velke refaktory. Ma hladat konkretne problemy: prekryvy t
 Pouzitie po zavedeni:
 
 - fyzicke modely klavesnic,
-- jazykove layouty,
+- US keyboard layout,
 - mapovanie klavesov na prsty,
 - oddelenie `code`, labelu a generovaneho znaku.
 
@@ -194,38 +194,33 @@ DoD:
 - aplikacia vie existovat aj bez cookies v session pamati,
 - dokumentacia popisuje tvar ulozenych dat.
 
-### Loop 2: Nastavenia klavesnice a jazyka
+### Loop 2: Nastavenia klavesnice a pevny US layout
 
 Vystup:
 
 - vyber fyzickej klavesnice:
   - MacBook Air
   - Dell XPS 2018
-- vyber jazykovej sady:
-  - cestina
-  - slovencina
-  - US English
-  - British English
-  - spanielcina
+- pevne rozlozenie US English bez pouzivatelskeho vyberu
 
 DoD:
 
 - vybrane nastavenia sa ulozia k profilu,
-- existuje jasne oddelenie fyzickeho modelu a jazykoveho layoutu.
+- existuje jasne oddelenie fyzickeho modelu a US labelov.
 
 ### Loop 3: Renderovanie klavesnice
 
 Vystup:
 
 - vizualna klavesnica z datoveho modelu,
-- labely podla jazykoveho layoutu,
+- labely podla pevneho US layoutu,
 - aktivny klaves sa vie zvyraznit.
 
 DoD:
 
 - oba fyzicke modely sa daju prepnut,
 - layout nekolabuje na desktop sirke,
-- rozdiel medzi modelom klavesnice a jazykovym layoutom je dokumentovany.
+- rozdiel medzi fyzickym modelom klavesnice a US labelmi je dokumentovany.
 
 ### Loop 4: Typing engine
 
@@ -305,5 +300,4 @@ DoD:
 - diktaty/slova/vety,
 - zvukovy feedback,
 - viac fyzickych klavesnic,
-- viac layoutov,
 - editor vlastnych lekcii.

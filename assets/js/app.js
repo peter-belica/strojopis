@@ -1,12 +1,12 @@
 import { createStorage } from "./storage.js";
 import { createProfileManager } from "./profiles.js";
 import { KEYBOARD_MODELS, getKeyboardModel } from "./keyboard-models.js";
-import { KEYBOARD_LAYOUTS, getKeyboardLayout } from "./keyboard-layouts.js";
-
-const sampleText = ["a", "s", "d", "f", "j", "k", "l", ";", "a", "f", "j", "l", "s", "d", "k", ";"];
+import { getKeyboardLayout, US_LAYOUT_ID } from "./keyboard-layouts.js";
+import { createTypingEngine } from "./typing-engine.js";
 
 const storage = createStorage();
 const profiles = createProfileManager(storage);
+const typing = createTypingEngine();
 
 const dom = {
   profileForm: document.querySelector("#profileForm"),
@@ -15,24 +15,26 @@ const dom = {
   activeProfileChip: document.querySelector("#activeProfileChip span"),
   storageStatus: document.querySelector("#storageStatus"),
   keyboardModel: document.querySelector("#keyboardModel"),
-  languageLayout: document.querySelector("#languageLayout"),
   typingStrip: document.querySelector("#typingStrip"),
+  feedbackLine: document.querySelector("#feedbackLine"),
   keyboardPreview: document.querySelector("#keyboardPreview"),
   statProfile: document.querySelector("#statProfile"),
   statKeyboard: document.querySelector("#statKeyboard"),
   statLanguage: document.querySelector("#statLanguage"),
+  statAccuracy: document.querySelector("#statAccuracy"),
+  statErrors: document.querySelector("#statErrors"),
   resetButton: document.querySelector("#resetButton")
 };
 
 const state = {
   activeProfile: profiles.getActiveProfile(),
-  currentIndex: 0
+  typing: typing.snapshot()
 };
 
 function activeSettings() {
   return {
     keyboardModel: dom.keyboardModel.value,
-    languageLayout: dom.languageLayout.value
+    languageLayout: US_LAYOUT_ID
   };
 }
 
@@ -50,7 +52,6 @@ function setControlsFromProfile(profile) {
   }
 
   dom.keyboardModel.value = profile.keyboardModel || "macbook-air";
-  dom.languageLayout.value = profile.languageLayout || "sk";
 }
 
 function syncActiveProfile() {
@@ -77,26 +78,47 @@ function renderProfileSelect() {
 }
 
 function renderTypingStrip() {
-  dom.typingStrip.innerHTML = sampleText
-    .map((char, index) => {
-      const className = index === state.currentIndex ? "typing-token is-current" : "typing-token";
-      return `<span class="${className}">${escapeHtml(char)}</span>`;
+  dom.typingStrip.innerHTML = state.typing.exercise
+    .map((target, index) => {
+      const classes = ["typing-token"];
+      if (index === state.typing.currentIndex) {
+        classes.push("is-current");
+      }
+      if (state.typing.results[index] === "done") {
+        classes.push("is-done");
+      }
+      if (state.typing.results[index] === "error") {
+        classes.push("is-error");
+      }
+      return `<span class="${classes.join(" ")}">${escapeHtml(target.char)}</span>`;
     })
     .join("");
 }
 
-function keyClasses(code, label) {
+function keyClasses(code) {
   const classes = ["key"];
 
   if (["Tab", "CapsLock", "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight", "AltLeft", "AltRight", "MetaLeft", "MetaRight", "Backspace", "Enter"].includes(code)) {
     classes.push("is-wide");
   }
 
+  if (code === "Backspace") {
+    classes.push("is-backspace");
+  }
+
+  if (code === "Enter") {
+    classes.push("is-enter");
+  }
+
   if (code === "Space") {
     classes.push("is-space");
   }
 
-  if (label.toLowerCase() === sampleText[state.currentIndex]) {
+  if (["KeyA", "KeyS", "KeyD", "KeyF", "KeyJ", "KeyK", "KeyL", "Semicolon"].includes(code)) {
+    classes.push("is-home");
+  }
+
+  if (code === state.typing.currentTarget.code) {
     classes.push("is-active");
   }
 
@@ -105,14 +127,14 @@ function keyClasses(code, label) {
 
 function renderKeyboard() {
   const model = getKeyboardModel(dom.keyboardModel.value);
-  const layout = getKeyboardLayout(dom.languageLayout.value);
+  const layout = getKeyboardLayout();
 
   dom.keyboardPreview.innerHTML = model.rows
     .map((row) => {
       const keys = row
         .map((code) => {
           const label = layout.labels[code] || code;
-          return `<span class="${keyClasses(code, label)}">${escapeHtml(label)}</span>`;
+          return `<span class="${keyClasses(code)}" data-code="${escapeHtml(code)}">${escapeHtml(label)}</span>`;
         })
         .join("");
 
@@ -135,21 +157,30 @@ function renderStorageStatus() {
 function renderStats() {
   const profileName = state.activeProfile ? state.activeProfile.name : "-";
   const keyboard = getKeyboardModel(dom.keyboardModel.value);
-  const layout = getKeyboardLayout(dom.languageLayout.value);
+  const layout = getKeyboardLayout();
 
   dom.activeProfileChip.textContent = state.activeProfile ? state.activeProfile.name : "Bez profilu";
   dom.statProfile.textContent = profileName;
   dom.statKeyboard.textContent = keyboard.name;
   dom.statLanguage.textContent = layout.name;
+  dom.statAccuracy.textContent = `${state.typing.accuracy}%`;
+  dom.statErrors.textContent = String(state.typing.errors);
+}
+
+function renderFeedback() {
+  if (!state.typing.lastError) {
+    dom.feedbackLine.textContent = "Stlac aktualny znak.";
+    dom.feedbackLine.className = "feedback-line";
+    return;
+  }
+
+  dom.feedbackLine.textContent = `Ocakavane: ${state.typing.lastError.expected}, zadane: ${state.typing.lastError.typed}`;
+  dom.feedbackLine.className = "feedback-line is-error";
 }
 
 function renderSettingsOptions() {
   dom.keyboardModel.innerHTML = Object.values(KEYBOARD_MODELS)
     .map((model) => `<option value="${escapeHtml(model.id)}">${escapeHtml(model.name)}</option>`)
-    .join("");
-
-  dom.languageLayout.innerHTML = Object.values(KEYBOARD_LAYOUTS)
-    .map((layout) => `<option value="${escapeHtml(layout.id)}">${escapeHtml(layout.name)}</option>`)
     .join("");
 
   setControlsFromProfile(state.activeProfile);
@@ -159,6 +190,7 @@ function render() {
   renderStorageStatus();
   renderProfileSelect();
   renderStats();
+  renderFeedback();
   renderTypingStrip();
   renderKeyboard();
 }
@@ -198,27 +230,26 @@ function bindEvents() {
 
     state.activeProfile = profiles.setActiveProfile(dom.profileSelect.value);
     setControlsFromProfile(state.activeProfile);
-    state.currentIndex = 0;
+    state.typing = typing.reset();
     render();
   });
 
   dom.keyboardModel.addEventListener("change", updateCurrentProfileSettings);
-  dom.languageLayout.addEventListener("change", updateCurrentProfileSettings);
 
   dom.resetButton.addEventListener("click", () => {
-    state.currentIndex = 0;
+    state.typing = typing.reset();
     render();
   });
 
   window.addEventListener("keydown", (event) => {
-    if (event.key.length !== 1) {
+    const activeTag = document.activeElement ? document.activeElement.tagName : "";
+    if (["INPUT", "SELECT", "TEXTAREA"].includes(activeTag)) {
       return;
     }
 
-    if (event.key === sampleText[state.currentIndex]) {
-      state.currentIndex = (state.currentIndex + 1) % sampleText.length;
-      render();
-    }
+    const nextState = typing.handleKeydown(event);
+    state.typing = nextState;
+    render();
   });
 }
 

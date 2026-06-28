@@ -131,3 +131,72 @@ Najblizsi dalsi krok:
 Rizika:
 
 - Pri realnych narodnych layoutoch bude treba rozhodnut, ci cielovy znak mapujeme podla fyzickeho `code`, `event.key`, alebo kombinacie oboch.
+
+## Checkpoint 2026-06-28 22:20
+
+Funguje:
+
+- Plan bol upraveny na pevny US English layout.
+- Ostatne jazykove sady boli vyhodene z UI aj z `keyboard-layouts.js`.
+- Profilovy default `languageLayout` je `en-us`.
+- Stare profily sa pri dalsom ulozeni budu drzat pevneho `en-us` layoutu.
+
+Rozhodnutie:
+
+- MVP nema riesit slovencinu, cestinu, britsku anglictinu ani spanielcinu.
+- Pri typing engine sa pouziva kombinacia `event.key` a `event.code`, ale iba pre US home-row znaky.
+
+## Checkpoint 2026-06-28 22:25
+
+Funguje:
+
+- Loop 3 bol implementovany.
+- Vizualna klavesnica sa renderuje z fyzickeho modelu a pevnych US labelov.
+- Aktivny cielovy klaves sa zvyraznuje podla `KeyboardEvent.code`, nie podla textoveho labelu.
+- Home-row klavesy maju samostatny vizualny stav.
+- Obrysy ruk boli opravene:
+  - lava a prava ruka su odlisne,
+  - ruky su priehladne,
+  - ruky su overlay nad klavesnicou,
+  - defaultne sedia nad home-row oblastou lavej a pravej ruky.
+
+Rozpracovane:
+
+- Hand-guide je zatial CSS/HTML overlay, nie samostatny `hand-guide.js` modul.
+- Presne pozicie prstov nad jednotlivymi klavesmi budu doladene v dalsom hand-guide loope.
+
+## Checkpoint 2026-06-28 22:30
+
+Funguje:
+
+- Loop 4 bol implementovany.
+- Typing engine bol presunuty do `assets/js/typing-engine.js`.
+- Cvicenie sleduje:
+  - aktualny znak,
+  - spravne zadania,
+  - chybne zadania,
+  - pocet pokus,
+  - pocet chyb,
+  - presnost.
+- Riadok znakov zobrazuje stavy `current`, `done` a `error`.
+- Reset vynuluje cvicenie aj metriky.
+
+Overene:
+
+- `node --check` presiel pre upravene JS moduly.
+- In-app browser po reloade potvrdil:
+  - jazykovy select uz neexistuje,
+  - UI ukazuje `US English`,
+  - aktivny klaves startuje na `KeyA`,
+  - lava a prava ruka maju rozdielne transformacie,
+  - obrysy ruk maju priehladnost `0.38`,
+  - spravny vstup `a` posunie cvicenie na `KeyS`,
+  - chybny vstup zvysi pocet chyb a upravi presnost.
+
+Najblizsi dalsi krok:
+
+- Loop 5: pridat mapovanie klavesov na konkretne prsty a zvyraznovat odporucany prst pre aktualny cielovy klaves.
+
+Rizika:
+
+- Aktuala kontrola znaku je prisna: znak aj fyzicky `code` musia sediet. To je dobre pre US layout, ale bude potrebne prehodnotit, ak sa v buducnosti vratia ine layouty.

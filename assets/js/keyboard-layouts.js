@@ -1,4 +1,4 @@
-const BASE_LABELS = {
+const US_LABELS = {
   Escape: "Esc",
   Digit1: "1",
   Digit2: "2",
@@ -61,68 +61,14 @@ const BASE_LABELS = {
   Space: "Space"
 };
 
-export const KEYBOARD_LAYOUTS = {
-  sk: {
-    id: "sk",
-    name: "Slovencina",
-    labels: {
-      ...BASE_LABELS,
-      Digit2: "2 / l",
-      Digit3: "3 / s",
-      Digit4: "4 / c",
-      Digit5: "5 / t",
-      Digit6: "6 / z",
-      Digit7: "7 / y",
-      Digit8: "8 / a",
-      Digit9: "9 / i",
-      Digit0: "0 / e"
-    }
-  },
-  cs: {
-    id: "cs",
-    name: "Cestina",
-    labels: {
-      ...BASE_LABELS,
-      Digit2: "2 / e",
-      Digit3: "3 / s",
-      Digit4: "4 / c",
-      Digit5: "5 / r",
-      Digit6: "6 / z",
-      Digit7: "7 / y",
-      Digit8: "8 / a",
-      Digit9: "9 / i",
-      Digit0: "0 / e"
-    }
-  },
-  "en-us": {
-    id: "en-us",
-    name: "US English",
-    labels: BASE_LABELS
-  },
-  "en-gb": {
-    id: "en-gb",
-    name: "British English",
-    labels: {
-      ...BASE_LABELS,
-      Digit3: "3 / £",
-      Quote: "#",
-      Backslash: "\\"
-    }
-  },
-  es: {
-    id: "es",
-    name: "Spanielcina",
-    labels: {
-      ...BASE_LABELS,
-      Semicolon: "Ñ",
-      BracketLeft: "`",
-      BracketRight: "+",
-      Minus: "'",
-      Equal: "¡"
-    }
-  }
+export const US_LAYOUT_ID = "en-us";
+
+export const KEYBOARD_LAYOUT = {
+  id: US_LAYOUT_ID,
+  name: "US English",
+  labels: US_LABELS
 };
 
-export function getKeyboardLayout(id) {
-  return KEYBOARD_LAYOUTS[id] || KEYBOARD_LAYOUTS.sk;
+export function getKeyboardLayout() {
+  return KEYBOARD_LAYOUT;
 }

@@ -121,6 +121,19 @@ body {
   color: var(--warn);
 }
 
+.fixed-setting {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfe;
+  color: var(--muted);
+  font-weight: 650;
+}
+
 .practice-panel {
   min-width: 0;
   flex: 1;
@@ -162,6 +175,30 @@ body {
   color: var(--accent);
 }
 
+.typing-token.is-done {
+  border-color: rgba(21, 128, 61, 0.35);
+  background: rgba(220, 252, 231, 0.8);
+  color: var(--good);
+}
+
+.typing-token.is-error {
+  border-color: rgba(180, 83, 9, 0.45);
+  background: rgba(254, 243, 199, 0.8);
+  color: var(--warn);
+}
+
+.feedback-line {
+  min-height: 22px;
+  margin: -8px 0 16px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.feedback-line.is-error {
+  color: var(--warn);
+  font-weight: 650;
+}
+
 .stats-row {
   gap: 12px;
   margin-bottom: 20px;
@@ -196,69 +233,128 @@ body {
   min-height: 310px;
   align-items: center;
   justify-content: center;
-  gap: 22px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #eef2f7;
 }
 
+.keyboard-workbench {
+  position: relative;
+  width: min(100%, 720px);
+}
+
 .hand-guide {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
 .hand {
-  position: relative;
-  width: 120px;
-  height: 86px;
+  position: absolute;
+  top: 92px;
+  width: 160px;
+  height: 124px;
+  opacity: 0.38;
+}
+
+.left-hand {
+  left: 24.5%;
+  transform: translateX(-50%) rotate(-5deg);
+}
+
+.right-hand {
+  right: 24.5%;
+  transform: translateX(50%) rotate(5deg);
 }
 
 .hand span {
   position: absolute;
-  bottom: 20px;
-  width: 18px;
-  border: 2px solid #8aa0b8;
+  display: block;
+  border: 2px solid rgba(65, 86, 113, 0.75);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.hand .palm {
+  left: 42px;
+  bottom: 10px;
+  width: 78px;
+  height: 58px;
+  border-radius: 38px 38px 28px 28px;
+}
+
+.hand .finger {
+  bottom: 58px;
+  width: 20px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55);
 }
 
-.left-hand span:nth-child(1),
-.right-hand span:nth-child(5) {
+.left-hand .pinky {
+  left: 18px;
   height: 42px;
-  left: 4px;
+  transform: rotate(-13deg);
 }
 
-.left-hand span:nth-child(2),
-.right-hand span:nth-child(4) {
+.left-hand .ring {
+  left: 42px;
   height: 62px;
-  left: 26px;
+  transform: rotate(-5deg);
 }
 
-.left-hand span:nth-child(3),
-.right-hand span:nth-child(3) {
+.left-hand .middle {
+  left: 66px;
   height: 72px;
-  left: 48px;
 }
 
-.left-hand span:nth-child(4),
-.right-hand span:nth-child(2) {
+.left-hand .index {
+  left: 92px;
   height: 60px;
-  left: 70px;
+  transform: rotate(7deg);
 }
 
-.left-hand span:nth-child(5),
-.right-hand span:nth-child(1) {
-  width: 42px;
-  height: 18px;
-  left: 82px;
-  bottom: 6px;
+.left-hand .thumb {
+  left: 105px;
+  bottom: 24px;
+  width: 48px;
+  height: 20px;
+  border-radius: 999px;
   transform: rotate(-28deg);
 }
 
+.right-hand .index {
+  left: 48px;
+  height: 60px;
+  transform: rotate(-7deg);
+}
+
+.right-hand .middle {
+  left: 74px;
+  height: 72px;
+}
+
+.right-hand .ring {
+  left: 98px;
+  height: 62px;
+  transform: rotate(5deg);
+}
+
+.right-hand .pinky {
+  left: 122px;
+  height: 42px;
+  transform: rotate(13deg);
+}
+
+.right-hand .thumb {
+  left: 8px;
+  bottom: 24px;
+  width: 48px;
+  height: 20px;
+  border-radius: 999px;
+  transform: rotate(28deg);
+}
+
 .keyboard-preview {
-  width: min(100%, 620px);
+  width: 100%;
 }
 
 .keyboard-row {
@@ -282,8 +378,20 @@ body {
   box-shadow: 0 1px 0 rgba(15, 23, 42, 0.08);
 }
 
+.key.is-home {
+  box-shadow: inset 0 -3px 0 rgba(37, 99, 235, 0.2), 0 1px 0 rgba(15, 23, 42, 0.08);
+}
+
 .key.is-wide {
   flex: 1.6;
+}
+
+.key.is-backspace {
+  flex: 2;
+}
+
+.key.is-enter {
+  flex: 1.8;
 }
 
 .key.is-space {
@@ -298,7 +406,6 @@ body {
 
 @media (max-width: 880px) {
   .workspace,
-  .keyboard-stage,
   .stats-row {
     flex-direction: column;
   }
@@ -312,8 +419,13 @@ body {
     grid-template-columns: repeat(8, minmax(28px, 1fr));
   }
 
-  .hand-guide {
-    flex-direction: row;
+  .keyboard-stage {
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .keyboard-workbench {
+    min-width: 640px;
   }
 }
 

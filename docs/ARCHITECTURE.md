@@ -17,13 +17,14 @@ assets/
     profiles.js
     keyboard-models.js
     keyboard-layouts.js
+    typing-engine.js
 docs/
   IMPLEMENTATION_PLAN.md
   PROGRESS.md
   ARCHITECTURE.md
 ```
 
-Aktualna verzia uz ma oddelenu profilovu, storage a keyboard konfiguraciu. Typing engine a hand-guide su zatial sucastou jednoducheho `app.js` flow alebo statickeho placeholderu.
+Aktualna verzia uz ma oddelenu profilovu, storage, keyboard konfiguraciu a typing engine. Hand-guide je zatial CSS/HTML overlay bez samostatneho JS modulu.
 
 ## Cielova struktura
 
@@ -54,12 +55,12 @@ Aktualne je hlavny orchestrator UI:
 
 - inicializaciu,
 - napojenie event listenerov,
-- prepojenie profilov, storage, klavesnice a layoutov,
+- prepojenie profilov, storage, klavesnice, US layoutu a typing engine,
 - render profiloveho selectu,
-- render jednoducheho typing stripu,
+- render typing stripu so stavmi,
 - render vizualnej klavesnice.
 
-Docasne stale obsahuje placeholder typing flow. Ten sa ma v dalsom loope presunut do `typing-engine.js`.
+Typing stav je uz presunuty do `typing-engine.js`.
 
 ### `storage.js`
 
@@ -95,7 +96,7 @@ Profil obsahuje:
   id: "peter",
   name: "Peter",
   keyboardModel: "macbook-air",
-  languageLayout: "sk",
+  languageLayout: "en-us",
   createdAt: "...",
   updatedAt: "..."
 }
@@ -126,38 +127,32 @@ Model obsahuje riadky fyzickych `KeyboardEvent.code` hodnot:
 
 ### `keyboard-layouts.js`
 
-Mapovanie fyzickych `KeyboardEvent.code` hodnot na zobrazene znaky pre konkretny jazyk.
+Mapovanie fyzickych `KeyboardEvent.code` hodnot na zobrazene znaky pre pevny US English layout.
 
-Aktualne layouty:
+Aktualny layout:
 
-- slovencina
-- cestina
 - US English
-- British English
-- spanielcina
 
 Layout obsahuje labely pre nahlad klavesnice:
 
 ```js
 {
-  id: "sk",
-  name: "Slovencina",
+  id: "en-us",
+  name: "US English",
   labels: {
-    KeyA: "a",
-    KeyS: "s"
+    KeyA: "A",
+    KeyS: "S"
   }
 }
 ```
 
-Poznamka: layouty su zatial zakladne UI labely, nie plne presne systemove mapovanie vsetkych modifikatorov.
+Poznamka: ostatne jazykove layouty boli z MVP vyhodene. Ak sa vratia neskor, maju byt riesene ako novy scope.
 
 ### `typing-engine.js`
 
-Zatial neexistuje ako samostatny subor. Minimalny typing placeholder je v `app.js`.
-
 Zodpoveda za:
 
-- generovanie cvicenia,
+- home-row cvicenie pre US layout,
 - spracovanie `keydown`,
 - posun aktualnej pozicie,
 - pocitanie chyb a presnosti,
@@ -179,11 +174,11 @@ Zodpoveda za:
 Treba striktne oddelit:
 
 - `KeyboardEvent.code` - fyzicka klavesa, napriklad `KeyA`,
-- label klavesu - co je napisane na vizualnej klavese,
+- label klavesu - co je napisane na vizualnej klavese v US layoute,
 - generovany znak - co ma pouzivatel napisat,
 - prst - ktorym prstom sa ma klavesa stlacit.
 
-Toto oddelenie je klucove, pretoze fyzicka klavesnica a jazykove rozlozenie su nezavisle veci.
+Toto oddelenie ostava klucove aj pri jednom US layoute, pretoze fyzicka klavesnica a znak z cvicenia stale nie su to iste.
 
 ## Cookies
 
@@ -193,7 +188,7 @@ Cookies maju malu kapacitu. V prvej verzii sa do nich maju ukladat iba:
 - meno profilu,
 - aktivny profil,
 - vybrana fyzicka klavesnica,
-- vybrany jazykovy layout,
+- pevny layout marker `en-us`,
 - zakladne posledne nastavenia.
 
 Vacsie statistiky nepatria do cookies. Ak budu potrebne, pouzit neskor `localStorage`.

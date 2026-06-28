@@ -4,7 +4,7 @@ const LEGACY_ACTIVE_PROFILE_KEY = "strojopis_active_profile";
 
 const DEFAULT_PROFILE_SETTINGS = {
   keyboardModel: "macbook-air",
-  languageLayout: "sk"
+  languageLayout: "en-us"
 };
 
 function profileKey(id) {
@@ -64,7 +64,7 @@ function migrateLegacyProfile(storage) {
     id,
     name: legacy.name,
     keyboardModel: legacy.keyboardModel || DEFAULT_PROFILE_SETTINGS.keyboardModel,
-    languageLayout: legacy.languageLayout || DEFAULT_PROFILE_SETTINGS.languageLayout,
+    languageLayout: DEFAULT_PROFILE_SETTINGS.languageLayout,
     createdAt: legacy.updatedAt || now(),
     updatedAt: now()
   };

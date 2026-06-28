@@ -52,14 +52,11 @@
               </select>
             </div>
             <div class="stack-sm">
-              <label class="form-label" for="languageLayout">Jazykova sada</label>
-              <select class="form-select" id="languageLayout">
-                <option value="sk">Slovencina</option>
-                <option value="cs">Cestina</option>
-                <option value="en-us">US English</option>
-                <option value="en-gb">British English</option>
-                <option value="es">Spanielcina</option>
-              </select>
+              <span class="form-label d-block">Jazykova sada</span>
+              <div class="fixed-setting">
+                <i class="bi bi-keyboard"></i>
+                <span>US English</span>
+              </div>
             </div>
           </div>
         </aside>
@@ -67,8 +64,8 @@
         <section class="practice-panel">
           <div class="practice-header">
             <div>
-              <p class="section-kicker">Loop 0</p>
-              <h2>Spustitelna kostra</h2>
+              <p class="section-kicker">Loop 4</p>
+              <h2>Cvicenie home-row</h2>
             </div>
             <button class="btn btn-outline-secondary" id="resetButton" type="button">
               <i class="bi bi-arrow-counterclockwise"></i>
@@ -77,6 +74,7 @@
           </div>
 
           <div class="typing-strip" id="typingStrip" aria-label="Riadok znakov na pisanie"></div>
+          <p class="feedback-line" id="feedbackLine">Stlac aktualny znak.</p>
 
           <div class="stats-row" aria-label="Zakladne metriky">
             <div>
@@ -89,20 +87,40 @@
             </div>
             <div>
               <span class="stat-label">Jazyk</span>
-              <strong id="statLanguage">Slovencina</strong>
+              <strong id="statLanguage">US English</strong>
+            </div>
+            <div>
+              <span class="stat-label">Presnost</span>
+              <strong id="statAccuracy">100%</strong>
+            </div>
+            <div>
+              <span class="stat-label">Chyby</span>
+              <strong id="statErrors">0</strong>
             </div>
           </div>
 
           <div class="keyboard-stage">
-            <div class="hand-guide" aria-hidden="true">
-              <div class="hand left-hand">
-                <span></span><span></span><span></span><span></span><span></span>
-              </div>
-              <div class="hand right-hand">
-                <span></span><span></span><span></span><span></span><span></span>
+            <div class="keyboard-workbench">
+              <div class="keyboard-preview" id="keyboardPreview" aria-label="Nahlad klavesnice"></div>
+              <div class="hand-guide" aria-hidden="true">
+                <div class="hand left-hand">
+                  <span class="finger pinky"></span>
+                  <span class="finger ring"></span>
+                  <span class="finger middle"></span>
+                  <span class="finger index"></span>
+                  <span class="thumb"></span>
+                  <span class="palm"></span>
+                </div>
+                <div class="hand right-hand">
+                  <span class="finger index"></span>
+                  <span class="finger middle"></span>
+                  <span class="finger ring"></span>
+                  <span class="finger pinky"></span>
+                  <span class="thumb"></span>
+                  <span class="palm"></span>
+                </div>
               </div>
             </div>
-            <div class="keyboard-preview" id="keyboardPreview" aria-label="Nahlad klavesnice"></div>
           </div>
         </section>
       </section>
