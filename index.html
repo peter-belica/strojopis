@@ -26,15 +26,19 @@
           <div class="panel-block">
             <h2>Profil</h2>
             <form id="profileForm" class="stack-sm">
-              <label class="form-label" for="profileName">Ako sa volas?</label>
+              <label class="form-label" for="profileName">Novy profil</label>
               <div class="input-group">
                 <input class="form-control" id="profileName" name="profileName" autocomplete="name" placeholder="Meno alebo prezyvka">
                 <button class="btn btn-primary" type="submit">
-                  <i class="bi bi-check2"></i>
-                  Ulozit
+                  <i class="bi bi-person-plus"></i>
+                  Vytvorit
                 </button>
               </div>
             </form>
+            <div class="stack-sm">
+              <label class="form-label" for="profileSelect">Aktivny profil</label>
+              <select class="form-select" id="profileSelect"></select>
+            </div>
             <p class="helper-text" id="storageStatus">Kontrolujem cookies...</p>
           </div>
 
@@ -105,6 +109,6 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
   </body>
 </html>

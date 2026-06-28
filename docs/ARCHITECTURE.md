@@ -13,13 +13,17 @@ assets/
     app.css
   js/
     app.js
+    storage.js
+    profiles.js
+    keyboard-models.js
+    keyboard-layouts.js
 docs/
   IMPLEMENTATION_PLAN.md
   PROGRESS.md
   ARCHITECTURE.md
 ```
 
-Aktualna verzia ma zatial jednu JS entrypoint vrstvu v `app.js`. Dalsie loopy ju budu rozdelovat na mensie moduly.
+Aktualna verzia uz ma oddelenu profilovu, storage a keyboard konfiguraciu. Typing engine a hand-guide su zatial sucastou jednoducheho `app.js` flow alebo statickeho placeholderu.
 
 ## Cielova struktura
 
@@ -46,25 +50,18 @@ docs/
 
 ### `app.js`
 
-Aktualne obsahuje celu zakladnu logiku aplikacie:
+Aktualne je hlavny orchestrator UI:
 
 - inicializaciu,
-- cookie test,
-- aktivny profil,
-- nastavenia klavesnice a jazyka,
-- render jednoduchej klavesnice,
-- placeholder typing flow.
-
-Cielovo bude `app.js` hlavny orchestrator UI:
-
-- inicializacia aplikacie,
-- prepinanie obrazoviek,
 - napojenie event listenerov,
-- prepojenie profilov, klavesnice a typing engine.
+- prepojenie profilov, storage, klavesnice a layoutov,
+- render profiloveho selectu,
+- render jednoducheho typing stripu,
+- render vizualnej klavesnice.
+
+Docasne stale obsahuje placeholder typing flow. Ten sa ma v dalsom loope presunut do `typing-engine.js`.
 
 ### `storage.js`
-
-Zatial neexistuje ako samostatny subor. Cookie helper je v `app.js`.
 
 Zodpoveda za:
 
@@ -72,9 +69,9 @@ Zodpoveda za:
 - citanie a zapis JSON dat cez js-cookie,
 - fallback na runtime pamat, ked cookies nie su dostupne.
 
-### `profiles.js`
+Fallback runtime pamat prezije iba aktualne otvorenu stranku. Po reloade bez cookies sa data stratia.
 
-Zatial neexistuje ako samostatny subor. Zakladny aktivny profil je v `app.js`.
+### `profiles.js`
 
 Zodpoveda za:
 
@@ -83,34 +80,63 @@ Zodpoveda za:
 - aktivny profil,
 - ulozenie nastaveni profilu.
 
-### `keyboard-models.js`
+Aktualne cookie kluce:
 
-Zatial neexistuje ako samostatny subor. Nahlad klavesnice je docasne definovany v `app.js`.
+```text
+strojopis_profiles_index
+strojopis_active_profile_id
+strojopis_profile_<id>
+```
+
+Profil obsahuje:
+
+```js
+{
+  id: "peter",
+  name: "Peter",
+  keyboardModel: "macbook-air",
+  languageLayout: "sk",
+  createdAt: "...",
+  updatedAt: "..."
+}
+```
+
+Existuje aj jednorazova migracia zo stareho Loop 0 kluca `strojopis_active_profile`.
+
+### `keyboard-models.js`
 
 Fyzicky tvar klavesnice. Rovnaky fyzicky model sa moze pouzit s viacerymi jazykovymi layoutmi.
 
-Priklad:
+Aktualne modely:
+
+- MacBook Air
+- Dell XPS 2018
+
+Model obsahuje riadky fyzickych `KeyboardEvent.code` hodnot:
 
 ```js
 {
   id: "macbook-air",
   name: "MacBook Air",
   rows: [
-    [
-      { code: "KeyQ", width: 1 },
-      { code: "KeyW", width: 1 }
-    ]
+    ["KeyQ", "KeyW", "KeyE"]
   ]
 }
 ```
 
 ### `keyboard-layouts.js`
 
-Zatial neexistuje ako samostatny subor. Vyber layoutu existuje v UI, ale labely klaves este nie su skutocne premapovane.
-
 Mapovanie fyzickych `KeyboardEvent.code` hodnot na zobrazene znaky pre konkretny jazyk.
 
-Priklad:
+Aktualne layouty:
+
+- slovencina
+- cestina
+- US English
+- British English
+- spanielcina
+
+Layout obsahuje labely pre nahlad klavesnice:
 
 ```js
 {
@@ -122,6 +148,8 @@ Priklad:
   }
 }
 ```
+
+Poznamka: layouty su zatial zakladne UI labely, nie plne presne systemove mapovanie vsetkych modifikatorov.
 
 ### `typing-engine.js`
 
