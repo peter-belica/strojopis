@@ -55,3 +55,9 @@ test('only the last 100 results are retained while summaries continue to aggrega
   const p = profiles.getActiveProfile();
   expect(p.history).toHaveLength(100); expect(p.history[0].id).toBe('r-6'); expect(p.courses['en-gb'].lessons['home-left'].completedAttempts).toBe(105);
 });
+test('an AltGraph target never swallows a plain Control shortcut', () => {
+  const mapped = lesson('@'); mapped.targets[0].altGraph = true;
+  const e = createTypingEngine([mapped]);
+  e.handleKeydown({key:'l',ctrlKey:true}); expect(e.snapshot().attempts).toBe(0);
+  e.handleKeydown({key:'@',ctrlKey:true,altKey:true}); expect(e.snapshot().isComplete).toBe(true);
+});

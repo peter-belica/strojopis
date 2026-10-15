@@ -246,8 +246,9 @@ test('main controls can be operated with keyboard and respect reduced motion',as
   await page.keyboard.press(tabKey); await expect(page.locator('#rememberButton')).toBeFocused();
   await page.keyboard.press(tabKey); await expect(page.locator('#languageLayout')).toBeFocused();
   await page.keyboard.press(tabKey); await expect(page.locator('#lessonSelect')).toBeFocused();
-  await page.keyboard.press('ArrowDown'); await page.keyboard.press('ArrowDown'); await page.keyboard.press('Enter');
-  await expect(page.locator('#lessonSelect')).not.toHaveValue('home-left');
+  // Native select type-ahead works in both headless tests and system menus.
+  await page.keyboard.press('v');
+  await expect(page.locator('#lessonSelect')).toHaveValue('free-practice');
   await page.keyboard.press(tabKey); await expect(page.locator('#difficulty')).toBeFocused();
   await page.keyboard.press('End'); await expect(page.locator('#difficulty')).toHaveValue('4');
   expect(await page.locator('#difficulty').evaluate(el=>getComputedStyle(el).outlineStyle)).toBe('solid');

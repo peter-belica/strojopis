@@ -310,6 +310,7 @@ function renderLessonMeta() {
 }
 
 function renderSettingsOptions() {
+  const selectedKeyboard = dom.keyboardModel.value || 'macbook-air';
   dom.keyboardModel.innerHTML = Object.values(KEYBOARD_MODELS)
     .map((model) => `<option value="${escapeHtml(model.id)}">${escapeHtml(model.name)}</option>`)
     .join("");
@@ -324,6 +325,7 @@ function renderSettingsOptions() {
 
   setControlsFromProfile(state.activeProfile);
   if (!state.activeProfile) {
+    dom.keyboardModel.value = selectedKeyboard;
     dom.languageLayout.value = state.course?.id || DEFAULT_LAYOUT_ID;
   }
   dom.lessonSelect.value = state.typing.lesson.id;
@@ -378,7 +380,7 @@ function rememberLesson() {
 function startExercise(id = state.typing.lesson.id) {
   if (!state.course || !state.keyboardLayout) return;
   const base = state.lessons.find(l => l.id === id) ?? state.lessons[0];
-  const exercise = prepareExercise(base, state.sentences, state.course.id, state.difficulty, state.keyboardLayout, state.typing.lesson.textId);
+  const exercise = prepareExercise(base, state.sentences, state.course.id, state.difficulty, state.keyboardLayout, state.typing.lesson.textId ?? state.activeProfile?.courses[state.course.id]?.lessons[id]?.lastResult.textId);
   state.typing = typing.setLessons([exercise], exercise.id);
   dom.lessonSelect.value = exercise.id;
   rememberLesson();
@@ -510,6 +512,7 @@ function bindEvents() {
     composedInput = ''; acceptText(text); dom.trainingInput.value = '';
   });
   dom.trainingInput.addEventListener('paste', event => event.preventDefault());
+  dom.trainingInput.addEventListener('keydown', event => { if (!composing && (event.key === 'Enter' || event.repeat)) event.preventDefault(); });
   window.addEventListener('keydown', event => {
     const active = document.activeElement;
     const tag = active?.tagName ?? '';

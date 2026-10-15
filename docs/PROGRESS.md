@@ -364,3 +364,32 @@ Overenie tejto úpravy:
 - Lekcie majú explicitne zavádzané znaky, nezávislé od náročnosti viet. Základná medzera je zavedená od prvej lekcie pre oddelenie skupín klávesov.
 - Rozhranie obsahuje posuvník, voľný tréning, výsledok, pokračovanie, pamäťový režim a potvrdenie mazania.
 - Ďalší krok: automatizované testy pravidiel a používateľských postupov nad produkčným `dist/`, oprava zistených problémov a finálna dokumentácia.
+
+## Checkpoint 2026-10-15 – Dokončený tréning a finálne overenie
+
+Funguje:
+
+- Miestne profily s potvrdeným mazaním, individuálnym vedením prstov, náročnosťou a fyzickou klávesnicou.
+- Samostatné miesto a progres každého kurzu; otvorenie lekcie nevytvára výsledok. Dokončenie sa zaznamená raz, s počtami, presnosťou a aktívnym časom.
+- História posledných 100 výsledkov a súhrny najlepšieho a posledného výsledku; opakovanie a pokračovanie.
+- `localStorage` po výslovnom vyžiadaní zapamätania, pamäťový režim a pravdivé chyby. Ochrana poškodeného alebo novšieho formátu, migrácia starých cookies až po overenom zápise.
+- 240 viet a štyri úrovne v češtine a britskej angličtine. Postupné lekcie filtrujú presné naučené znaky; voľný tréning ponúka všetky úrovne hneď.
+- Zložené znaky rozhodujú podľa výsledného textu. Neznáme fyzické mapovanie nemá vymyslený prst. Opravené sú súbehy pri rýchlom prepínaní kurzov a zachytávanie bežných skratiek.
+
+Overenie:
+
+- Skutočne použitý podporovaný Node.js 22.16.0; cesta označená Homebrew `node@24` smerovala na 25.2.1, preto sa nepoužila ako dôkaz verzie.
+- Čisté `npm ci` s uloženým lockfile prešlo v oddelenom dočasnom priečinku. Audit inštalácie: 0 známych zraniteľností.
+- `npm run typecheck`, `npm test` (45/45), `npm run validate:content` (240 viet), `npm run build` a `npm run test:e2e` (33/33, tri prehliadače) úspešné.
+- Produkčný build bol overený v Chromium, Firefoxe a WebKite, vrátane JSON, šírok 390/768/1366, klávesnicového postupu, migrácie a zlyhaní úložiska.
+- Natívne ovládanie v Codex prehliadači potvrdilo posun, chybu bez postupu a metriky. Bez chýb konzoly. Aktuálna ukážka zostáva na porte 4173.
+- Kompletné dôkazy, hranice ručného overenia a snímky sú v `VALIDATION.md` a `docs/screenshots/`.
+
+Otvorené problémy:
+
+- Žiadna povinná podmienka lokálneho zadania. Súbežné editovanie viacerých kariet, synchronizácia a úplná matica fyzických klávesníc sú mimo tejto verzie.
+- Verejné publikovanie a GitHub workflow koordinuje súbežná práca; jeho súbory, README odkazy a Git stav boli zachované. Tento checkpoint sám nepotvrdzuje stav verejného nasadenia.
+
+Ďalší krok:
+
+- Lokálna implementácia je pripravená na používanie. Prípadné ďalšie zmeny overiť piatimi príkazmi z README; nezamieňať lokálne overenie s kontrolou hostingu.

@@ -111,3 +111,8 @@ describe('local persistence', () => {
     expect(storage.disable()).toBe(true); expect(local.getItem(STORAGE_KEY)).toBeNull(); expect(profiles.listProfiles()).toHaveLength(1);
   });
 });
+test('explicit deletion unlocks a protected future record without deleting foreign data',()=>{
+  const {storage,local}=setup({[STORAGE_KEY]:JSON.stringify({schemaVersion:99}),foreign:'keep'});
+  expect(storage.status().blocked).toBe(true); expect(storage.clear()).toBe(true);
+  expect(storage.enable()).toBe(true); expect(local.getItem('foreign')).toBe('keep');
+});
