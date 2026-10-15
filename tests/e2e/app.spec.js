@@ -239,7 +239,8 @@ test('completed result offers continuation and repeating without phantom complet
 });
 
 test('main controls can be operated with keyboard and respect reduced motion',async ({page},testInfo)=>{
-  const tabKey = testInfo.project.name === 'webkit' ? 'Alt+Tab' : 'Tab';
+  // WebKit on macOS follows the system's Option+Tab navigation preference.
+  const tabKey = process.platform === 'darwin' && testInfo.project.name === 'webkit' ? 'Alt+Tab' : 'Tab';
   await page.emulateMedia({reducedMotion:'reduce'});
   await ready(page);
   await page.keyboard.press(tabKey); await expect(page.getByRole('link',{name:'Strojopis – domov'})).toBeFocused();
