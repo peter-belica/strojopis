@@ -293,3 +293,74 @@ Overene:
 Najblizsi dalsi krok:
 
 - Ukladat poslednu aktivnu lekciu k profilu a pridat minimalne pravidlo odporucania dalsiej lekcie po dokonceni aktualnej s dobrou presnostou.
+
+## Checkpoint 2026-07-06
+
+Funguje:
+
+- Lekcie su presunute z `assets/js/lessons.js` do externych JSON konfiguracii v `content/courses/`.
+- Pridane su dva kurzy:
+  - `cs-cz`: cestina a ceska klavesnice,
+  - `en-gb`: English UK a EN-GB keyboard.
+- Jazykove layouty su presunute do `content/keyboard-layouts/`.
+- Layout obsahuje aj `charMap`, teda mapovanie pisaneho znaku na fyzicky `KeyboardEvent.code` a pripadne modifikatory `shift` alebo `altGraph`.
+- `typing-engine.js` uz neimportuje konkretny zoznam lekcii. Lekcie dostava cez `setLessons`.
+- `app.js` pri starte nacita katalog kurzov, aktivny kurz, keyboard layout a nasledne normalizuje lekcie.
+- UI ma znovu select `Jazykova sada`, ktory prepina cely kurz aj vizualny layout klavesnice.
+
+Pridane subory:
+
+- `assets/js/lesson-loader.js`
+- `content/courses/index.json`
+- `content/courses/cs-cz.json`
+- `content/courses/en-gb.json`
+- `content/keyboard-layouts/cs-cz.json`
+- `content/keyboard-layouts/en-gb.json`
+
+Overene:
+
+- `python3 -m json.tool` presiel pre vsetky nove JSON konfiguracie.
+- HTTP/fetch test cez lokalny server nacital a normalizoval oba kurzy:
+  - `cs-cz`: 16 lekcii,
+  - `en-gb`: 16 lekcii.
+
+Rizika:
+
+- Niektore ceske znaky skladane cez mrtve klavesy maju v `charMap` prazdny `code`, preto sa pri nich kontroluje hlavne vysledny znak.
+- EN-GB symboly sa mozu medzi OS a fyzickymi klavesnicami mierne lisit. Layout je oddeleny, aby sa dal upravit bez zmeny aplikacneho kodu.
+
+## 2026-10-13 – Nová grafika a prepínateľné vedenie prstov
+
+- Nové rozhranie „Prst po prste“: svetlý podklad, zelené akcenty, kompaktnejšie nastavenia a samostatná tréningová plocha.
+- Farebné zóny klávesnice sa zhodujú s prstami na ilustráciách oboch rúk. Aktívny prst spája s cieľovým klávesom čiarkovaná krivka.
+- Žiak ešte pred stlačením vidí znak, meno prsta, fyzický kláves a štyri nasledujúce znaky.
+- Prepínač „Vedenie prstov“ vypína ruky, spojnicu, pokyn aj farebné zóny a zvýraznenie klávesu. Voľba sa ukladá cez existujúci storage modul do `strojopis_finger_guide` (spoločná pre prehliadač).
+- Doplnené mapovanie medzerníka na palec, zátvoriek na malíček a zobrazenie opačného Shiftu pre veľké písmená. Zložené znaky bez fyzického mapovania majú vysvetlenie namiesto vymysleného prsta.
+- Písanie medzier neposúva stránku; ovládanie formulárov a klávesové skratky sú oddelené od tréningu. Zmena nastavenia myšou umožňuje pokračovať v písaní.
+- Rozloženie sa prispôsobuje menším obrazovkám, spojnica sa prepočíta pri zmene veľkosti. Rešpektuje sa obmedzenie animácií v nastaveniach systému.
+
+Overenie tejto úpravy:
+
+- `node --check` pre `app.js` a `hand-guide.js`; `git diff --check` bez problémov.
+- V prehliadači overený správny postup `a → s → d → f → medzerník`, chyba bez postupu na ďalší znak a aktualizácia metrík.
+- Vypnutie odstráni aktívne klávesy a ruky; nastavenie prežije obnovenie stránky.
+- Lekcia veľkých písmen: `L` zvýrazní `KeyL`, pravý prstenník, `ShiftLeft` a ľavý malíček. `Shift+l` posunie cvičenie.
+- Pri šírke 390 px stránka nepresahuje obrazovku; spojnica po zmene veľkosti zostáva medzi správnym prstom a klávesom.
+- Konzola prehliadača bez chýb. Náhľad uložený v `docs/preview-prst-po-prste.jpg`.
+
+## Checkpoint 2026-10-15 – Audit a základy
+
+- Aktivovaný trvalý cieľ podľa `AUTONOMOUS_DEVELOPMENT.md`; počiatočné úpravy sú zaznamenané v `INITIAL_STATE.md` a zachované.
+- Pôvodná aplikácia overená v Codex prehliadači: správny posun prvého znaku, konzola bez chýb. Audit našiel nezavedené znaky v skorých lekciách.
+- Zavedené npm, Vite, Vitest, TypeScript s postupnou kontrolou JavaScriptu a Playwright. Podporované prostredie sa overí podľa skutočnej verzie binárky, nie len názvu cesty.
+- Nové verzované lokálne úložisko s pamäťovým režimom, kontrolou údajov, ochranou novšieho formátu a overeným migračným zápisom. Cookies už nie sú bežným úložiskom.
+- Implementované ukončenie tréningu, metriky a prevzatie výsledku presne raz. Samotné otvorenie lekcie výsledok nevytvára.
+- `tsc --noEmit` a prvé produkčné zostavenie prešli. Chybové vetvy a migráciu ešte treba doložiť testami.
+
+## Checkpoint 2026-10-15 – Obsah a ovládanie
+
+- Pripravených a jazykovo prečítaných 240 pôvodných viet, po 30 na každú kombináciu jazyka a úrovne.
+- Validátor kontroluje počty slov, duplicity, identifikátory, jazyk, náročnosť, témy a znaky; prešiel bez chýb.
+- Lekcie majú explicitne zavádzané znaky, nezávislé od náročnosti viet. Základná medzera je zavedená od prvej lekcie pre oddelenie skupín klávesov.
+- Rozhranie obsahuje posuvník, voľný tréning, výsledok, pokračovanie, pamäťový režim a potvrdenie mazania.
+- Ďalší krok: automatizované testy pravidiel a používateľských postupov nad produkčným `dist/`, oprava zistených problémov a finálna dokumentácia.

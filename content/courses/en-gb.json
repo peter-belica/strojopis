@@ -1,0 +1,444 @@
+{
+  "id": "en-gb",
+  "name": "Britská angličtina",
+  "keyboardLayoutId": "en-gb",
+  "locale": "en-GB",
+  "lessons": [
+    {
+      "id": "home-left",
+      "name": "1. Základný rad ľavej ruky",
+      "phase": "Základná poloha",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyA",
+        "KeyS",
+        "KeyD",
+        "KeyF"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "asdf fdsa ada sad"
+        },
+        {
+          "type": "words",
+          "text": "sad dad fad"
+        }
+      ],
+      "introducedCharacters": [
+        " ",
+        "a",
+        "s",
+        "d",
+        "f"
+      ]
+    },
+    {
+      "id": "home-right",
+      "name": "2. Základný rad pravej ruky",
+      "phase": "Základná poloha",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyJ",
+        "KeyK",
+        "KeyL",
+        "Semicolon"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "jkl; ;lkj jak lak"
+        },
+        {
+          "type": "words",
+          "text": "ask fall lad"
+        }
+      ],
+      "introducedCharacters": [
+        "j",
+        "k",
+        "l",
+        ";"
+      ]
+    },
+    {
+      "id": "home-row",
+      "name": "3. Celý základný rad",
+      "phase": "Základná poloha",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyA",
+        "KeyS",
+        "KeyD",
+        "KeyF",
+        "KeyJ",
+        "KeyK",
+        "KeyL",
+        "Semicolon"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "asdf jkl; ask fall"
+        },
+        {
+          "type": "words",
+          "text": "ask fall sad lad flask"
+        }
+      ],
+      "introducedCharacters": []
+    },
+    {
+      "id": "top-left",
+      "name": "4. Horný rad ľavej ruky",
+      "phase": "Horný rad",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyQ",
+        "KeyW",
+        "KeyE",
+        "KeyR",
+        "KeyT"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "qwer trew qwert"
+        },
+        {
+          "type": "words",
+          "text": "wet tree rate water"
+        }
+      ],
+      "introducedCharacters": [
+        "q",
+        "w",
+        "e",
+        "r",
+        "t"
+      ]
+    },
+    {
+      "id": "top-right",
+      "name": "5. Horný rad pravej ruky",
+      "phase": "Horný rad",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyY",
+        "KeyU",
+        "KeyI",
+        "KeyO",
+        "KeyP"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "yuiop poiuy you oil"
+        },
+        {
+          "type": "words",
+          "text": "you oil pull look pilot"
+        }
+      ],
+      "introducedCharacters": [
+        "y",
+        "u",
+        "i",
+        "o",
+        "p"
+      ]
+    },
+    {
+      "id": "top-row",
+      "name": "6. Celý horný rad",
+      "phase": "Horný rad",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyQ",
+        "KeyW",
+        "KeyE",
+        "KeyR",
+        "KeyT",
+        "KeyY",
+        "KeyU",
+        "KeyI",
+        "KeyO",
+        "KeyP"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "qwert yuiop type write"
+        },
+        {
+          "type": "words",
+          "text": "type write quiet power story"
+        }
+      ],
+      "introducedCharacters": []
+    },
+    {
+      "id": "bottom-left",
+      "name": "7. Dolný rad ľavej ruky",
+      "phase": "Dolný rad",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyZ",
+        "KeyX",
+        "KeyC",
+        "KeyV"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "zxcv vcxz vex cave"
+        },
+        {
+          "type": "words",
+          "text": "vex cave zest active"
+        }
+      ],
+      "introducedCharacters": [
+        "z",
+        "x",
+        "c",
+        "v"
+      ]
+    },
+    {
+      "id": "bottom-right",
+      "name": "8. Dolný rad pravej ruky",
+      "phase": "Dolný rad",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "KeyB",
+        "KeyN",
+        "KeyM",
+        "Comma",
+        "Period",
+        "Slash"
+      ],
+      "blocks": [
+        {
+          "type": "drill",
+          "text": "bnm, .,/ man moon"
+        },
+        {
+          "type": "words",
+          "text": "man moon band number main"
+        }
+      ],
+      "introducedCharacters": [
+        "b",
+        "n",
+        "m"
+      ]
+    },
+    {
+      "id": "all-letters",
+      "name": "9. Všetky základné písmená",
+      "phase": "Písmená",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "home hand pen wheel water"
+        }
+      ],
+      "introducedCharacters": [
+        "g",
+        "h"
+      ]
+    },
+    {
+      "id": "space-rhythm",
+      "name": "10. Medzera a rytmus",
+      "phase": "Plynulé písanie",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "Space"
+      ],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "one small step"
+        }
+      ],
+      "introducedCharacters": []
+    },
+    {
+      "id": "capitals",
+      "name": "11. Veľké písmená",
+      "phase": "Veľké písmená",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "ShiftLeft",
+        "ShiftRight"
+      ],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "London York Anna Tom"
+        }
+      ],
+      "introducedCharacters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z"
+      ]
+    },
+    {
+      "id": "punctuation",
+      "name": "12. Interpunkcia",
+      "phase": "Interpunkcia",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "Period",
+        "Comma",
+        "Slash",
+        "Digit1"
+      ],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "pen, home. tea?"
+        }
+      ],
+      "introducedCharacters": [
+        ",",
+        ".",
+        "?",
+        "!",
+        ":",
+        ";",
+        "-"
+      ]
+    },
+    {
+      "id": "apostrophes",
+      "name": "13. Apostrof a úvodzovky",
+      "phase": "Interpunkcia",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "Quote",
+        "Digit2"
+      ],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "it's Tom's pen"
+        }
+      ],
+      "introducedCharacters": [
+        "'",
+        "\""
+      ]
+    },
+    {
+      "id": "numbers",
+      "name": "14. Čísla",
+      "phase": "Čísla",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "Digit1",
+        "Digit2",
+        "Digit3",
+        "Digit4",
+        "Digit5",
+        "Digit6",
+        "Digit7",
+        "Digit8",
+        "Digit9",
+        "Digit0"
+      ],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "12 34 56 78 90"
+        }
+      ],
+      "introducedCharacters": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "symbols",
+      "name": "15. Praktické symboly",
+      "phase": "Symboly",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [
+        "Digit3",
+        "Quote",
+        "Digit4",
+        "Minus",
+        "Equal",
+        "Slash",
+        "Digit5",
+        "Digit7"
+      ],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "120 + 20 = 140"
+        }
+      ],
+      "introducedCharacters": [
+        "@",
+        "£",
+        "%",
+        "+",
+        "=",
+        "/",
+        "(",
+        ")"
+      ]
+    },
+    {
+      "id": "short-texts",
+      "name": "16. Krátke texty",
+      "phase": "Čítanie a písanie",
+      "description": "Postupne pridávaj znaky a vracaj prsty do základnej polohy.",
+      "introducedKeys": [],
+      "blocks": [
+        {
+          "type": "words",
+          "text": "home school garden"
+        }
+      ],
+      "introducedCharacters": []
+    }
+  ]
+}

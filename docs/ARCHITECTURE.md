@@ -1,274 +1,103 @@
-# Architektura
+# Architektúra
 
-## Zakladny princip
+## Princíp a technológie
 
-Aplikacia je staticka webova aplikacia bez build procesu. Knihnice sa tahaju cez CDN. Kod ma byt rozdeleny na male JS moduly, ale stale jednoducho citatelny.
+Strojopis je klientská aplikácia v HTML (štruktúra stránky), CSS (štýly) a moduloch JavaScriptu. Vite pripravuje vývojový server a produkčné statické súbory. V produkcii nebeží aplikačný server, iba podávanie súborov. Nie sú tu bežné runtime závislosti, externé fonty, skripty, obrázky ani generovanie textov na diaľku.
 
-## Aktualna struktura
+Existujúci vizuálny smer a moduly klávesnice zostali zachované. React ani ďalší framework by tu nevyvážil cenu prepisu. TypeScript kontroluje JavaScript cez `checkJs` a typové komentáre JSDoc; `types.d.ts` pomenúva dátové rozhrania. Kontrola `null` je zapnutá, úplný prísny režim sa zavádza postupne. TypeScript nemení formát uložených údajov ani nevaliduje JSON počas behu; na to slúži samostatný validátor.
 
-```text
-index.html
-assets/
-  css/
-    app.css
-  js/
-    app.js
-    storage.js
-    profiles.js
-    keyboard-models.js
-    keyboard-layouts.js
-    lessons.js
-    typing-engine.js
-    hand-guide.js
-docs/
-  IMPLEMENTATION_PLAN.md
-  PROGRESS.md
-  ARCHITECTURE.md
-```
+Vite 8.3.4, Vitest 5.0.4, TypeScript 7.0.2 a Playwright 1.64.1 boli zvolené ako aktuálne stabilné vydania v npm pri implementácii 15. októbra 2026. Presné tranzitívne závislosti obsahuje `package-lock.json`. Podporu prostredia určujú aj `engines` jednotlivých balíčkov. Používame npm ako jediného správcu balíčkov.
 
-Aktualna verzia uz ma oddelenu profilovu, storage, keyboard konfiguraciu, typing engine a hand-guide modul.
+Oficiálne podklady: [Vite](https://vite.dev/guide/), [Vitest](https://vitest.dev/guide/), [kontrola JavaScriptu cez TypeScript](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), [prehliadače Playwright](https://playwright.dev/docs/browsers).
 
-## Cielova struktura
+## Zodpovednosti modulov
 
-```text
-index.html
-assets/
-  css/
-    app.css
-  js/
-    app.js
-    storage.js
-    profiles.js
-    keyboard-models.js
-    keyboard-layouts.js
-    lessons.js
-    typing-engine.js
-    hand-guide.js
-docs/
-  IMPLEMENTATION_PLAN.md
-  PROGRESS.md
-  ARCHITECTURE.md
-```
+| Modul | Zodpovednosť |
+| --- | --- |
+| `app.js` | Prepája rozhranie, vstup, profily, načítanie kurzu a zobrazenie výsledku. Počas načítania zakáže spustenie lekcie starého kurzu; číslovanie požiadaviek chráni pred oneskorenou odpoveďou. |
+| `typing-engine.js` | Čisté pravidlá pozície, pokusov, chýb, dokončenia a aktívneho času. Nepristupuje k stránke ani úložisku. Čas je injektovateľný pre testy. |
+| `sentences.js` | Štyri úrovne, validácia korpusu a testovateľný výber vety podľa jazyka, náročnosti a povolených znakov. |
+| `lessons.js` | Normalizuje postupné lekcie, kumuluje naučené znaky a pripraví cvičenie alebo poctivý náhradný tréning klávesov a slov. |
+| `lesson-loader.js` | Načítava katalóg a kurz cez lokálny `fetch`. |
+| `profiles.js` | Aktívny profil, jeho nastavenia, posledná lekcia podľa kurzu, agregované výsledky a ohraničená história. |
+| `data-model.js` | Verzia formátu, rozsahy a identifikátory, validácia nedôveryhodných údajov a migrácia podporovanej verzie. |
+| `storage.js` | Pamäťový režim, čítanie/zápis `localStorage`, overenie zápisu, bezpečné chyby, migrácia starých cookies a mazanie vlastných údajov. |
+| `keyboard-models.js` | Fyzický tvar MacBook Air a Dell XPS 2018, nezávislý od jazyka. |
+| `keyboard-layouts.js` | Načíta popisy klávesov a známe mapovanie znaku na fyzický kláves s modifikátormi. |
+| `hand-guide.js` | Mapovanie fyzickej klávesy na prst, SVG ilustrácie rúk a spojnica k cieľovému klávesu. SVG znamená škálovateľnú vektorovú grafiku. |
 
-## Moduly
+## Tok vstupu a výsledku
 
-### `app.js`
+1. Rozhranie zachytí výsledný znak z `keydown` alebo potvrdený vstup cez pole cvičenia. Prezývka, posuvník, výbery a bežné skratky prehliadača sú oddelené od tréningu.
+2. Samotné modifikátory, `Dead`, opakovanie držaného klávesu a pomocné udalosti skladania sa nepočítajú. Skladanie sa potvrdí cez `compositionend`; nasledujúci duplicitný `input` sa vynechá. NFC, kanonická normalizácia Unicode, spojí napríklad písmeno a prízvuk do výsledného znaku.
+3. Engine porovná výsledný znak. Správny znak posunie pozíciu, nesprávny zvýši počet chýb a ponechá rovnaký cieľ. Fyzický `event.code` pomáha zobrazovaniu a neurčuje správnosť textu.
+4. Po poslednom znaku zostáva stav dokončený. `claimResult` dovolí prevzatie výsledku daného behu iba raz. Nový beh dostane nový náhodný identifikátor; nejde o sledovací identifikátor a neopúšťa prehliadač.
+5. Profilový modul uloží výsledok, aktualizuje súhrn lekcie a obmedzí históriu na posledných 100 záznamov. Bežné stlačenie klávesu nespôsobuje zápis úložiska.
 
-Aktualne je hlavny orchestrator UI:
+Presnosť = `round((attempts - errors) / attempts * 100)`. Bez pokusu sa ukazuje 100 %. Dokončený výsledok musí mať `attempts - errors === length`. Čas začína prvým pokusom, zahŕňa opravy chýb a končí posledným správnym znakom. Skrytie stránky, strata zamerania okna alebo prechod na ovládacie prvky pozastaví meranie; ďalší znak ho obnoví. Údaje obsahujú trvanie v milisekundách aj dátum dokončenia. WPM (words per minute, slová za minútu) sa v tejto verzii nevypočítava.
 
-- inicializaciu,
-- napojenie event listenerov,
-- prepojenie profilov, storage, klavesnice, US layoutu a typing engine,
-- render profiloveho selectu,
-- render typing stripu so stavmi,
-- render vizualnej klavesnice,
-- vyvolanie hand-guide aktualizacie po kazdom renderi klavesnice.
+Najlepší výsledok je najvyššia presnosť; pri rovnakej presnosti vyhrá kratší aktívny čas. Samotné otvorenie alebo reštart lekcie nevytvára dokončený výsledok.
 
-Typing stav je uz presunuty do `typing-engine.js`.
+## Obsah a pedagogické obmedzenie
 
-### `storage.js`
+`content/courses/` obsahuje dva kurzy po 16 lekciách. Každá lekcia zavádza explicitné `introducedCharacters`. Množina sa postupne rozširuje. Medzera je zavedená od prvej lekcie na oddelenie skupín klávesov; veľké písmená, diakritika, čísla a interpunkcia majú vlastné kroky. `introducedKeys` zachováva fyzické metadáta pôvodných kurzov; pri výbere textu rozhoduje presný znak.
 
-Zodpoveda za:
+`content/sentences/<language>.json` obsahuje 120 viet na jazyk. Každá má stabilné `id`, `language`, `difficulty`, `text` a `topics`. Počet slov a znakov sa odvodzuje z textu. Zdroje vznikli pri vývoji a boli jazykovo prečítané; nie sú prevzaté z cudzích článkov.
 
-- detekciu cookies,
-- citanie a zapis JSON dat cez js-cookie,
-- fallback na runtime pamat, ked cookies nie su dostupne.
+Výber najprv filtruje jazyk a úroveň, potom vyžaduje všetky naučené znaky vrátane medzery, interpunkcie a veľkosti písmen. Ak vhodná veta nie je dostupná, kurz použije dostupné slová alebo klávesové skupiny a vysvetlí dôvod. Neprípustné slová sa vynechajú celé, aby nevznikali skomolené fragmenty. Voľný tréning túto pedagogickú hranicu nemá. Pri viacerých vhodných vetách sa bezprostredne neopakuje posledné `textId` v aktuálne otvorenej lekcii.
 
-Fallback runtime pamat prezije iba aktualne otvorenu stranku. Po reloade bez cookies sa data stratia.
+Zmena úrovne nemení rozpracovaný text. Nastavenie sa uloží k profilu a použije sa pri ďalšom cvičení, opakovaní, pokračovaní alebo vedomom reštarte. Štyri orientačné vekové pásma sú informácia o obsahu; vek sa nezisťuje.
 
-### `profiles.js`
+Nový obsah sa pridáva do JSON a overí `npm run validate:content`. Nový kurz vyžaduje aj identifikátory v `data-model.js`, layout a testy migrácie/progresu. JSON je textový formát štruktúrovaných údajov.
 
-Zodpoveda za:
+## Úložisko a verzovanie
 
-- vytvaranie profilu,
-- zoznam profilov,
-- aktivny profil,
-- ulozenie nastaveni profilu.
-
-Aktualne cookie kluce:
+Jediný aktuálny kľúč v `localStorage` je `strojopis_data`:
 
 ```text
-strojopis_profiles_index
-strojopis_active_profile_id
-strojopis_profile_<id>
+schemaVersion: 2
+activeProfileId: string | null
+profiles: [
+  id, name, keyboardModel, languageLayout, difficulty, guideEnabled,
+  createdAt, updatedAt,
+  courses: {
+    <language>: {
+      lastLessonId,
+      lessons: { <lessonId>: { completedAttempts, bestResult, lastResult } }
+    }
+  },
+  history: [najviac 100 výsledkov]
+]
 ```
 
-Profil obsahuje:
+Výsledok obsahuje `id`, `lessonId`, `textId`, jazyk, použitú náročnosť, pokusy, chyby, presnosť, čas, dĺžku textu a dátum dokončenia. Neukladá stlačenia klávesov, vek, e-mail, celý napísaný text ani polohu rozpracovaného znaku. Úložisko je obmedzené na 50 profilov; dĺžky prezývok, identifikátory, kurzy a rozsahy metrík sa validujú.
 
-```js
-{
-  id: "peter",
-  name: "Peter",
-  keyboardModel: "macbook-air",
-  languageLayout: "en-us",
-  createdAt: "...",
-  updatedAt: "..."
-}
-```
+Verzia 1 je podporovaný starší tvar profilových nastavení bez výsledkov. Migrácia doplní úroveň 1, historické vedenie prstov, dátum a prázdny progres. Poškodený či neplatný záznam a novšia neznáma verzia sa chránia pred prepísaním. Nová relácia môže trénovať v pamäti. Obnovenie zápisu po takom stave vyžaduje vedomé vymazanie vlastných starých údajov v rozhraní.
 
-Existuje aj jednorazova migracia zo stareho Loop 0 kluca `strojopis_active_profile`.
+Bez existujúceho platného záznamu sa trvalo nezapisuje, kým používateľ nezvolí **Zapamätať tréning**. Už existujúci platný záznam obnovuje predchádzajúcu voľbu. Pri každom významnom zápise sa záznam spätne prečíta a porovná. Chyba kapacity, prístupu alebo overenia prepne ďalšiu prácu do pamäte a zobrazí pravdivý oznam. Predchádzajúci úspešný záznam môže zostať na disku, čo oznam netají.
 
-### `keyboard-models.js`
+Mazanie profilu zachová ostatné profily. Vymazanie všetkých údajov zasahuje iba vlastný menný priestor `strojopis_`, nikdy `localStorage.clear()`. Vypnutie zapamätania odstráni aktuálny záznam a ponechá reláciu v pamäti. Všetky tri deštruktívne voľby majú potvrdzovací dialóg. Súbežná editácia viacerých kariet sa nezlučuje; posledný zápis môže nahradiť stav inej karty.
 
-Fyzicky tvar klavesnice. Rovnaky fyzicky model sa moze pouzit s viacerymi jazykovymi layoutmi.
+### Migrácia cookies
 
-Aktualne modely:
+Bez js-cookie, natívnym čítaním `document.cookie`, sa pri vyžiadaní zapamätania jednorazovo spracujú:
 
-- MacBook Air
-- Dell XPS 2018
+- `strojopis_profiles_index`, `strojopis_active_profile_id`, `strojopis_profile_<id>`;
+- najstarší `strojopis_active_profile`;
+- spoločné `strojopis_finger_guide` ako predvolená hodnota pre prenesené profily.
 
-Model obsahuje riadky fyzickych `KeyboardEvent.code` hodnot:
+Platné údaje sa skontrolujú a zlúčia bez nahradenia existujúcich profilov rovnakého ID (identifikátora). Až po úspešnom zápise a totožnom spätnom načítaní sa odstránia prenesené cookies. Pri chybe zostávajú všetky pôvodné cookies. Neplatné profily sa nepreberú a ich cookies sa nemažú. Nové profily cookies nevytvárajú.
 
-```js
-{
-  id: "macbook-air",
-  name: "MacBook Air",
-  rows: [
-    ["KeyQ", "KeyW", "KeyE"]
-  ]
-}
-```
+## Účel zapamätania a rozsah overenia
 
-### `keyboard-layouts.js`
+Účel každého uloženého údaja je obnovenie používateľom vyžiadaného tréningu: prezývka rozlišuje profily, nastavenia obnovujú voľby, posledná lekcia miesto v kurze a výsledky progres. Údaje neopúšťajú zariadenie; nie je tu analytika, reklama ani vzdialená synchronizácia. Nejde o všeobecný právny súhlas a rozhranie ho tak nenazýva.
 
-Mapovanie fyzickych `KeyboardEvent.code` hodnot na zobrazene znaky pre pevny US English layout.
+Samotné použitie `localStorage` nevylučuje pôsobnosť čl. 5 ods. 3 ePrivacy. [Usmernenia EDPB 2/2023, v2.0](https://www.edpb.europa.eu/system/files/documents/2024-10/edpb_guidelines_202302_technical_scope_art_53_eprivacydirective_v2_en_0.pdf), odseky 1 a 4 a poznámka 4, opisujú technický rozsah; oprávnenosť konkrétnej výnimky z požiadavky súhlasu sa posudzuje osobitne podľa vnútroštátnej úpravy. EDPB je Európsky výbor pre ochranu údajov. Toto overenie dokumentuje implementovaný účel a tok údajov, nepotvrdzuje právne posúdenie verejného nasadenia ani prevádzku budúceho hostingu.
 
-Aktualny layout:
+Lokálne profily nie sú chránené prihlasovaním. Ďalší používateľ toho istého profilu prehliadača ich môže vidieť. Vymazanie dát prehliadača, zmena pôvodu alebo zariadenia znemožní prístup k miestnemu progresu; prenos medzi zariadeniami nie je súčasťou prvej verzie.
 
-- US English
+## Klávesnica a prsty
 
-Layout obsahuje labely pre nahlad klavesnice:
+Fyzický model, jazyk textu a jeho náročnosť sú samostatné osi. `KeyboardEvent.code` označuje fyzický kláves, `key` výsledný znak, popis klávesu slúži na zobrazenie a prst určuje fyzické mapovanie. Modifikátor Shift sa ukazuje opačnej ruke; medzerník pravému palcu. České veľké písmená s diakritikou nemajú vymyslenú kombináciu Shift + číslica: keďže sa bežne skladajú, ich fyzické mapovanie zostáva neznáme.
 
-```js
-{
-  id: "en-us",
-  name: "US English",
-  labels: {
-    KeyA: "A",
-    KeyS: "S"
-  }
-}
-```
-
-Poznamka: ostatne jazykove layouty boli z MVP vyhodene. Ak sa vratia neskor, maju byt riesene ako novy scope.
-
-### `typing-engine.js`
-
-Zodpoveda za:
-
-- beh aktivnej lekcie,
-- spracovanie `keydown`,
-- posun aktualnej pozicie,
-- pocitanie chyb a presnosti,
-- reset cvicenia,
-- prepnutie lekcie cez `setLesson`.
-
-### `lessons.js`
-
-Zodpoveda za:
-
-- definiciu postupnosti lekcii,
-- mapovanie textu lekcie na `{ char, code }` targety,
-- oddelenie obsahu lekcie od typing engine.
-
-Aktualna postupnost lekcii:
-
-1. Home row: `A S D F J K L ;`
-2. Upper row: pohyb z home klavesov na `Q W E R U I O P`
-3. Lower row: spodny riadok a navrat na home row
-4. All letters: vsetky pismena v kratkych skupinach
-5. Simple words: kratke slova
-6. Word flow: dlhsie jednoduche slova
-7. Short phrases: jednoduche frazy
-8. Numbers and signs: cisla a zakladne znamienka
-9. Sentences: jednoduche vety so znamienkami
-
-Princip pre dalsie lekcie:
-
-- nova lekcia nikdy nema zaviest viac ako malu skupinu novych klaves,
-- slova maju pouzivat hlavne uz precvicene klavesy,
-- cisla a znamienka pridu az po vsetkych pismenach,
-- vety su az posledna faza, ked uz pouzivatel pozna medzery, ciarky, bodky, cisla a zakladne znamienka.
-
-### `hand-guide.js`
-
-Zodpoveda za:
-
-- mapovanie klavesu na prst,
-- urcenie home-row pozicie prsta,
-- zvyraznenie cieloveho klavesu,
-- vypocet stredov home a cielovej klavesy z DOM,
-- nastavenie CSS premennych pre animaciu prsta.
-
-Aktualny princip:
-
-- kazdy prst ma vlastny element s `data-finger`,
-- vsetky prsty su priehladne a sedia na svojej home klavese,
-- aktivny prst dostane `--finger-x`, `--finger-y`, `--target-x`, `--target-y`,
-- CSS animacia ho posunie z home klavesy na cielovu klavesu, naznaci stlacenie a vrati ho naspat.
-
-Home pozicie:
-
-```text
-left-pinky  -> A
-left-ring   -> S
-left-middle -> D
-left-index  -> F
-right-index -> J
-right-middle-> K
-right-ring  -> L
-right-pinky -> ;
-```
-
-## Dolezite datove oddelenie
-
-Treba striktne oddelit:
-
-- `KeyboardEvent.code` - fyzicka klavesa, napriklad `KeyA`,
-- label klavesu - co je napisane na vizualnej klavese v US layoute,
-- generovany znak - co ma pouzivatel napisat,
-- prst - ktorym prstom sa ma klavesa stlacit.
-
-Toto oddelenie ostava klucove aj pri jednom US layoute, pretoze fyzicka klavesnica a znak z cvicenia stale nie su to iste.
-
-## Cookies
-
-Cookies maju malu kapacitu. V prvej verzii sa do nich maju ukladat iba:
-
-- zoznam profilov,
-- meno profilu,
-- aktivny profil,
-- vybrana fyzicka klavesnica,
-- pevny layout marker `en-us`,
-- zakladne posledne nastavenia.
-
-Vacsie statistiky nepatria do cookies. Ak budu potrebne, pouzit neskor `localStorage`.
-
-## UI obrazovky
-
-Minimalne obrazovky:
-
-- profilova obrazovka,
-- nastavenia profilu,
-- cvicenie.
-
-Cvicenie obsahuje:
-
-- riadok znakov,
-- aktualny znak,
-- vizualnu klavesnicu,
-- obrys ruk,
-- odporucany prst,
-- zakladne metriky.
-
-## Chybove pravidla
-
-Aplikacia nesmie spadnut, ked:
-
-- cookies nie su povolene,
-- profil nie je ulozeny,
-- chyba mapovanie klavesu,
-- layout nema label pre konkretny `code`,
-- pouzivatel stlaci nepodporovanu klavesu.
-
-V takych pripadoch ma pouzit fallback a pokracovat.
+`ResizeObserver` prepočíta spojnicu po zmene veľkosti. Vypnutie vedenia prstov schová ruky, pokyn, spojnicu aj farebné zóny. Voľba patrí každému profilu osobitne. Pri obmedzení animácií v systéme sa efekty nehýbu. Úzky displej má vnútorný posuv klávesnice, nie vodorovný posuv celej stránky.

@@ -3,135 +3,51 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Strojopis</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <meta name="theme-color" content="#f6f5ef">
+    <title>Strojopis · Prst po prste</title>
     <link href="assets/css/app.css" rel="stylesheet">
   </head>
   <body>
     <main class="app-shell">
-      <section class="topbar">
-        <div>
-          <p class="section-kicker">Strojopis</p>
-          <h1>Trening pisania</h1>
-        </div>
-        <div class="profile-chip" id="activeProfileChip">
-          <i class="bi bi-person"></i>
-          <span>Bez profilu</span>
-        </div>
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Strojopis – domov"><span class="brand-mark">s<span>●</span></span><span>strojopis<span class="brand-dot">.</span></span></a>
+        <span class="topbar-note">Malé kroky. Šikovné prsty.</span>
+        <div class="profile-chip" id="activeProfileChip"><span class="avatar" aria-hidden="true">☺</span><span>Bez profilu</span></div>
+      </header>
+      <div class="intro"><div><p class="section-kicker">TVOJA CHVÍĽA NA TRÉNING</p><h1>Prst po prste.<br><span>Ide ti to do rúk.</span></h1></div><p>Pozeraj na obrazovku, nechaj prsty nájsť cestu.<br>Každým stlačením budeš o kúsok lepší.</p></div>
+      <section class="memory-card" aria-label="Zapamätanie tréningu">
+        <div><strong>Tréning podľa teba, údaje u teba.</strong><p id="memoryDescription">Prezývku, nastavenia a výsledky môžeme zapamätať iba v tomto prehliadači. Bez zapamätania môžeš trénovať do zatvorenia stránky.</p><p id="storageStatus" class="helper-text" role="status"></p></div>
+        <button id="rememberButton" class="btn btn-primary" type="button" aria-describedby="memoryDescription">Zapamätať tréning</button>
       </section>
-
       <section class="workspace">
-        <aside class="side-panel">
-          <div class="panel-block">
-            <h2>Profil</h2>
-            <form id="profileForm" class="stack-sm">
-              <label class="form-label" for="profileName">Novy profil</label>
-              <div class="input-group">
-                <input class="form-control" id="profileName" name="profileName" autocomplete="name" placeholder="Meno alebo prezyvka">
-                <button class="btn btn-primary" type="submit">
-                  <i class="bi bi-person-plus"></i>
-                  Vytvorit
-                </button>
-              </div>
-            </form>
-            <div class="stack-sm">
-              <label class="form-label" for="profileSelect">Aktivny profil</label>
-              <select class="form-select" id="profileSelect"></select>
-            </div>
-            <p class="helper-text" id="storageStatus">Kontrolujem cookies...</p>
+        <aside class="side-panel" aria-label="Profil a nastavenia tréningu">
+          <div class="panel-block lesson-settings"><p class="section-kicker">01 / TVOJ TRÉNING</p><h2>Čo si dnes precvičíš?</h2>
+            <div class="stack-sm"><label for="languageLayout">Kurz a jazyk klávesnice</label><select id="languageLayout"></select></div>
+            <div class="stack-sm"><label for="lessonSelect">Vyber si lekciu</label><select id="lessonSelect"></select><p class="helper-text" id="lessonMeta">Načítavam lekcie…</p></div>
+            <div class="stack-sm difficulty-settings"><label for="difficulty">Náročnosť viet <output id="difficultyName" for="difficulty"></output></label><input type="range" id="difficulty" min="1" max="4" step="1" value="1" aria-describedby="difficultyDescription difficultySample difficultyPending"><p id="difficultyDescription" class="helper-text"></p><p id="difficultySample" class="sample-text"></p><p id="difficultyPending" class="helper-text" role="status"></p></div>
+            <div class="stack-sm"><label for="keyboardModel">Fyzická klávesnica</label><select id="keyboardModel"><option value="macbook-air">MacBook Air</option><option value="dell-xps-2018">Dell XPS 2018</option></select></div>
           </div>
-
-          <div class="panel-block">
-            <h2>Nastavenia</h2>
-            <div class="stack-sm">
-              <label class="form-label" for="keyboardModel">Fyzicka klavesnica</label>
-              <select class="form-select" id="keyboardModel">
-                <option value="macbook-air">MacBook Air</option>
-                <option value="dell-xps-2018">Dell XPS 2018</option>
-              </select>
-            </div>
-            <div class="stack-sm">
-              <span class="form-label d-block">Jazykova sada</span>
-              <div class="fixed-setting">
-                <i class="bi bi-keyboard"></i>
-                <span>US English</span>
-              </div>
-            </div>
-            <div class="stack-sm">
-              <label class="form-label" for="lessonSelect">Lekcia</label>
-              <select class="form-select" id="lessonSelect"></select>
-              <p class="helper-text" id="lessonMeta">Rows: Zakladne klavesy</p>
-            </div>
-          </div>
+          <div class="tip-card"><span class="tip-icon" aria-hidden="true">✦</span><div><h3>Nájdi svoje miesto</h3><p>Ukazováky polož na <b>F</b> a <b>J</b>. Výstupky na týchto klávesoch ti pomôžu aj bez pozerania.</p></div><div class="home-demo" aria-hidden="true"><kbd>F</kbd><span>← základná poloha →</span><kbd>J</kbd></div></div>
+          <details class="panel-block profile-settings"><summary>Tvoj profil <span aria-hidden="true">＋</span></summary><div class="stack-sm"><label for="profileSelect">Aktívny profil</label><select id="profileSelect"></select></div><form id="profileForm" class="stack-sm"><label for="profileName">Nový profil</label><div class="input-group"><input id="profileName" name="profileName" autocomplete="off" placeholder="Tvoja prezývka" maxlength="60"><button class="btn btn-primary" type="submit" aria-label="Vytvoriť profil">＋</button></div></form><p id="profileMessage" class="helper-text" role="status"></p><p id="profileProgress" class="helper-text"></p><button id="deleteProfileButton" class="btn btn-danger" type="button">Vymazať tento profil</button></details>
+          <p class="sidebar-footer">Nie je to pretek. Najprv presne, potom rýchlo.</p>
+        <details class="panel-block privacy"><summary>Údaje v tomto zariadení</summary><p>Ukladáme prezývku, nastavenia, miesto v každom kurze, súhrny a najviac 100 posledných výsledkov na profil. Údaje nikam neposielame.</p><p>Profily nemajú prihlasovanie. Môžu ich vidieť ďalší používatelia rovnakého profilu prehliadača. Vymazanie údajov prehliadača alebo zmena zariadenia odstráni prístup k progresu.</p><button class="btn btn-danger" id="deleteAllButton" type="button">Vymazať všetky údaje aplikácie</button></details>
         </aside>
-
-        <section class="practice-panel">
-          <div class="practice-header">
-            <div>
-              <p class="section-kicker">Lekcie</p>
-              <h2>Postupny trening</h2>
-            </div>
-            <button class="btn btn-outline-secondary" id="resetButton" type="button">
-              <i class="bi bi-arrow-counterclockwise"></i>
-              Reset
-            </button>
-          </div>
-
-          <div class="typing-strip" id="typingStrip" aria-label="Riadok znakov na pisanie"></div>
-          <p class="feedback-line" id="feedbackLine">Stlac aktualny znak.</p>
-
-          <div class="stats-row" aria-label="Zakladne metriky">
-            <div>
-              <span class="stat-label">Profil</span>
-              <strong id="statProfile">-</strong>
-            </div>
-            <div>
-              <span class="stat-label">Klavesnica</span>
-              <strong id="statKeyboard">MacBook Air</strong>
-            </div>
-            <div>
-              <span class="stat-label">Jazyk</span>
-              <strong id="statLanguage">US English</strong>
-            </div>
-            <div>
-              <span class="stat-label">Presnost</span>
-              <strong id="statAccuracy">100%</strong>
-            </div>
-            <div>
-              <span class="stat-label">Chyby</span>
-              <strong id="statErrors">0</strong>
-            </div>
-          </div>
-
-          <div class="keyboard-stage">
-            <div class="keyboard-workbench">
-              <div class="keyboard-preview" id="keyboardPreview" aria-label="Nahlad klavesnice"></div>
-              <div class="hand-guide" aria-hidden="true">
-                <div class="hand-shape left-hand-shape">
-                  <span class="palm"></span>
-                  <span class="thumb"></span>
-                </div>
-                <div class="hand-shape right-hand-shape">
-                  <span class="palm"></span>
-                  <span class="thumb"></span>
-                </div>
-                <span class="guide-finger left-pinky" data-finger="left-pinky"></span>
-                <span class="guide-finger left-ring" data-finger="left-ring"></span>
-                <span class="guide-finger left-middle" data-finger="left-middle"></span>
-                <span class="guide-finger left-index" data-finger="left-index"></span>
-                <span class="guide-finger right-index" data-finger="right-index"></span>
-                <span class="guide-finger right-middle" data-finger="right-middle"></span>
-                <span class="guide-finger right-ring" data-finger="right-ring"></span>
-                <span class="guide-finger right-pinky" data-finger="right-pinky"></span>
-              </div>
-            </div>
-          </div>
+        <section class="practice-panel" aria-label="Cvičenie strojopisu">
+          <div class="practice-header"><div><p class="section-kicker">02 / PRSTY DO AKCIE</p><h2 id="practiceTitle">Základná poloha</h2></div><button class="btn btn-outline" id="resetButton" type="button"><span aria-hidden="true">↺</span> Odznova</button></div>
+          <div class="exercise-card"><div class="exercise-topline"><span><span class="live-dot" aria-hidden="true"></span> Píš na svojej klávesnici</span><span id="exercisePosition">1 / 1</span></div><div class="typing-strip" id="typingStrip" aria-label="Znaky na písanie"></div><div class="exercise-bottomline"><p class="feedback-line" id="feedbackLine" role="status">Stlač zvýraznený znak.</p><span>Presnosť <b id="statAccuracy">100%</b><span class="metric-divider">/</span>Chyby <b id="statErrors">0</b></span></div><div class="progress-track" role="progressbar" aria-label="Postup v cvičení" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="exerciseProgress"><span id="progressFill"></span></div></div>
+          <label class="training-label" for="trainingInput">Tu píš cvičenie <span>· fyzickou klávesnicou</span></label><textarea id="trainingInput" rows="1" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="feedbackLine" placeholder="Klikni sem alebo začni písať mimo ovládacích prvkov"></textarea>
+          <section id="resultPanel" class="result-panel" aria-labelledby="resultTitle" hidden><h3 id="resultTitle" tabindex="-1">✓ Cvičenie dokončené</h3><p id="resultMetrics"></p><p id="resultProgress"></p><div class="result-actions"><button id="repeatButton" class="btn" type="button">Opakovať lekciu</button><button id="nextButton" class="btn btn-primary" type="button">Pokračovať</button></div></section>
+          <div class="guide-toolbar"><div><h3>Tvoja mapa klávesnice</h3><p>Rovnaká farba = rovnaký prst.</p></div><button id="guideToggle" class="guide-toggle" type="button" role="switch" aria-checked="true" aria-controls="fingerInstruction handGuide fingerLegend"><span class="switch-track" aria-hidden="true"><span></span></span><span>Vedenie prstov <small id="guideToggleStatus">Zapnuté</small></span></button></div>
+          <div class="finger-instruction" id="fingerInstruction" aria-live="polite" aria-atomic="true"><span class="target-badge" id="targetBadge">a</span><div class="instruction-copy"><span class="section-kicker">TERAZ STLAČ</span><strong id="fingerName">Ľavý malíček</strong><p id="fingerDescription">Polož prst na zvýraznený kláves.</p></div><div class="upcoming"><span class="section-kicker">POTOM NASLEDUJE</span><div id="upcomingKeys"></div></div></div>
+          <div class="keyboard-stage"><div class="keyboard-workbench"><div class="keyboard-preview" id="keyboardPreview" aria-label="Mapa klávesnice"></div><svg class="guide-connection" id="guideConnection" aria-hidden="true"><path id="guidePath"/><circle id="guideEndpoint" r="4"/></svg><div class="hand-guide" id="handGuide" aria-hidden="true"></div></div></div>
+          <div class="finger-legend" id="fingerLegend"><span><i class="finger-pinky"></i>Malíček</span><span><i class="finger-ring"></i>Prstenník</span><span><i class="finger-middle"></i>Prostredník</span><span><i class="finger-index"></i>Ukazovák</span><span><i class="finger-thumb"></i>Palec</span></div>
+          <div class="practice-footer"><span><span class="footer-dot" aria-hidden="true"></span><span id="statKeyboard">MacBook Air</span> · <span id="statLanguage">English UK</span></span><span id="guideFooter">Sleduj znak → nájdi prst → stlač kláves</span><span id="statProfile" hidden></span></div>
         </section>
       </section>
+      <footer class="page-footer"><span>Desať prstov. Nekonečne možností.</span><span>Vyrobené pre zvedavé ruky <span aria-hidden="true">✳</span></span></footer>
     </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <dialog id="deleteDialog" aria-labelledby="deleteTitle"><h2 id="deleteTitle">Vymazanie údajov</h2><p id="deleteDescription"></p><div class="result-actions"><button id="cancelDeleteButton" class="btn" type="button" autofocus>Zrušiť</button><button id="confirmDeleteButton" class="btn btn-danger" type="button">Vymazať</button></div></dialog>
     <script type="module" src="assets/js/app.js"></script>
   </body>
 </html>

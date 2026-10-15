@@ -1,149 +1,70 @@
-const INDEX_KEY = "strojopis_profiles_index";
-const ACTIVE_KEY = "strojopis_active_profile_id";
-const LEGACY_ACTIVE_PROFILE_KEY = "strojopis_active_profile";
-
-const DEFAULT_PROFILE_SETTINGS = {
-  keyboardModel: "macbook-air",
-  languageLayout: "en-us"
-};
-
-function profileKey(id) {
-  return `strojopis_profile_${id}`;
-}
-
-function slugify(value) {
-  const cleaned = value
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-  return cleaned || "profil";
-}
-
-function readIndex(storage) {
-  const index = storage.readJSON(INDEX_KEY, []);
-  return Array.isArray(index) ? index : [];
-}
-
-function writeIndex(storage, ids) {
-  storage.writeJSON(INDEX_KEY, Array.from(new Set(ids)));
-}
-
-function makeUniqueId(storage, baseId) {
-  const ids = readIndex(storage);
-  if (!ids.includes(baseId)) {
-    return baseId;
-  }
-
-  let counter = 2;
-  let candidate = `${baseId}-${counter}`;
-
-  while (ids.includes(candidate)) {
-    counter += 1;
-    candidate = `${baseId}-${counter}`;
-  }
-
-  return candidate;
-}
-
-function now() {
-  return new Date().toISOString();
-}
-
-function migrateLegacyProfile(storage) {
-  const legacy = storage.readJSON(LEGACY_ACTIVE_PROFILE_KEY, null);
-  if (!legacy || !legacy.name) {
-    return;
-  }
-
-  const id = makeUniqueId(storage, slugify(legacy.name));
-  const profile = {
-    id,
-    name: legacy.name,
-    keyboardModel: legacy.keyboardModel || DEFAULT_PROFILE_SETTINGS.keyboardModel,
-    languageLayout: DEFAULT_PROFILE_SETTINGS.languageLayout,
-    createdAt: legacy.updatedAt || now(),
-    updatedAt: now()
-  };
-
-  const ids = readIndex(storage);
-  writeIndex(storage, ids.concat(profile.id));
-  storage.writeJSON(profileKey(profile.id), profile);
-  storage.writeJSON(ACTIVE_KEY, profile.id);
-  storage.remove(LEGACY_ACTIVE_PROFILE_KEY);
-}
-
+import { COURSE_LESSON_IDS, LANGUAGES, MODELS, validateResult } from './data-model.js';
+/** @typedef {import('./types').Profile} Profile */
+/** @param {ReturnType<typeof import('./storage').createStorage>} storage */
 export function createProfileManager(storage) {
-  migrateLegacyProfile(storage);
-
-  function listProfiles() {
-    return readIndex(storage)
-      .map((id) => storage.readJSON(profileKey(id), null))
-      .filter(Boolean);
-  }
-
-  function getActiveProfileId() {
-    return storage.readJSON(ACTIVE_KEY, null);
-  }
-
-  function getActiveProfile() {
-    const id = getActiveProfileId();
-    if (!id) {
-      return null;
-    }
-
-    return storage.readJSON(profileKey(id), null);
-  }
-
-  function setActiveProfile(id) {
-    storage.writeJSON(ACTIVE_KEY, id);
+  const listProfiles = () => storage.read().profiles;
+  const getActiveProfile = () => { const data = storage.read(); return data.profiles.find(p => p.id === data.activeProfileId) ?? null; };
+  function change(action) {
+    const data = storage.read();
+    action(data);
+    storage.save(data);
     return getActiveProfile();
   }
-
+  function setActiveProfile(id) {
+    return change(data => { if (data.profiles.some(p => p.id === id)) data.activeProfileId = id; });
+  }
   function createProfile(name, settings = {}) {
-    const profileName = name.trim();
-    const id = makeUniqueId(storage, slugify(profileName));
-    const timestamp = now();
-    const profile = {
-      id,
-      name: profileName,
-      ...DEFAULT_PROFILE_SETTINGS,
-      ...settings,
-      createdAt: timestamp,
-      updatedAt: timestamp
-    };
-
-    const ids = readIndex(storage);
-    writeIndex(storage, ids.concat(profile.id));
-    storage.writeJSON(profileKey(profile.id), profile);
-    storage.writeJSON(ACTIVE_KEY, profile.id);
-    return profile;
+    const cleaned = name.trim().slice(0, 60);
+    if (!cleaned) throw new Error('Zadaj prezývku.');
+    if (listProfiles().length >= 50) throw new Error('V tomto prehliadači môže byť najviac 50 profilov.');
+    const stamp = new Date().toISOString();
+    const id = `p-${crypto.randomUUID()}`;
+    change(data => {
+      data.profiles.push({ id, name: cleaned, keyboardModel: 'macbook-air', languageLayout: 'en-gb', difficulty: 1, guideEnabled: true, ...settings, createdAt: stamp, updatedAt: stamp, courses: {}, history: [] });
+      data.activeProfileId = id;
+    });
+    return getActiveProfile();
   }
-
   function updateActiveProfileSettings(settings) {
-    const profile = getActiveProfile();
-    if (!profile) {
-      return null;
-    }
-
-    const updated = {
-      ...profile,
-      ...settings,
-      updatedAt: now()
-    };
-
-    storage.writeJSON(profileKey(updated.id), updated);
-    return updated;
+    return change(data => {
+      const p = data.profiles.find(p => p.id === data.activeProfileId);
+      if (!p) return;
+      if (MODELS.includes(settings.keyboardModel)) p.keyboardModel = settings.keyboardModel;
+      if (LANGUAGES.includes(settings.languageLayout)) p.languageLayout = settings.languageLayout;
+      if ([1,2,3,4].includes(settings.difficulty)) p.difficulty = settings.difficulty;
+      if (typeof settings.guideEnabled === 'boolean') p.guideEnabled = settings.guideEnabled;
+      p.updatedAt = new Date().toISOString();
+    });
   }
-
-  return {
-    listProfiles,
-    getActiveProfile,
-    setActiveProfile,
-    createProfile,
-    updateActiveProfileSettings
-  };
+  function selectLesson(language, id) {
+    return change(data => {
+      const p = data.profiles.find(p => p.id === data.activeProfileId);
+      if (!p || !COURSE_LESSON_IDS[language]?.includes(id)) return;
+      p.courses[language] ??= { lastLessonId: id, lessons: {} };
+      p.courses[language].lastLessonId = id;
+    });
+  }
+  /** Completion is idempotent, including repeated UI renders. */
+  function recordResult(result) {
+    const valid = validateResult(result, result.language);
+    return change(data => {
+      const p = data.profiles.find(p => p.id === data.activeProfileId);
+      if (!p || p.history.some(r => r.id === valid.id)) return;
+      p.courses[valid.language] ??= { lastLessonId: valid.lessonId, lessons: {} };
+      const course = p.courses[valid.language];
+      const previous = course.lessons[valid.lessonId];
+      const best = previous?.bestResult;
+      const better = !best || valid.accuracy > best.accuracy || (valid.accuracy === best.accuracy && valid.durationMs < best.durationMs);
+      course.lessons[valid.lessonId] = { completedAttempts: (previous?.completedAttempts ?? 0) + 1, bestResult: better ? valid : best, lastResult: valid };
+      p.history = [...p.history, valid].slice(-100);
+      p.updatedAt = valid.completedAt;
+    });
+  }
+  function deleteActiveProfile() {
+    return change(data => {
+      data.profiles = data.profiles.filter(p => p.id !== data.activeProfileId);
+      data.activeProfileId = data.profiles[0]?.id ?? null;
+    });
+  }
+  return { listProfiles, getActiveProfile, createProfile, setActiveProfile, updateActiveProfileSettings, selectLesson, recordResult, deleteActiveProfile };
 }

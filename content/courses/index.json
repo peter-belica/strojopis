@@ -1,0 +1,12 @@
+[
+  {
+    "id": "en-gb",
+    "name": "Britská angličtina · EN-GB",
+    "courseUrl": "content/courses/en-gb.json"
+  },
+  {
+    "id": "cs-cz",
+    "name": "Čeština · česká klávesnica",
+    "courseUrl": "content/courses/cs-cz.json"
+  }
+]

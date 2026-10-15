@@ -1,0 +1,435 @@
+{
+  "id": "cs-cz",
+  "name": "Čeština",
+  "labels": {
+    "Escape": "Esc",
+    "Digit1": "+",
+    "Digit2": "ě",
+    "Digit3": "š",
+    "Digit4": "č",
+    "Digit5": "ř",
+    "Digit6": "ž",
+    "Digit7": "ý",
+    "Digit8": "á",
+    "Digit9": "í",
+    "Digit0": "é",
+    "Minus": "=",
+    "Equal": "´",
+    "Backspace": "Back",
+    "Tab": "Tab",
+    "KeyQ": "Q",
+    "KeyW": "W",
+    "KeyE": "E",
+    "KeyR": "R",
+    "KeyT": "T",
+    "KeyY": "Z",
+    "KeyU": "U",
+    "KeyI": "I",
+    "KeyO": "O",
+    "KeyP": "P",
+    "BracketLeft": "ú",
+    "BracketRight": ")",
+    "CapsLock": "Caps",
+    "KeyA": "A",
+    "KeyS": "S",
+    "KeyD": "D",
+    "KeyF": "F",
+    "KeyG": "G",
+    "KeyH": "H",
+    "KeyJ": "J",
+    "KeyK": "K",
+    "KeyL": "L",
+    "Semicolon": "ů",
+    "Quote": "§",
+    "Enter": "Enter",
+    "ShiftLeft": "Shift",
+    "KeyZ": "Y",
+    "KeyX": "X",
+    "KeyC": "C",
+    "KeyV": "V",
+    "KeyB": "B",
+    "KeyN": "N",
+    "KeyM": "M",
+    "Comma": ",",
+    "Period": ".",
+    "Slash": "-",
+    "ShiftRight": "Shift",
+    "Fn": "Fn",
+    "ControlLeft": "Ctrl",
+    "ControlRight": "Ctrl",
+    "AltLeft": "Alt",
+    "AltRight": "AltGr",
+    "MetaLeft": "Cmd",
+    "MetaRight": "Cmd",
+    "Space": "Mezera"
+  },
+  "charMap": {
+    " ": {
+      "code": "Space"
+    },
+    "a": {
+      "code": "KeyA"
+    },
+    "b": {
+      "code": "KeyB"
+    },
+    "c": {
+      "code": "KeyC"
+    },
+    "d": {
+      "code": "KeyD"
+    },
+    "e": {
+      "code": "KeyE"
+    },
+    "f": {
+      "code": "KeyF"
+    },
+    "g": {
+      "code": "KeyG"
+    },
+    "h": {
+      "code": "KeyH"
+    },
+    "i": {
+      "code": "KeyI"
+    },
+    "j": {
+      "code": "KeyJ"
+    },
+    "k": {
+      "code": "KeyK"
+    },
+    "l": {
+      "code": "KeyL"
+    },
+    "m": {
+      "code": "KeyM"
+    },
+    "n": {
+      "code": "KeyN"
+    },
+    "o": {
+      "code": "KeyO"
+    },
+    "p": {
+      "code": "KeyP"
+    },
+    "q": {
+      "code": "KeyQ"
+    },
+    "r": {
+      "code": "KeyR"
+    },
+    "s": {
+      "code": "KeyS"
+    },
+    "t": {
+      "code": "KeyT"
+    },
+    "u": {
+      "code": "KeyU"
+    },
+    "v": {
+      "code": "KeyV"
+    },
+    "w": {
+      "code": "KeyW"
+    },
+    "x": {
+      "code": "KeyX"
+    },
+    "y": {
+      "code": "KeyZ"
+    },
+    "z": {
+      "code": "KeyY"
+    },
+    "A": {
+      "code": "KeyA",
+      "shift": true
+    },
+    "B": {
+      "code": "KeyB",
+      "shift": true
+    },
+    "C": {
+      "code": "KeyC",
+      "shift": true
+    },
+    "D": {
+      "code": "KeyD",
+      "shift": true
+    },
+    "E": {
+      "code": "KeyE",
+      "shift": true
+    },
+    "F": {
+      "code": "KeyF",
+      "shift": true
+    },
+    "G": {
+      "code": "KeyG",
+      "shift": true
+    },
+    "H": {
+      "code": "KeyH",
+      "shift": true
+    },
+    "I": {
+      "code": "KeyI",
+      "shift": true
+    },
+    "J": {
+      "code": "KeyJ",
+      "shift": true
+    },
+    "K": {
+      "code": "KeyK",
+      "shift": true
+    },
+    "L": {
+      "code": "KeyL",
+      "shift": true
+    },
+    "M": {
+      "code": "KeyM",
+      "shift": true
+    },
+    "N": {
+      "code": "KeyN",
+      "shift": true
+    },
+    "O": {
+      "code": "KeyO",
+      "shift": true
+    },
+    "P": {
+      "code": "KeyP",
+      "shift": true
+    },
+    "Q": {
+      "code": "KeyQ",
+      "shift": true
+    },
+    "R": {
+      "code": "KeyR",
+      "shift": true
+    },
+    "S": {
+      "code": "KeyS",
+      "shift": true
+    },
+    "T": {
+      "code": "KeyT",
+      "shift": true
+    },
+    "U": {
+      "code": "KeyU",
+      "shift": true
+    },
+    "V": {
+      "code": "KeyV",
+      "shift": true
+    },
+    "W": {
+      "code": "KeyW",
+      "shift": true
+    },
+    "X": {
+      "code": "KeyX",
+      "shift": true
+    },
+    "Y": {
+      "code": "KeyZ",
+      "shift": true
+    },
+    "Z": {
+      "code": "KeyY",
+      "shift": true
+    },
+    "á": {
+      "code": "Digit8"
+    },
+    "č": {
+      "code": "Digit4"
+    },
+    "ď": {
+      "code": ""
+    },
+    "é": {
+      "code": "Digit0"
+    },
+    "ě": {
+      "code": "Digit2"
+    },
+    "í": {
+      "code": "Digit9"
+    },
+    "ň": {
+      "code": ""
+    },
+    "ó": {
+      "code": ""
+    },
+    "ř": {
+      "code": "Digit5"
+    },
+    "š": {
+      "code": "Digit3"
+    },
+    "ť": {
+      "code": ""
+    },
+    "ú": {
+      "code": "BracketLeft"
+    },
+    "ů": {
+      "code": "Semicolon"
+    },
+    "ý": {
+      "code": "Digit7"
+    },
+    "ž": {
+      "code": "Digit6"
+    },
+    "Á": {
+      "code": ""
+    },
+    "Č": {
+      "code": ""
+    },
+    "Ď": {
+      "code": ""
+    },
+    "É": {
+      "code": ""
+    },
+    "Ě": {
+      "code": ""
+    },
+    "Í": {
+      "code": ""
+    },
+    "Ň": {
+      "code": ""
+    },
+    "Ó": {
+      "code": ""
+    },
+    "Ř": {
+      "code": ""
+    },
+    "Š": {
+      "code": ""
+    },
+    "Ť": {
+      "code": ""
+    },
+    "Ú": {
+      "code": ""
+    },
+    "Ů": {
+      "code": ""
+    },
+    "Ý": {
+      "code": ""
+    },
+    "Ž": {
+      "code": ""
+    },
+    "0": {
+      "code": "Digit0",
+      "shift": true
+    },
+    "1": {
+      "code": "Digit1",
+      "shift": true
+    },
+    "2": {
+      "code": "Digit2",
+      "shift": true
+    },
+    "3": {
+      "code": "Digit3",
+      "shift": true
+    },
+    "4": {
+      "code": "Digit4",
+      "shift": true
+    },
+    "5": {
+      "code": "Digit5",
+      "shift": true
+    },
+    "6": {
+      "code": "Digit6",
+      "shift": true
+    },
+    "7": {
+      "code": "Digit7",
+      "shift": true
+    },
+    "8": {
+      "code": "Digit8",
+      "shift": true
+    },
+    "9": {
+      "code": "Digit9",
+      "shift": true
+    },
+    ",": {
+      "code": "Comma"
+    },
+    ".": {
+      "code": "Period"
+    },
+    "-": {
+      "code": "Slash"
+    },
+    "?": {
+      "code": "Comma",
+      "shift": true
+    },
+    "!": {
+      "code": "Quote",
+      "shift": true
+    },
+    ":": {
+      "code": "Period",
+      "shift": true
+    },
+    ";": {
+      "code": "Comma",
+      "shift": true
+    },
+    "+": {
+      "code": "Digit1"
+    },
+    "=": {
+      "code": "Minus"
+    },
+    "/": {
+      "code": "BracketLeft",
+      "shift": true
+    },
+    "%": {
+      "code": "Equal",
+      "shift": true
+    },
+    "@": {
+      "code": "KeyV",
+      "altGraph": true
+    },
+    "£": {
+      "code": ""
+    },
+    "(": {
+      "code": ""
+    },
+    ")": {
+      "code": ""
+    }
+  }
+}

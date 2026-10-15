@@ -1,74 +1,14 @@
-const US_LABELS = {
-  Escape: "Esc",
-  Digit1: "1",
-  Digit2: "2",
-  Digit3: "3",
-  Digit4: "4",
-  Digit5: "5",
-  Digit6: "6",
-  Digit7: "7",
-  Digit8: "8",
-  Digit9: "9",
-  Digit0: "0",
-  Minus: "-",
-  Equal: "=",
-  Backspace: "Back",
-  Tab: "Tab",
-  KeyQ: "Q",
-  KeyW: "W",
-  KeyE: "E",
-  KeyR: "R",
-  KeyT: "T",
-  KeyY: "Y",
-  KeyU: "U",
-  KeyI: "I",
-  KeyO: "O",
-  KeyP: "P",
-  BracketLeft: "[",
-  BracketRight: "]",
-  CapsLock: "Caps",
-  KeyA: "A",
-  KeyS: "S",
-  KeyD: "D",
-  KeyF: "F",
-  KeyG: "G",
-  KeyH: "H",
-  KeyJ: "J",
-  KeyK: "K",
-  KeyL: "L",
-  Semicolon: ";",
-  Quote: "'",
-  Enter: "Enter",
-  ShiftLeft: "Shift",
-  KeyZ: "Z",
-  KeyX: "X",
-  KeyC: "C",
-  KeyV: "V",
-  KeyB: "B",
-  KeyN: "N",
-  KeyM: "M",
-  Comma: ",",
-  Period: ".",
-  Slash: "/",
-  ShiftRight: "Shift",
-  Fn: "Fn",
-  ControlLeft: "Ctrl",
-  ControlRight: "Ctrl",
-  AltLeft: "Alt",
-  AltRight: "Alt",
-  MetaLeft: "Cmd",
-  MetaRight: "Cmd",
-  Space: "Space"
-};
+export const DEFAULT_LAYOUT_ID = "en-gb";
 
-export const US_LAYOUT_ID = "en-us";
+const LAYOUT_BASE_URL = "content/keyboard-layouts";
 
-export const KEYBOARD_LAYOUT = {
-  id: US_LAYOUT_ID,
-  name: "US English",
-  labels: US_LABELS
-};
+/** @returns {Promise<import('./types').KeyboardLayout>} */
+export async function loadKeyboardLayout(id = DEFAULT_LAYOUT_ID) {
+  const response = await fetch(`${LAYOUT_BASE_URL}/${id}.json`, { cache: "no-cache" });
 
-export function getKeyboardLayout() {
-  return KEYBOARD_LAYOUT;
+  if (!response.ok) {
+    throw new Error(`Cannot load keyboard layout ${id}: ${response.status}`);
+  }
+
+  return response.json();
 }
