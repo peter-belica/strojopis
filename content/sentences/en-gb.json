@@ -1,0 +1,1082 @@
+[
+  {
+    "id": "en-gb-1-01",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "The little dog runs home.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-02",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A cat sleeps on a rug.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-03",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "The ball is under the table.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-04",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Anna has a new bike.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-05",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "The sun warms the grass.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-06",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Dad carries a big bag.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-07",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Mum reads a small book.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-08",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A tree grows by the path.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-09",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "The frog sits near the pond.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-10",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A bird sings in the tree.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-11",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "We build a little sandcastle.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-12",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A cloud floats across the sky.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-13",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Gran bakes a tasty cake.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-14",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Grandad waters a yellow flower.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-15",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Lucy draws a blue house.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-16",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Tom looks for his hat.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-17",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Soft snow falls outside our window.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-18",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A robin sits on the fence.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-19",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "There are apples in the basket.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-20",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "The rabbit eats a fresh carrot.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-21",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A small boat sails away.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-22",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "My brother stacks the coloured blocks.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-23",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "My sister strokes the little kitten.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-24",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "The roses smell very sweet.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-25",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A narrow path crosses the garden.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-26",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "My shoes are by the door.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-27",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Ben drinks a cup of tea.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-28",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "A leaf lies on the ground.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-29",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "Daisies grow in the green grass.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-1-30",
+    "language": "en-gb",
+    "difficulty": 1,
+    "text": "We can go outside today.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-01",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "After school we planted a tomato in our garden.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-02",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We watched the birds beside a quiet pond.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-03",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "Gran showed us photographs from her childhood in York.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-04",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "The children built a town with wooden blocks.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-05",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "The first flowers appeared in the park this spring.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-06",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "Ben packed a sandwich and a bottle of water.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-07",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We read a story about a brave squirrel together.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-08",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "Our cat found a warm place by the window.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-09",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We borrowed a book about space from the library.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-10",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "On our way home we found a colourful stone.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-11",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "A thin mist rose slowly above the morning meadow.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-12",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We played a cheerful ball game in the playground.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-13",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "Mum helped me mend my torn paper kite.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-14",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We made a small bird feeder behind our house.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-15",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "The green leaves shone in the sunshine after rain.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-16",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "My cousin from Bristol will visit during the holidays.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-17",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "A hedgehog hid beneath a pile of fallen leaves.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-18",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "On Sunday we baked rolls with a crunchy crust.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-19",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "My friend lent me crayons for my garden picture.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-20",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We stopped by the stream to hear the water.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-21",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "Our teacher brought a large map into the classroom.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-22",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "From the train we could see fields and woods.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-23",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "A wooden tower stood at the end of our path.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-24",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We made a salad with fresh vegetables at home.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-25",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "I drew a leaf from our favourite tree.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-26",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "Before bedtime I put my toys into their box.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-27",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We made a birthday card with bright coloured paper.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-28",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "Small animal tracks crossed the wet woodland path.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-29",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "My brother and I learnt a new board game.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-2-30",
+    "language": "en-gb",
+    "difficulty": 2,
+    "text": "We planted a tree for future pupils outside school.",
+    "topics": [
+      "everyday"
+    ]
+  },
+  {
+    "id": "en-gb-3-01",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "When we compared both ideas, we found a solution that saved time.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-02",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "While watching the night sky, we noticed that some stars formed easily recognised patterns.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-03",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Our school garden provides a place to observe changes in nature throughout the year.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-04",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Before building the model bridge, we drew several possible designs for its structure.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-05",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Each member of our group contributed a different idea, which made the discussion useful.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-06",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Although it rained in the morning, our afternoon walk through the countryside was enjoyable.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-07",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "At the library we looked for information to help us understand our local history.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-08",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "If we divide the work into smaller tasks, it becomes easier to plan.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-09",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "The report contained several unclear details that we needed to check before using them.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-10",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "At the exhibition we admired a painting whose colours changed with the light.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-11",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Through regular practice we gradually developed a skill that had seemed difficult at first.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-12",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "We recorded the temperature at the same time and in the same place each day.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-13",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "The local museum prepared an exhibition showing how everyday life changed during the last century.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-14",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "To keep moisture around the plants, we covered the surrounding soil with dry grass.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-15",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "The explanation became clearer when we added a simple drawing and a specific example.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-16",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "During our group work we discovered that careful listening could prevent unnecessary misunderstandings.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-17",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "While one group prepared questions, another searched for suitable material for our presentation.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-18",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "After finishing the experiment, we compared the measurements with the results we had expected.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-19",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Our route passed an old mill that now serves as a small visitor centre.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-20",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "When we offer advice, we should first understand what the other person needs.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-21",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "The new nature trail explains why wetlands and their wildlife deserve careful protection.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-22",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "We completed the larger task on time because we regularly checked each part.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-23",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Before handing in the text, we corrected typing mistakes and checked the order of paragraphs.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-24",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Photographs of the same location from different years helped us trace changes in the landscape.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-25",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "After a class vote, we chose a topic that interested most of the pupils.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-26",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Besides the final result, we wanted to understand how we had reached it.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-27",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Our neighbours organised a book swap so that familiar stories could find new readers.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-28",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "When planning the trip, we considered the distance, the weather and places to rest.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-29",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Over several weeks a simple sketch became a working model of our dream playground.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-3-30",
+    "language": "en-gb",
+    "difficulty": 3,
+    "text": "Different opinions helped us notice connections that we might easily have missed on our own.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-01",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "When planning a shared project, it helps to establish clear goals, divide responsibilities and agree how progress will be reviewed.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-02",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "The quality of a decision depends on both the information available and our ability to assess its relevance and reliability.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-03",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Lasting cooperation develops more easily when people can describe difficulties openly and work together towards practical solutions.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-04",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "A clearly documented process helps team members share experience and reduces dependence on the memory of any individual participant.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-05",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Improvements to public spaces should consider the everyday needs of local residents alongside the resources required for future maintenance.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-06",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Balancing periods of focused work with suitable breaks can help people maintain attention during tasks that require particular care.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-07",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Success should be assessed against criteria agreed in advance, allowing different participants to judge the results with similar expectations.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-08",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "An open discussion of uncertainty can be more useful than expressing confidence when there is insufficient evidence to support it.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-09",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "When designing a new tool, testing the central assumptions on a small example can reveal problems before substantial work begins.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-10",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Useful feedback describes a specific observation and its consequences while leaving room for explanation and a practical next step.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-11",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Maintaining clear documentation makes it easier to return to unfinished work, especially when there are long intervals between its stages.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-12",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Every change to an established process involves some cost, so the expected benefits should be compared with the effort required.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-13",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Distinguishing between an observed fact and its interpretation supports constructive discussion and more careful use of the information available.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-14",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Access to cultural and educational activities is influenced by the way information about those opportunities is organised and communicated.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-15",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "When reading a complex text together, it helps to summarise the main ideas and explain terms that have several meanings.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-16",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "An appropriate degree of simplicity improves a design when it preserves all the features needed for its intended purpose.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-17",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Results from a brief observation may fail to reflect a longer trend, particularly when conditions vary considerably between different periods.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-18",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "A shared overview of unfinished tasks supports cooperation by making dependencies visible and helping participants identify obstacles in good time.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-19",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Clearly defined responsibilities make everyday decisions easier, while shared rules establish when other participants should be involved in the discussion.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-20",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "A range of experience can enrich a joint proposal when everyone has sufficient opportunity to explain their reasoning and expectations.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-21",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Caring for public green spaces requires regular observation of local conditions and patience, since some changes become visible only after years.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-22",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "When comparing several options, it is useful to separate essential requirements from features that would simply provide a welcome addition.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-23",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Experience gained from solving a small problem can also inform more complicated tasks if we correctly recognise the principles they share.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-24",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Regular reviews of a shared plan help participants respond to new circumstances while retaining a clear view of the original purpose.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-25",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "A well prepared meeting has a clear purpose and leaves enough time for questions that cannot be resolved by simply sharing information.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-26",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Keeping earlier versions of a proposal makes previous decisions easier to understand and allows promising ideas to be reconsidered later.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-27",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "When explaining a specialist subject, it helps to build on the audience's experience and connect new ideas with concrete examples.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-28",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "A meaningful project review considers the results achieved, the resources used and the lessons that could improve similar work in future.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-29",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "Recognising different expectations early helps people find common ground before minor disagreements develop into a more substantial problem.",
+    "topics": [
+      "learning"
+    ]
+  },
+  {
+    "id": "en-gb-4-30",
+    "language": "en-gb",
+    "difficulty": 4,
+    "text": "A carefully designed environment helps new users find their way while allowing experienced people to complete familiar activities without unnecessary obstacles.",
+    "topics": [
+      "learning"
+    ]
+  }
+]
