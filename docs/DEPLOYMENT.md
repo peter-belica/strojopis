@@ -50,3 +50,15 @@ Na samostatný statický hosting stačí preniesť celý obsah `dist/`, vrátane
 ## Overenie nasadenia
 
 Úspech potvrdzuje zelený workflow, commit v `gh-pages` a otvorenie verejnej adresy. Pri kontrole treba overiť aj načítanie oboch jazykových kurzov pod `/strojopis/` a vytvorenie miestneho profilu. Konkrétny výsledok prvého nasadenia je zaznamenaný nižšie po jeho dokončení.
+
+## Potvrdené nasadenie – 16. októbra 2026
+
+- Zdrojový commit: [`57069b8`](https://github.com/peter-belica/strojopis/commit/57069b80c9c48042cf52f4917e522386974cc4f2).
+- [Automatické overenie a publikovanie](https://github.com/peter-belica/strojopis/actions/runs/38856678711) skončilo úspešne. Prešlo `npm ci`, typová kontrola, 45 jednotkových testov, validácia 240 viet, produkčné zostavenie a testy celých postupov v troch prehliadačoch.
+- Statické súbory sú commitnuté vo vetve `gh-pages`. Následné zmeny v `main` prechádzajú tým istým overením a publikovaním.
+- Verejná stránka vracia HTTP 200, teda úspešnú odpoveď webového servera, a používa HTTPS, šifrované spojenie.
+- Priamo na verejnej adrese bolo overené načítanie anglického a českého kurzu pod `/strojopis/`, vytvorenie dočasného profilu, správny posun po napísaní `asdf` a český voľný tréning viet. Konzola bola bez chýb a varovaní. Opätovné otvorenie obnovilo čistý stav bez dočasného profilu, keďže zapamätanie nebolo zapnuté.
+- Kontrolovaná odpoveď na načítanie HTML neobsahovala `Set-Cookie`. Toto je konkrétne technické pozorovanie; nepredstavuje audit prevádzkových záznamov poskytovateľa hostingu.
+- [Snímka skutočne nasadeného webu](screenshots/live-deployment.jpg).
+
+Dokumentácia lokálneho vývoja a jeho podrobného overenia zostáva v [VALIDATION.md](VALIDATION.md). Neúspešný prvý beh počas súbežného dokončovania vývoja nepublikoval web; nasledujúce overené verzie boli publikované automaticky.
