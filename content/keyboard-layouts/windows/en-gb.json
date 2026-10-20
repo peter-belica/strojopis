@@ -1,0 +1,2437 @@
+{
+  "id": "en-gb",
+  "name": "English (UK)",
+  "platform": "windows",
+  "labels": {
+    "Escape": "esc",
+    "Backspace": "⌫",
+    "Tab": "⇥",
+    "CapsLock": "⇪",
+    "Enter": "↵",
+    "ShiftLeft": "⇧",
+    "ShiftRight": "⇧",
+    "ControlLeft": "Ctrl",
+    "ControlRight": "Ctrl",
+    "AltLeft": "Alt",
+    "AltRight": "AltGr",
+    "MetaLeft": "⊞",
+    "MetaRight": "⌘",
+    "Fn": "fn",
+    "Space": " ",
+    "TouchID": "Touch ID",
+    "Delete": "Del",
+    "ArrowLeft": "←",
+    "ArrowRight": "→",
+    "ArrowUp": "↑",
+    "ArrowDown": "↓",
+    "F1": "F1",
+    "F2": "F2",
+    "F3": "F3",
+    "F4": "F4",
+    "F5": "F5",
+    "F6": "F6",
+    "F7": "F7",
+    "F8": "F8",
+    "F9": "F9",
+    "F10": "F10",
+    "F11": "F11",
+    "F12": "F12",
+    "Backquote": "`",
+    "Digit1": "1",
+    "Digit2": "2",
+    "Digit3": "3",
+    "Digit4": "4",
+    "Digit5": "5",
+    "Digit6": "6",
+    "Digit7": "7",
+    "Digit8": "8",
+    "Digit9": "9",
+    "Digit0": "0",
+    "Minus": "-",
+    "Equal": "=",
+    "KeyQ": "Q",
+    "KeyW": "W",
+    "KeyE": "E",
+    "KeyR": "R",
+    "KeyT": "T",
+    "KeyY": "Y",
+    "KeyU": "U",
+    "KeyI": "I",
+    "KeyO": "O",
+    "KeyP": "P",
+    "BracketLeft": "[",
+    "BracketRight": "]",
+    "Backslash": "#",
+    "KeyA": "A",
+    "KeyS": "S",
+    "KeyD": "D",
+    "KeyF": "F",
+    "KeyG": "G",
+    "KeyH": "H",
+    "KeyJ": "J",
+    "KeyK": "K",
+    "KeyL": "L",
+    "Semicolon": ";",
+    "Quote": "'",
+    "IntlBackslash": "\\",
+    "KeyZ": "Z",
+    "KeyX": "X",
+    "KeyC": "C",
+    "KeyV": "V",
+    "KeyB": "B",
+    "KeyN": "N",
+    "KeyM": "M",
+    "Comma": ",",
+    "Period": ".",
+    "Slash": "/"
+  },
+  "charMap": {
+    "`": {
+      "code": "Backquote",
+      "steps": [
+        {
+          "code": "Backquote"
+        }
+      ]
+    },
+    "1": {
+      "code": "Digit1",
+      "steps": [
+        {
+          "code": "Digit1"
+        }
+      ]
+    },
+    "2": {
+      "code": "Digit2",
+      "steps": [
+        {
+          "code": "Digit2"
+        }
+      ]
+    },
+    "3": {
+      "code": "Digit3",
+      "steps": [
+        {
+          "code": "Digit3"
+        }
+      ]
+    },
+    "4": {
+      "code": "Digit4",
+      "steps": [
+        {
+          "code": "Digit4"
+        }
+      ]
+    },
+    "5": {
+      "code": "Digit5",
+      "steps": [
+        {
+          "code": "Digit5"
+        }
+      ]
+    },
+    "6": {
+      "code": "Digit6",
+      "steps": [
+        {
+          "code": "Digit6"
+        }
+      ]
+    },
+    "7": {
+      "code": "Digit7",
+      "steps": [
+        {
+          "code": "Digit7"
+        }
+      ]
+    },
+    "8": {
+      "code": "Digit8",
+      "steps": [
+        {
+          "code": "Digit8"
+        }
+      ]
+    },
+    "9": {
+      "code": "Digit9",
+      "steps": [
+        {
+          "code": "Digit9"
+        }
+      ]
+    },
+    "0": {
+      "code": "Digit0",
+      "steps": [
+        {
+          "code": "Digit0"
+        }
+      ]
+    },
+    "-": {
+      "code": "Minus",
+      "steps": [
+        {
+          "code": "Minus"
+        }
+      ]
+    },
+    "=": {
+      "code": "Equal",
+      "steps": [
+        {
+          "code": "Equal"
+        }
+      ]
+    },
+    "q": {
+      "code": "KeyQ",
+      "steps": [
+        {
+          "code": "KeyQ"
+        }
+      ]
+    },
+    "w": {
+      "code": "KeyW",
+      "steps": [
+        {
+          "code": "KeyW"
+        }
+      ]
+    },
+    "e": {
+      "code": "KeyE",
+      "steps": [
+        {
+          "code": "KeyE"
+        }
+      ]
+    },
+    "r": {
+      "code": "KeyR",
+      "steps": [
+        {
+          "code": "KeyR"
+        }
+      ]
+    },
+    "t": {
+      "code": "KeyT",
+      "steps": [
+        {
+          "code": "KeyT"
+        }
+      ]
+    },
+    "y": {
+      "code": "KeyY",
+      "steps": [
+        {
+          "code": "KeyY"
+        }
+      ]
+    },
+    "u": {
+      "code": "KeyU",
+      "steps": [
+        {
+          "code": "KeyU"
+        }
+      ]
+    },
+    "i": {
+      "code": "KeyI",
+      "steps": [
+        {
+          "code": "KeyI"
+        }
+      ]
+    },
+    "o": {
+      "code": "KeyO",
+      "steps": [
+        {
+          "code": "KeyO"
+        }
+      ]
+    },
+    "p": {
+      "code": "KeyP",
+      "steps": [
+        {
+          "code": "KeyP"
+        }
+      ]
+    },
+    "[": {
+      "code": "BracketLeft",
+      "steps": [
+        {
+          "code": "BracketLeft"
+        }
+      ]
+    },
+    "]": {
+      "code": "BracketRight",
+      "steps": [
+        {
+          "code": "BracketRight"
+        }
+      ]
+    },
+    "#": {
+      "code": "Backslash",
+      "steps": [
+        {
+          "code": "Backslash"
+        }
+      ]
+    },
+    "a": {
+      "code": "KeyA",
+      "steps": [
+        {
+          "code": "KeyA"
+        }
+      ]
+    },
+    "s": {
+      "code": "KeyS",
+      "steps": [
+        {
+          "code": "KeyS"
+        }
+      ]
+    },
+    "d": {
+      "code": "KeyD",
+      "steps": [
+        {
+          "code": "KeyD"
+        }
+      ]
+    },
+    "f": {
+      "code": "KeyF",
+      "steps": [
+        {
+          "code": "KeyF"
+        }
+      ]
+    },
+    "g": {
+      "code": "KeyG",
+      "steps": [
+        {
+          "code": "KeyG"
+        }
+      ]
+    },
+    "h": {
+      "code": "KeyH",
+      "steps": [
+        {
+          "code": "KeyH"
+        }
+      ]
+    },
+    "j": {
+      "code": "KeyJ",
+      "steps": [
+        {
+          "code": "KeyJ"
+        }
+      ]
+    },
+    "k": {
+      "code": "KeyK",
+      "steps": [
+        {
+          "code": "KeyK"
+        }
+      ]
+    },
+    "l": {
+      "code": "KeyL",
+      "steps": [
+        {
+          "code": "KeyL"
+        }
+      ]
+    },
+    ";": {
+      "code": "Semicolon",
+      "steps": [
+        {
+          "code": "Semicolon"
+        }
+      ]
+    },
+    "'": {
+      "code": "Quote",
+      "steps": [
+        {
+          "code": "Quote"
+        }
+      ]
+    },
+    "\\": {
+      "code": "IntlBackslash",
+      "steps": [
+        {
+          "code": "IntlBackslash"
+        }
+      ]
+    },
+    "z": {
+      "code": "KeyZ",
+      "steps": [
+        {
+          "code": "KeyZ"
+        }
+      ]
+    },
+    "x": {
+      "code": "KeyX",
+      "steps": [
+        {
+          "code": "KeyX"
+        }
+      ]
+    },
+    "c": {
+      "code": "KeyC",
+      "steps": [
+        {
+          "code": "KeyC"
+        }
+      ]
+    },
+    "v": {
+      "code": "KeyV",
+      "steps": [
+        {
+          "code": "KeyV"
+        }
+      ]
+    },
+    "b": {
+      "code": "KeyB",
+      "steps": [
+        {
+          "code": "KeyB"
+        }
+      ]
+    },
+    "n": {
+      "code": "KeyN",
+      "steps": [
+        {
+          "code": "KeyN"
+        }
+      ]
+    },
+    "m": {
+      "code": "KeyM",
+      "steps": [
+        {
+          "code": "KeyM"
+        }
+      ]
+    },
+    ",": {
+      "code": "Comma",
+      "steps": [
+        {
+          "code": "Comma"
+        }
+      ]
+    },
+    ".": {
+      "code": "Period",
+      "steps": [
+        {
+          "code": "Period"
+        }
+      ]
+    },
+    "/": {
+      "code": "Slash",
+      "steps": [
+        {
+          "code": "Slash"
+        }
+      ]
+    },
+    "¬": {
+      "code": "Backquote",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Backquote",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "!": {
+      "code": "Digit1",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit1",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "\"": {
+      "code": "Digit2",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit2",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "£": {
+      "code": "Digit3",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit3",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "$": {
+      "code": "Digit4",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit4",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "%": {
+      "code": "Digit5",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit5",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "^": {
+      "code": "Digit6",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit6",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "&": {
+      "code": "Digit7",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit7",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "*": {
+      "code": "Digit8",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit8",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "(": {
+      "code": "Digit9",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit9",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    ")": {
+      "code": "Digit0",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Digit0",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "_": {
+      "code": "Minus",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Minus",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "+": {
+      "code": "Equal",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Equal",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "Q": {
+      "code": "KeyQ",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyQ",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "W": {
+      "code": "KeyW",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyW",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "code": "KeyE",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyE",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "R": {
+      "code": "KeyR",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyR",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "T": {
+      "code": "KeyT",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyT",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "Y": {
+      "code": "KeyY",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyY",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "U": {
+      "code": "KeyU",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyU",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "I": {
+      "code": "KeyI",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyI",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "O": {
+      "code": "KeyO",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyO",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "P": {
+      "code": "KeyP",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyP",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "{": {
+      "code": "BracketLeft",
+      "shift": true,
+      "steps": [
+        {
+          "code": "BracketLeft",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "}": {
+      "code": "BracketRight",
+      "shift": true,
+      "steps": [
+        {
+          "code": "BracketRight",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "~": {
+      "code": "Backslash",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Backslash",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "A": {
+      "code": "KeyA",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyA",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "S": {
+      "code": "KeyS",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyS",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "D": {
+      "code": "KeyD",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyD",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "F": {
+      "code": "KeyF",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyF",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "G": {
+      "code": "KeyG",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyG",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "H": {
+      "code": "KeyH",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyH",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "J": {
+      "code": "KeyJ",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyJ",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "K": {
+      "code": "KeyK",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyK",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "L": {
+      "code": "KeyL",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyL",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    ":": {
+      "code": "Semicolon",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Semicolon",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "@": {
+      "code": "Quote",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Quote",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "|": {
+      "code": "IntlBackslash",
+      "shift": true,
+      "steps": [
+        {
+          "code": "IntlBackslash",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "Z": {
+      "code": "KeyZ",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyZ",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "X": {
+      "code": "KeyX",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyX",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "code": "KeyC",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyC",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "V": {
+      "code": "KeyV",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyV",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "B": {
+      "code": "KeyB",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyB",
+          "modifiers": [
+            "ShiftRight"
+          ]
+        }
+      ]
+    },
+    "N": {
+      "code": "KeyN",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyN",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "M": {
+      "code": "KeyM",
+      "shift": true,
+      "steps": [
+        {
+          "code": "KeyM",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "<": {
+      "code": "Comma",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Comma",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    ">": {
+      "code": "Period",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Period",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "?": {
+      "code": "Slash",
+      "shift": true,
+      "steps": [
+        {
+          "code": "Slash",
+          "modifiers": [
+            "ShiftLeft"
+          ]
+        }
+      ]
+    },
+    "¦": {
+      "code": "Backquote",
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "Backquote",
+          "modifiers": [
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "€": {
+      "code": "Digit4",
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "Digit4",
+          "modifiers": [
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "é": {
+      "code": "KeyE",
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyE",
+          "modifiers": [
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "ú": {
+      "code": "KeyU",
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyU",
+          "modifiers": [
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "í": {
+      "code": "KeyI",
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyI",
+          "modifiers": [
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "ó": {
+      "code": "KeyO",
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyO",
+          "modifiers": [
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "á": {
+      "code": "KeyA",
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyA",
+          "modifiers": [
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "É": {
+      "code": "KeyE",
+      "shift": true,
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyE",
+          "modifiers": [
+            "ShiftRight",
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "Ú": {
+      "code": "KeyU",
+      "shift": true,
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyU",
+          "modifiers": [
+            "ShiftLeft",
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "Í": {
+      "code": "KeyI",
+      "shift": true,
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyI",
+          "modifiers": [
+            "ShiftLeft",
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "Ó": {
+      "code": "KeyO",
+      "shift": true,
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyO",
+          "modifiers": [
+            "ShiftLeft",
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    "Á": {
+      "code": "KeyA",
+      "shift": true,
+      "altGraph": true,
+      "steps": [
+        {
+          "code": "KeyA",
+          "modifiers": [
+            "ShiftRight",
+            "AltRight"
+          ]
+        }
+      ]
+    },
+    " ": {
+      "code": "Space",
+      "steps": [
+        {
+          "code": "Space"
+        }
+      ]
+    }
+  },
+  "variants": {
+    "ansi": {
+      "id": "en-gb",
+      "name": "English (UK)",
+      "platform": "windows",
+      "labels": {
+        "Escape": "esc",
+        "Backspace": "⌫",
+        "Tab": "⇥",
+        "CapsLock": "⇪",
+        "Enter": "↵",
+        "ShiftLeft": "⇧",
+        "ShiftRight": "⇧",
+        "ControlLeft": "Ctrl",
+        "ControlRight": "Ctrl",
+        "AltLeft": "Alt",
+        "AltRight": "AltGr",
+        "MetaLeft": "⊞",
+        "MetaRight": "⌘",
+        "Fn": "fn",
+        "Space": " ",
+        "TouchID": "Touch ID",
+        "Delete": "Del",
+        "ArrowLeft": "←",
+        "ArrowRight": "→",
+        "ArrowUp": "↑",
+        "ArrowDown": "↓",
+        "F1": "F1",
+        "F2": "F2",
+        "F3": "F3",
+        "F4": "F4",
+        "F5": "F5",
+        "F6": "F6",
+        "F7": "F7",
+        "F8": "F8",
+        "F9": "F9",
+        "F10": "F10",
+        "F11": "F11",
+        "F12": "F12",
+        "Backquote": "`",
+        "Digit1": "1",
+        "Digit2": "2",
+        "Digit3": "3",
+        "Digit4": "4",
+        "Digit5": "5",
+        "Digit6": "6",
+        "Digit7": "7",
+        "Digit8": "8",
+        "Digit9": "9",
+        "Digit0": "0",
+        "Minus": "-",
+        "Equal": "=",
+        "KeyQ": "Q",
+        "KeyW": "W",
+        "KeyE": "E",
+        "KeyR": "R",
+        "KeyT": "T",
+        "KeyY": "Y",
+        "KeyU": "U",
+        "KeyI": "I",
+        "KeyO": "O",
+        "KeyP": "P",
+        "BracketLeft": "[",
+        "BracketRight": "]",
+        "Backslash": "#",
+        "KeyA": "A",
+        "KeyS": "S",
+        "KeyD": "D",
+        "KeyF": "F",
+        "KeyG": "G",
+        "KeyH": "H",
+        "KeyJ": "J",
+        "KeyK": "K",
+        "KeyL": "L",
+        "Semicolon": ";",
+        "Quote": "'",
+        "KeyZ": "Z",
+        "KeyX": "X",
+        "KeyC": "C",
+        "KeyV": "V",
+        "KeyB": "B",
+        "KeyN": "N",
+        "KeyM": "M",
+        "Comma": ",",
+        "Period": ".",
+        "Slash": "/"
+      },
+      "charMap": {
+        "`": {
+          "code": "Backquote",
+          "steps": [
+            {
+              "code": "Backquote"
+            }
+          ]
+        },
+        "1": {
+          "code": "Digit1",
+          "steps": [
+            {
+              "code": "Digit1"
+            }
+          ]
+        },
+        "2": {
+          "code": "Digit2",
+          "steps": [
+            {
+              "code": "Digit2"
+            }
+          ]
+        },
+        "3": {
+          "code": "Digit3",
+          "steps": [
+            {
+              "code": "Digit3"
+            }
+          ]
+        },
+        "4": {
+          "code": "Digit4",
+          "steps": [
+            {
+              "code": "Digit4"
+            }
+          ]
+        },
+        "5": {
+          "code": "Digit5",
+          "steps": [
+            {
+              "code": "Digit5"
+            }
+          ]
+        },
+        "6": {
+          "code": "Digit6",
+          "steps": [
+            {
+              "code": "Digit6"
+            }
+          ]
+        },
+        "7": {
+          "code": "Digit7",
+          "steps": [
+            {
+              "code": "Digit7"
+            }
+          ]
+        },
+        "8": {
+          "code": "Digit8",
+          "steps": [
+            {
+              "code": "Digit8"
+            }
+          ]
+        },
+        "9": {
+          "code": "Digit9",
+          "steps": [
+            {
+              "code": "Digit9"
+            }
+          ]
+        },
+        "0": {
+          "code": "Digit0",
+          "steps": [
+            {
+              "code": "Digit0"
+            }
+          ]
+        },
+        "-": {
+          "code": "Minus",
+          "steps": [
+            {
+              "code": "Minus"
+            }
+          ]
+        },
+        "=": {
+          "code": "Equal",
+          "steps": [
+            {
+              "code": "Equal"
+            }
+          ]
+        },
+        "q": {
+          "code": "KeyQ",
+          "steps": [
+            {
+              "code": "KeyQ"
+            }
+          ]
+        },
+        "w": {
+          "code": "KeyW",
+          "steps": [
+            {
+              "code": "KeyW"
+            }
+          ]
+        },
+        "e": {
+          "code": "KeyE",
+          "steps": [
+            {
+              "code": "KeyE"
+            }
+          ]
+        },
+        "r": {
+          "code": "KeyR",
+          "steps": [
+            {
+              "code": "KeyR"
+            }
+          ]
+        },
+        "t": {
+          "code": "KeyT",
+          "steps": [
+            {
+              "code": "KeyT"
+            }
+          ]
+        },
+        "y": {
+          "code": "KeyY",
+          "steps": [
+            {
+              "code": "KeyY"
+            }
+          ]
+        },
+        "u": {
+          "code": "KeyU",
+          "steps": [
+            {
+              "code": "KeyU"
+            }
+          ]
+        },
+        "i": {
+          "code": "KeyI",
+          "steps": [
+            {
+              "code": "KeyI"
+            }
+          ]
+        },
+        "o": {
+          "code": "KeyO",
+          "steps": [
+            {
+              "code": "KeyO"
+            }
+          ]
+        },
+        "p": {
+          "code": "KeyP",
+          "steps": [
+            {
+              "code": "KeyP"
+            }
+          ]
+        },
+        "[": {
+          "code": "BracketLeft",
+          "steps": [
+            {
+              "code": "BracketLeft"
+            }
+          ]
+        },
+        "]": {
+          "code": "BracketRight",
+          "steps": [
+            {
+              "code": "BracketRight"
+            }
+          ]
+        },
+        "#": {
+          "code": "Backslash",
+          "steps": [
+            {
+              "code": "Backslash"
+            }
+          ]
+        },
+        "a": {
+          "code": "KeyA",
+          "steps": [
+            {
+              "code": "KeyA"
+            }
+          ]
+        },
+        "s": {
+          "code": "KeyS",
+          "steps": [
+            {
+              "code": "KeyS"
+            }
+          ]
+        },
+        "d": {
+          "code": "KeyD",
+          "steps": [
+            {
+              "code": "KeyD"
+            }
+          ]
+        },
+        "f": {
+          "code": "KeyF",
+          "steps": [
+            {
+              "code": "KeyF"
+            }
+          ]
+        },
+        "g": {
+          "code": "KeyG",
+          "steps": [
+            {
+              "code": "KeyG"
+            }
+          ]
+        },
+        "h": {
+          "code": "KeyH",
+          "steps": [
+            {
+              "code": "KeyH"
+            }
+          ]
+        },
+        "j": {
+          "code": "KeyJ",
+          "steps": [
+            {
+              "code": "KeyJ"
+            }
+          ]
+        },
+        "k": {
+          "code": "KeyK",
+          "steps": [
+            {
+              "code": "KeyK"
+            }
+          ]
+        },
+        "l": {
+          "code": "KeyL",
+          "steps": [
+            {
+              "code": "KeyL"
+            }
+          ]
+        },
+        ";": {
+          "code": "Semicolon",
+          "steps": [
+            {
+              "code": "Semicolon"
+            }
+          ]
+        },
+        "'": {
+          "code": "Quote",
+          "steps": [
+            {
+              "code": "Quote"
+            }
+          ]
+        },
+        "z": {
+          "code": "KeyZ",
+          "steps": [
+            {
+              "code": "KeyZ"
+            }
+          ]
+        },
+        "x": {
+          "code": "KeyX",
+          "steps": [
+            {
+              "code": "KeyX"
+            }
+          ]
+        },
+        "c": {
+          "code": "KeyC",
+          "steps": [
+            {
+              "code": "KeyC"
+            }
+          ]
+        },
+        "v": {
+          "code": "KeyV",
+          "steps": [
+            {
+              "code": "KeyV"
+            }
+          ]
+        },
+        "b": {
+          "code": "KeyB",
+          "steps": [
+            {
+              "code": "KeyB"
+            }
+          ]
+        },
+        "n": {
+          "code": "KeyN",
+          "steps": [
+            {
+              "code": "KeyN"
+            }
+          ]
+        },
+        "m": {
+          "code": "KeyM",
+          "steps": [
+            {
+              "code": "KeyM"
+            }
+          ]
+        },
+        ",": {
+          "code": "Comma",
+          "steps": [
+            {
+              "code": "Comma"
+            }
+          ]
+        },
+        ".": {
+          "code": "Period",
+          "steps": [
+            {
+              "code": "Period"
+            }
+          ]
+        },
+        "/": {
+          "code": "Slash",
+          "steps": [
+            {
+              "code": "Slash"
+            }
+          ]
+        },
+        "¬": {
+          "code": "Backquote",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Backquote",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "!": {
+          "code": "Digit1",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit1",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "\"": {
+          "code": "Digit2",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit2",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "£": {
+          "code": "Digit3",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit3",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "$": {
+          "code": "Digit4",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit4",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "%": {
+          "code": "Digit5",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit5",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "^": {
+          "code": "Digit6",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit6",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "&": {
+          "code": "Digit7",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit7",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "*": {
+          "code": "Digit8",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit8",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "(": {
+          "code": "Digit9",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit9",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        ")": {
+          "code": "Digit0",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Digit0",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "_": {
+          "code": "Minus",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Minus",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "+": {
+          "code": "Equal",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Equal",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "Q": {
+          "code": "KeyQ",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyQ",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "W": {
+          "code": "KeyW",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyW",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "E": {
+          "code": "KeyE",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyE",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "R": {
+          "code": "KeyR",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyR",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "T": {
+          "code": "KeyT",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyT",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "Y": {
+          "code": "KeyY",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyY",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "U": {
+          "code": "KeyU",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyU",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "I": {
+          "code": "KeyI",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyI",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "O": {
+          "code": "KeyO",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyO",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "P": {
+          "code": "KeyP",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyP",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "{": {
+          "code": "BracketLeft",
+          "shift": true,
+          "steps": [
+            {
+              "code": "BracketLeft",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "}": {
+          "code": "BracketRight",
+          "shift": true,
+          "steps": [
+            {
+              "code": "BracketRight",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "~": {
+          "code": "Backslash",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Backslash",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "A": {
+          "code": "KeyA",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyA",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "S": {
+          "code": "KeyS",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyS",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "D": {
+          "code": "KeyD",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyD",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "F": {
+          "code": "KeyF",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyF",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "G": {
+          "code": "KeyG",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyG",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "H": {
+          "code": "KeyH",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyH",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "J": {
+          "code": "KeyJ",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyJ",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "K": {
+          "code": "KeyK",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyK",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "L": {
+          "code": "KeyL",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyL",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        ":": {
+          "code": "Semicolon",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Semicolon",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "@": {
+          "code": "Quote",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Quote",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "Z": {
+          "code": "KeyZ",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyZ",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "X": {
+          "code": "KeyX",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyX",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "C": {
+          "code": "KeyC",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyC",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "V": {
+          "code": "KeyV",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyV",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "B": {
+          "code": "KeyB",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyB",
+              "modifiers": [
+                "ShiftRight"
+              ]
+            }
+          ]
+        },
+        "N": {
+          "code": "KeyN",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyN",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "M": {
+          "code": "KeyM",
+          "shift": true,
+          "steps": [
+            {
+              "code": "KeyM",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "<": {
+          "code": "Comma",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Comma",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        ">": {
+          "code": "Period",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Period",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "?": {
+          "code": "Slash",
+          "shift": true,
+          "steps": [
+            {
+              "code": "Slash",
+              "modifiers": [
+                "ShiftLeft"
+              ]
+            }
+          ]
+        },
+        "¦": {
+          "code": "Backquote",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "Backquote",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "€": {
+          "code": "Digit4",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "Digit4",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "é": {
+          "code": "KeyE",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyE",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "ú": {
+          "code": "KeyU",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyU",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "í": {
+          "code": "KeyI",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyI",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "ó": {
+          "code": "KeyO",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyO",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "\\": {
+          "code": "Backslash",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "Backslash",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "á": {
+          "code": "KeyA",
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyA",
+              "modifiers": [
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "É": {
+          "code": "KeyE",
+          "shift": true,
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyE",
+              "modifiers": [
+                "ShiftRight",
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "Ú": {
+          "code": "KeyU",
+          "shift": true,
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyU",
+              "modifiers": [
+                "ShiftLeft",
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "Í": {
+          "code": "KeyI",
+          "shift": true,
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyI",
+              "modifiers": [
+                "ShiftLeft",
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "Ó": {
+          "code": "KeyO",
+          "shift": true,
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyO",
+              "modifiers": [
+                "ShiftLeft",
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "|": {
+          "code": "Backslash",
+          "shift": true,
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "Backslash",
+              "modifiers": [
+                "ShiftLeft",
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        "Á": {
+          "code": "KeyA",
+          "shift": true,
+          "altGraph": true,
+          "steps": [
+            {
+              "code": "KeyA",
+              "modifiers": [
+                "ShiftRight",
+                "AltRight"
+              ]
+            }
+          ]
+        },
+        " ": {
+          "code": "Space",
+          "steps": [
+            {
+              "code": "Space"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "provenance": {
+    "verifiedOn": "2026-10-19",
+    "method": "official Microsoft HTML modifier/dead-key tables",
+    "source": "https://learn.microsoft.com/en-us/globalization/keyboards/kbduk.html",
+    "hardwareTested": false
+  }
+}
