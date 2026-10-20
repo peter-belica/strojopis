@@ -1,0 +1,81 @@
+{
+  "url": "https://peter-belica.github.io/strojopis/",
+  "verifiedAt": "2026-10-20T07:09:02.833Z",
+  "results": [
+    {
+      "browser": "chromium",
+      "version": "156.0.8078.4",
+      "status": "passed",
+      "maps": 10,
+      "models": 4,
+      "widths": [
+        390,
+        768,
+        1366
+      ],
+      "completed": [
+        "en-gb home-left",
+        "cs-cz free-practice 4 sentences"
+      ],
+      "restoredHistory": 2,
+      "errors": [],
+      "warnings": [
+        "Course validation warnings: [Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-row, Chýba mapovanie ů v home-row, Chýba mapovanie ů v bottom-right, Chýba mapovanie ů v vowels-diacritics, Chýba mapovanie ý v vowels-diacritics, Chýba mapovanie š v caron-diacritics, Chýba mapovanie ž v caron-diacritics, Chýba mapovanie ř v caron-diacritics, Chýba mapovanie č v caron-diacritics, Chýba mapovanie ě v caron-diacritics, Chýba mapovanie ě v caron-diacritics, Chýba mapovanie š v capitals, Chýba mapovanie ů v punctuation, Chýba mapovanie č v punctuation, Chýba mapovanie š v short-texts]",
+        "Course validation warnings: [Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-row, Chýba mapovanie ů v home-row, Chýba mapovanie ů v bottom-right, Chýba mapovanie ů v vowels-diacritics, Chýba mapovanie ý v vowels-diacritics, Chýba mapovanie š v caron-diacritics, Chýba mapovanie ž v caron-diacritics, Chýba mapovanie ř v caron-diacritics, Chýba mapovanie č v caron-diacritics, Chýba mapovanie ě v caron-diacritics, Chýba mapovanie ě v caron-diacritics, Chýba mapovanie š v capitals, Chýba mapovanie ů v punctuation, Chýba mapovanie č v punctuation, Chýba mapovanie š v short-texts]"
+      ],
+      "failed": [],
+      "statuses": [],
+      "external": []
+    },
+    {
+      "browser": "firefox",
+      "version": "157.0",
+      "status": "passed",
+      "maps": 10,
+      "models": 4,
+      "widths": [
+        390,
+        768,
+        1366
+      ],
+      "completed": [
+        "en-gb home-left",
+        "cs-cz free-practice 4 sentences"
+      ],
+      "restoredHistory": 2,
+      "errors": [],
+      "warnings": [
+        "Course validation warnings: Array",
+        "Course validation warnings: Array"
+      ],
+      "failed": [],
+      "statuses": [],
+      "external": []
+    },
+    {
+      "browser": "webkit",
+      "version": "27.2",
+      "status": "passed",
+      "maps": 10,
+      "models": 4,
+      "widths": [
+        390,
+        768,
+        1366
+      ],
+      "completed": [
+        "en-gb home-left",
+        "cs-cz free-practice 4 sentences"
+      ],
+      "restoredHistory": 2,
+      "errors": [],
+      "warnings": [
+        "Course validation warnings: [Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-row, Chýba mapovanie ů v home-row, Chýba mapovanie ů v bottom-right, Chýba mapovanie ů v vowels-diacritics, Chýba mapovanie ý v vowels-diacritics, Chýba mapovanie š v caron-diacritics, Chýba mapovanie ž v caron-diacritics]",
+        "Course validation warnings: [Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-right, Chýba mapovanie ů v home-row, Chýba mapovanie ů v home-row, Chýba mapovanie ů v bottom-right, Chýba mapovanie ů v vowels-diacritics, Chýba mapovanie ý v vowels-diacritics, Chýba mapovanie š v caron-diacritics, Chýba mapovanie ž v caron-diacritics]"
+      ],
+      "failed": [],
+      "statuses": [],
+      "external": []
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+[
+  {
+    "path": "THIRD_PARTY_NOTICES.txt",
+    "status": 200,
+    "sha256": "132e9f00474058c2d5bbd13577c62fb5de20b5e42371d62ecc87ce1571ffbc2e",
+    "setCookie": null
+  },
+  {
+    "path": "assets/favicon-COEwL6_1.svg",
+    "status": 200,
+    "sha256": "1156684bc2cc3dbe96e6bddfd61cde2f2189e329c8c974bfb99322150dd68adc",
+    "setCookie": null
+  },
+  {
+    "path": "assets/index-CtGE1xyA.css",
+    "status": 200,
+    "sha256": "88bcdc09af374e2f55d1d131696ca7abf9b810d96f7eb3c71cc17778801f3207",
+    "setCookie": null
+  },
+  {
+    "path": "assets/index-Dp7PBv9X.js",
+    "status": 200,
+    "sha256": "4365ee70a7e95224cfe3d68481ee652eba7bfe8b05a15d58866b445a9cf84c04",
+    "setCookie": null
+  },
+  {
+    "path": "content/courses/cs-cz.json",
+    "status": 200,
+    "sha256": "6df0318a7c709aa4f82940657ce64f41293280a30b4267c3f2f7e38f9194e01d",
+    "setCookie": null
+  },
+  {
+    "path": "content/courses/en-gb.json",
+    "status": 200,
+    "sha256": "54d949ddf39c267391995f688d97b7c1c724099dafed413e6875f28b20fd6f19",
+    "setCookie": null
+  },
+  {
+    "path": "content/courses/index.json",
+    "status": 200,
+    "sha256": "cbe1f2919d37dd6f67764942590bdf95e5ac2e3fdc78a2a90c719074eec7e2c9",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/cs-cz.json",
+    "status": 200,
+    "sha256": "147de49f55369ac0f00a5e8c5fbf35831ee9f51222178fb0c2a7175322b855e8",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/en-gb.json",
+    "status": 200,
+    "sha256": "7d212469849c456716ef0068cb046ccc4b09ab273820198ea361584dce1ae0b3",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/mac/cs-cz.json",
+    "status": 200,
+    "sha256": "0b37b022e68f637747525335e2bca887fc976e6225761ab5e362ccedbf54818c",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/mac/en-gb.json",
+    "status": 200,
+    "sha256": "40926184d1161798a7712e0c013ad982260eb69727d6a54f37accca00fd11b1d",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/mac/en-us.json",
+    "status": 200,
+    "sha256": "b0fd2ba50af8d55c0ed4aebb4ee15d923a6b9159bb307e1469f0c2a79d686324",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/mac/es-es.json",
+    "status": 200,
+    "sha256": "d973b9947cc625dbef506cab2895829f5b4132e703c3f17f6d9e5888ec6ac8c2",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/mac/sk-sk.json",
+    "status": 200,
+    "sha256": "bfdd04ee0f214419ec3869d93ed20c8d99148c8bfcd532863b4faef17645eed5",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/windows/cs-cz.json",
+    "status": 200,
+    "sha256": "352a39726ef99b8c8c90a8abf4c2e844187c4d5b338d216a4c7af4d327fcb9c8",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/windows/en-gb.json",
+    "status": 200,
+    "sha256": "348df11b955a704d13a2694aa968c29e7240701edeeb831ceae7536d664b0ab2",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/windows/en-us.json",
+    "status": 200,
+    "sha256": "0d18cebaf63d27b46aaad7ba89fdb7010ba3a1b130e62c6d1dafd00603d3b869",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/windows/es-es.json",
+    "status": 200,
+    "sha256": "5d83467eed6464109e3b4fd4f393c07b41d11bf83b794de2a278d785d93888ac",
+    "setCookie": null
+  },
+  {
+    "path": "content/keyboard-layouts/windows/sk-sk.json",
+    "status": 200,
+    "sha256": "c331e87597d2c26906e4682144a26805a5d31310c0d337024674bd1a2ce3d37b",
+    "setCookie": null
+  },
+  {
+    "path": "content/sentences/cs-cz.json",
+    "status": 200,
+    "sha256": "8431a02b97e72383a38cb9017acd0ee7a92bd6c8647769d8098a7006f351ca85",
+    "setCookie": null
+  },
+  {
+    "path": "content/sentences/en-gb.json",
+    "status": 200,
+    "sha256": "cf1e790dbc26e5fb0b09ec97f87df3644721a7e6df0831117d97bf957aa1917d",
+    "setCookie": null
+  },
+  {
+    "path": "index.html",
+    "status": 200,
+    "sha256": "122f5b0578a68e790bdaa5c07d59f1d63013afb8b6229b6461805961063dda4d",
+    "setCookie": null
+  }
+]

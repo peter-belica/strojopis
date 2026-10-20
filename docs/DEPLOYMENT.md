@@ -73,3 +73,39 @@ Výsledok: stará verzia označila úložisko ako novší chránený formát, od
 **Hranica návratu:** stará verzia nový progres nezobrazí a neuloží výsledky dočasného tréningu. Používateľ nesmie zvoliť vymazanie chránených údajov ani vymazať údaje prehliadača, ak ich chce obnoviť po oprave. Nevykonávať ručný prepis `schemaVersion` na 2: nebol by to overený prevod dát.
 
 Pri chybe uprednostni opravu kompatibilnú s formátom 3. Ak je potrebný úplný návrat, priprav nový commit na `main` obnovujúci aplikačné a zostavovacie súbory z `57069b8` (vrátane `package.json`, lockfile a obsahu), zachovaj aktuálne záznamy vydania a potom zopakuj kontroly a existujúci workflow. Nepresúvaj históriu `main` ani ručne neprepisuj `gh-pages`. Núdzová stará verzia musí používateľom vysvetliť uvedené obmedzenie a zákaz mazania chráneného záznamu. Po oprave over návrat k formátu 3 a verejné používateľské postupy. Skúška modulov potvrdzuje ochranu dát; nie je vykonaným opätovným nasadením starej stránky.
+
+
+## Potvrdené nasadenie – 20. októbra 2026
+
+Aktuálna verzia je verejne dostupná na [Prst po prste](https://peter-belica.github.io/strojopis/). Peter výslovne autorizoval publikovanie; ručná fyzická skúška ON-05 zostáva otvorená a neuvádza sa ako vykonaná.
+
+- Zdrojový commit: [`7b40fcb`](https://github.com/peter-belica/strojopis/commit/7b40fcbc978e9e02a50bac1ba60331953c3ac964).
+- [GitHub Actions, beh 39383197546](https://github.com/peter-belica/strojopis/actions/runs/39383197546): **success**, zostavenie aj nasadenie úspešné; ukončenie 20. 10. o 08:58:55 Europe/Prague (06:58:55 UTC). UTC je koordinovaný svetový čas.
+- Build vo vetve `gh-pages`: [`7982545`](https://github.com/peter-belica/strojopis/commit/79825459f117d7b507e75e5563a17afcd56c9afb), správa `Build from 7b40fcbc978e9e02a50bac1ba60331953c3ac964`.
+- Čistá inštalácia a lokálne kontroly konkrétneho commitu: 107/107 jednotkových testov, 4/4 testy reportu, typy, 240 viet, licencie 84 záznamov a Fullik 1.3.3, zostavenie a 57/57 prehliadačových kontrol. Podrobnosti a odtlačky sú v [VALIDATION.md](VALIDATION.md).
+- GitHub zopakoval inštaláciu, typy, jednotkové testy, build s obsahom/licenciami a celý prehliadačový balík pred publikovaním. Testy reportu a skúška návratu sa vykonali lokálne; existujúci workflow ich samostatne nespúšťa.
+- Všetkých **22 verejných súborov** bolo stiahnutých a bajtovo porovnaných s čistým produkčným zostavením: HTML, JavaScript, CSS, ikona, oba kurzy, katalóg, vety, historické aj nové mapy a `THIRD_PARTY_NOTICES.txt`. Všetky odpovedali HTTP 200. Rovnakých 22 súborov je aj v `gh-pages`, navyše s prázdnym markerom `.nojekyll`.
+- JavaScript `index-Dp7PBv9X.js` má SHA-256 `4365ee70a7e95224cfe3d68481ee652eba7bfe8b05a15d58866b445a9cf84c04`. SHA-256 je kontrolný odtlačok obsahu; zhodné súbory preukazujú identitu vydania nad rámec úspešnej odpovede servera.
+
+### Používateľské postupy na verejnej adrese
+
+Kontrola skončila 20. 10. o 09:09 Europe/Prague. Chromium 156.0.8078.4, Firefox 157.0 a WebKit 27.2 prešli každý rovnakým scenárom priamo na `/strojopis/`, bez náhradných odpovedí servera:
+
+1. Čistá relácia nezapisovala profil pred zapamätaním. Po zapnutí vznikol izolovaný skúšobný profil.
+2. Nesprávny znak zvýšil chyby bez posunu; správny posunul text. Všetkých desať kombinácií systém/jazyk a štyri fyzické modely zachovali text, pozíciu aj chyby; ruky mali desať kontaktov.
+3. Anglická úvodná lekcia sa dokončila a ponúkla pokračovanie. Český voľný tréning na úrovni 4 dokončil štyri vety, vytvoril výsledok a uložil ho do formátu 3.
+4. Nová karta obnovila profil, vybranú lekciu, kurz, model, jazyk klávesnice, systém a celý uložený záznam s dvoma výsledkami. Opakovanie cvičenia fungovalo.
+5. Šírky 390, 768 a 1366 pixelov nemali vodorovné pretekanie stránky. Zrušenie mazania zachovalo profil; potvrdenie ho odstránilo a ponechalo cudzí kľúč.
+6. Žiadne neošetrené chyby JavaScriptu, chyby konzoly, neúspešné sieťové požiadavky, HTTP 400+ ani požiadavky na cudzie domény. Izolované kontexty nemali cookies; HTML neobsahovalo `Set-Cookie`.
+
+**Zaznamenaná hranica:** pri zámernej kombinácii českého textu s britskou mapou Windows sa pri otvorení kurzu a novej karty objavilo po jednom diagnostickom upozornení `Course validation warnings` o chýbajúcom mapovaní niektorých českých znakov. Tieto znaky majú vysvetlenie o neoverenom prstoklade; písanie, dokončenie a uloženie zostalo funkčné. Dve upozornenia v každom prehliadači sú zachované v dôkaze, nie označené ako nulové. Úvodná automatizácia očakávala úplne prázdne upozornenia a neskôr odlišný textový výpis poľa vo Firefoxe; po rozlíšení tejto očakávanej diagnostiky finálny celý scenár prešiel bez úpravy aplikácie.
+
+Dôkazy: [odtlačky všetkých verejných súborov](releases/2026-10-20/public-files.json), [výsledky troch prehliadačov](releases/2026-10-20/browser-results.json), [identita úspešného workflow](releases/2026-10-20/workflow.json), [dokončený verejný tréning](screenshots/live-deployment-2026-10-20.png), [ruky pri opakovaní tréningu](screenshots/live-hands-2026-10-20.png). Ide o verejné technické dôkazy a syntetické profily; súkromné lokálne logy a prihlasovacie údaje sa nepublikujú.
+
+### Odovzdanie prevádzky
+
+Vlastník produktu je Peter; technický postup vydania a obnovy je v tomto dokumente. Pri hlásení chyby použi [Issues repozitára](https://github.com/peter-belica/strojopis/issues) alebo pokračovanie projektového chatu: adresa, očakávané a skutočné správanie, postup zopakovania, prehliadač, systém, jazyk a model klávesnice. Prezývky a uložené osobné výsledky nie sú na bežné hlásenie potrebné. Tento kanál je odporúčaný postup, nie tvrdenie o osobitne odsúhlasenom servisnom záväzku.
+
+Ďalšia potrebná kontrola je ON-05 pri Petrovom najbližšom použití fyzickej klávesnice; potom nové overenie pri ďalšej zmene alebo nahlásenej chybe. Pravidelný interval dohľadu nebol objednaný a automatizácia sledovania nie je nastavená. Otvorené hranice: fyzická matica národných rozložení, uvedené nepokryté prstoklady a všeobecné obmedzenia miestnych profilov bez synchronizácie. Postup návratu nad touto sekciou bol overený na formáte 3; pri návrate sa chránené dáta nemažú.
+
+Následné lokálne úpravy dobrovoľnej podpory vznikli súbežne po vytvorení commitu vydania. Do tohto nasadenia nepatria a zostali zachované pre samostatné vydanie. Záverečný dokumentačný commit používa `[skip ci]`, pretože nemení overenú aplikáciu ani verejné súbory.

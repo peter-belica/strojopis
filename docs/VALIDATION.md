@@ -110,3 +110,29 @@ Následná oprava proporcií používa Fullik a pevné články v troch rozmeroc
 Nové invarianty kontrolujú dĺžku každého článku v troch rozmeroch, odchýlku končeka od kontaktu pod 0,002 klávesovej jednotky, polohu nad klávesnicou, odlíšené proporcie prstov, posun dlane pri vzdialenom dosahu a zachovanie šírky dlane počas otáčania. Rozsah: všetky podporované fyzické klávesy na štyroch hardvérových modeloch a kombinácie až piatich kontaktov. Testy sú rozdelené podľa hardvéru, aby ich súhrnný čas pri súčasnom behu prehliadačov nespôsoboval falošný časový limit. Kontakty širokých klávesov sa kontrolujú vo vnútri klávesu, bežné písmená zostávajú presne v strede. Overuje sa skutočný koncový bod vypočítaného článku, nie iba požadovaný cieľ.
 
 Licenčná kontrola overila 84 záznamov v package-lock.json (MIT/Apache-2.0/MPL-2.0/ISC/BSD-3-Clause) a Fullik 1.3.3 (MIT), kontrolné súčty prevzatých súborov a úplné oznámenie v produkčnom zostavení. Metodika a povinnosti sú v DEPENDENCIES.md. Snímka `screenshots/anatomical-hands-w.png` zachytáva dosah na W, pri ktorom bolo naťahovanie pôvodného modelu výrazné.
+
+
+## Overenie konkrétneho vydania – 20. októbra 2026
+
+Overovaný commit: `7b40fcbc978e9e02a50bac1ba60331953c3ac964`. Z Gitu vznikla čistá archívna kópia bez `node_modules` a `dist`; nové `npm ci` použilo presný `package-lock.json`. Miestne prostredie: Node.js 22.16.0, npm 10.9.2. Súbežné následné zmeny dobrovoľnej podpory nie sú súčasťou tohto commitu ani týchto výsledkov.
+
+| Kontrola nad čistou kópiou | Výsledok |
+| --- | --- |
+| `npm ci` | 41 nainštalovaných balíkov, audit 42, 0 hlásených zraniteľností v čase kontroly |
+| `npm run typecheck` | Úspech |
+| `npm test` | 107/107, 7 súborov |
+| `npm run test:report` | 4/4 |
+| `npm run build` | Úspech vrátane kontroly 240 viet a licencií 84 záznamov závislostí + Fullik 1.3.3 |
+| `npm run test:e2e` | 57/57 v Chromium, Firefox, WebKit; 1,1 minúty nad novým `dist` |
+| `node scripts/verify-rollback.js` v commitnutom repozitári | Úspech pre skutočné moduly `57069b8`; chránený formát 3 a obnovenie aktuálnou verziou |
+| `git diff --check` | Úspech |
+
+Prvý inštalačný pokus zastavil zákaz sieťového prístupu sandboxu; čistá inštalácia následne prešla po povolení. Prvý pokus o prehliadače zablokoval sandbox pri štarte. Finálny úplný beh bol povolený mimo neho; nejde o 57 vykonaných aplikačných zlyhaní pred opravou zdrojov.
+
+Identita produkčného zostavenia:
+
+- `assets/index-Dp7PBv9X.js`: SHA-256 `4365ee70a7e95224cfe3d68481ee652eba7bfe8b05a15d58866b445a9cf84c04`.
+- `assets/index-CtGE1xyA.css`: SHA-256 `88bcdc09af374e2f55d1d131696ca7abf9b810d96f7eb3c71cc17778801f3207`.
+- Súhrnný odtlačok 62 zdrojových a kontrolných súborov: `6880d6d5674d57db42092b1079dc3fe8b1aeb583c20c2281ae5c0950501894de`. Metodika je v ONLINE_PLAN.md; oproti 19. 10. pribudol skript skúšky návratu, aplikačný JavaScript a CSS majú rovnaké odtlačky.
+
+Výsledok skutočného verejného nasadenia, jeho automatický beh a následné prehliadačové overenie sú v [DEPLOYMENT.md](DEPLOYMENT.md). ON-05, fyzická skúška používateľom, zostáva nevykonaná; automatizácia ju nenahrádza.
