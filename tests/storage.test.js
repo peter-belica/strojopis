@@ -41,10 +41,10 @@ describe('local persistence', () => {
     const { profiles, local } = setup({ [STORAGE_KEY]: raw });
     expect(profiles.getActiveProfile()).toMatchObject({ difficulty: 1, guideEnabled: false, courses: {}, history: [] });
     profiles.updateActiveProfileSettings({ difficulty: 2 });
-    expect(JSON.parse(local.getItem(STORAGE_KEY)).schemaVersion).toBe(2);
+    expect(JSON.parse(local.getItem(STORAGE_KEY)).schemaVersion).toBe(3);
   });
   test.each([
-    { difficulty: 9 }, { guideEnabled: 'false' }, { keyboardModel: 'invented' }, { languageLayout: 'xx' }, { id: '../evil' }, { name: '' }, { history: new Array(101).fill(result()) }, { courses: { 'xx': {} } }, { createdAt: 'yesterday' }
+    { difficulty: 9 }, { guideEnabled: 'false' }, { keyboardModel: 'invented' }, { languageLayout: 'xx' }, { keyboardLocale: 'xx' }, { keyboardPlatform: 'linux' }, { id: '../evil' }, { name: '' }, { history: new Array(101).fill(result()) }, { courses: { 'xx': {} } }, { createdAt: 'yesterday' }
   ])('rejects malformed profile %j', changes => {
     const { profiles, storage } = setup(); profiles.createProfile('Anna');
     const data = storage.read(); Object.assign(data.profiles[0], changes);

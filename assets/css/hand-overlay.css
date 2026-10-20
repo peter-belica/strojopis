@@ -1,0 +1,18 @@
+/* The hand and the physical keys share one coordinate plane. */
+#guideConnection { display:none; }
+.hand-guide { position:absolute; inset:0; display:block; width:100%; height:100%; padding:0; pointer-events:none; z-index:4; }
+.hand-guide[hidden], .guidance-off .hand-guide { display:none; }
+.hand-overlay { position:absolute; inset:0; display:block; width:100%; height:100%; overflow:visible; pointer-events:none; }
+.articulated-hand { stroke:none; }
+/* Group opacity blends the connected palm and fingers as one smooth silhouette. */
+.hand-silhouette { fill:#dba789; opacity:.43; }
+.overlay-finger-shape { opacity:0; }
+.overlay-finger.is-active .overlay-finger-shape { opacity:.64; }
+.overlay-finger.is-pressed .overlay-finger-shape { opacity:.85; }
+.overlay-nail { fill:#fffaf4; fill-opacity:.35; stroke:#c78f74; stroke-opacity:.18; stroke-width:.012; }
+.overlay-contact { fill:none; stroke:none; }
+.keyboard-preview>.key.is-active,.keyboard-preview>.key.is-modifier { --finger-color:#7950ce; }
+.keyboard-stage { padding-bottom:14%; }
+@media (prefers-reduced-motion:reduce) {
+  .hand-overlay * { animation:none!important; transition:none!important; }
+}

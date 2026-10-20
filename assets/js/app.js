@@ -6,7 +6,7 @@ import { loadCourse, loadCourseCatalog, prepareLessons } from "./lesson-loader.j
 import { createTypingEngine } from "./typing-engine.js";
 import { getFingerForCode, getFingerName, getFingerClass, getModifierCodes, renderHandIllustrations, updateHandGuide } from "./hand-guide.js";
 
-import { prepareExercise } from './lessons.js';
+import { prepareExercise, targetsFromText } from './lessons.js';
 import { DIFFICULTIES } from './sentences.js';
 
 const storage = createStorage();
@@ -21,6 +21,9 @@ const dom = {
   storageStatus: /** @type {HTMLElement} */ (document.querySelector("#storageStatus")),
   keyboardModel: /** @type {HTMLSelectElement} */ (document.querySelector("#keyboardModel")),
   languageLayout: /** @type {HTMLSelectElement} */ (document.querySelector("#languageLayout")),
+  keyboardLocale: /** @type {HTMLSelectElement} */ (document.querySelector('#keyboardLocale')),
+  keyboardPlatform: /** @type {HTMLSelectElement} */ (document.querySelector('#keyboardPlatform')),
+  sentencePosition: /** @type {HTMLElement} */ (document.querySelector('#sentencePosition')),
   lessonSelect: /** @type {HTMLSelectElement} */ (document.querySelector("#lessonSelect")),
   lessonMeta: /** @type {HTMLElement} */ (document.querySelector("#lessonMeta")),
   typingStrip: /** @type {HTMLElement} */ (document.querySelector("#typingStrip")),
@@ -89,6 +92,8 @@ function activeSettings() {
   return {
     keyboardModel: dom.keyboardModel.value,
     languageLayout: dom.languageLayout.value || DEFAULT_LAYOUT_ID,
+    keyboardLocale: dom.keyboardLocale.value || 'sk-sk',
+    keyboardPlatform: dom.keyboardPlatform.value || 'mac',
     difficulty: state.difficulty,
     guideEnabled: state.guideEnabled
   };
@@ -111,6 +116,8 @@ function setControlsFromProfile(profile) {
   state.difficulty = profile.difficulty;
   dom.difficulty.value = String(state.difficulty);
   dom.keyboardModel.value = profile.keyboardModel || "macbook-air";
+  dom.keyboardLocale.value = profile.keyboardLocale;
+  dom.keyboardPlatform.value = profile.keyboardPlatform;
   const languageLayout = profile.languageLayout || DEFAULT_LAYOUT_ID;
   const hasLanguageOption = Array.from(dom.languageLayout.options).some((option) => option.value === languageLayout);
   dom.languageLayout.value = hasLanguageOption ? languageLayout : state.course?.id || DEFAULT_LAYOUT_ID;
@@ -139,8 +146,12 @@ function renderProfileSelect() {
     .join("");
 }
 
+let stripRunId = '', renderedTokenIndex = -1;
 function renderTypingStrip() {
-  dom.typingStrip.innerHTML = state.typing.exercise
+  if (stripRunId !== state.typing.runId) {
+    stripRunId = state.typing.runId;
+    renderedTokenIndex = -1;
+    dom.typingStrip.innerHTML = state.typing.exercise
     .map((target, index) => {
       const classes = ["typing-token"];
       if (index === state.typing.currentIndex) {
@@ -159,6 +170,20 @@ function renderTypingStrip() {
       return `<span class="${classes.join(" ")}"${index === state.typing.currentIndex ? ' aria-current="true"' : ""}>${escapeHtml(label)}</span>`;
     })
     .join("");
+  }
+  const changedIndices = renderedTokenIndex >= 0
+    ? Array.from({ length: Math.max(0,state.typing.currentIndex - renderedTokenIndex) + 1 }, (_, offset) => renderedTokenIndex + offset)
+    : [state.typing.currentIndex];
+  for (const index of changedIndices) {
+    const token = dom.typingStrip.children[index];
+    if (!(token instanceof HTMLElement)) continue;
+    token.classList.toggle('is-current', index === state.typing.currentIndex);
+    token.classList.toggle('is-done', state.typing.results[index] === 'done');
+    token.classList.toggle('is-error', state.typing.results[index] === 'error');
+    if (index === state.typing.currentIndex) token.setAttribute('aria-current', 'true');
+    else token.removeAttribute('aria-current');
+  }
+  renderedTokenIndex = state.typing.currentIndex;
 
   const currentToken = dom.typingStrip.querySelector(".typing-token.is-current");
   if (currentToken) {
@@ -166,7 +191,17 @@ function renderTypingStrip() {
   }
 }
 
-function keyClasses(code) {
+let guidanceStep = 0;
+const pressedCodes = new Set();
+function guidanceTarget() {
+  const target = state.typing.currentTarget;
+  const stroke = target.steps?.[Math.min(guidanceStep, target.steps.length - 1)];
+  const resolved = stroke ? { ...target, code: stroke.code, steps: [stroke] } : target;
+  const physicalCodes = new Set(getKeyboardModel(dom.keyboardModel.value).keys.map(key => key.code));
+  return physicalCodes.has(resolved.code) && getModifierCodes(resolved).every(code => physicalCodes.has(code)) ? resolved : { ...target, code:'',steps:[] };
+}
+
+function keyClasses(code, target = guidanceTarget()) {
   const classes = ["key"];
 
   if (["Tab", "CapsLock", "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight", "AltLeft", "AltRight", "MetaLeft", "MetaRight", "Backspace", "Enter"].includes(code)) {
@@ -191,37 +226,47 @@ function keyClasses(code) {
 
   const finger = getFingerForCode(code);
   if (finger) classes.push(getFingerClass(finger.finger));
-  if (state.guideEnabled && getModifierCodes(state.typing.currentTarget).includes(code)) {
+  if (state.guideEnabled && getModifierCodes(target).includes(code)) {
     classes.push("is-modifier");
   }
-  if (state.guideEnabled && code === state.typing.currentTarget.code) {
+  if (state.guideEnabled && code === target.code) {
     classes.push("is-active");
   }
+  if (pressedCodes.has(code)) classes.push('is-pressed');
 
   return classes.join(" ");
 }
 
+let renderedKeyboard = '';
 function renderKeyboard() {
   const model = getKeyboardModel(dom.keyboardModel.value);
   const layout = state.keyboardLayout;
   if (!layout) return;
+  const target = guidanceTarget();
 
-  dom.keyboardPreview.innerHTML = model.rows
-    .map((row) => {
-      const keys = row
-        .map((code) => {
-          const label = code === "Space" ? "medzerník" : layout.labels[code] || code;
-          const finger = getFingerForCode(code)?.finger;
-          const fingerAttribute = finger ? ` data-finger="${finger}"` : "";
-          return `<span class="${keyClasses(code)}" data-code="${escapeHtml(code)}"${fingerAttribute}>${escapeHtml(label)}</span>`;
-        })
-        .join("");
+  const signature = `${model.id}:${layout.platform}:${layout.id}`;
+  if (signature !== renderedKeyboard) {
+    renderedKeyboard = signature;
+    dom.keyboardPreview.style.aspectRatio = `${model.width} / ${model.height}`;
+    dom.keyboardPreview.dataset.variant = model.variant;
+    dom.keyboardPreview.innerHTML = model.keys.map(key => {
+      const code = key.code;
+      const label = code === 'Space' ? 'medzerník' : key.label || layout.labels[code] || code;
+      const finger = getFingerForCode(code)?.finger;
+      const cutout = key.shape === 'iso-enter' ? 'clip-path:polygon(0 0,100% 0,100% 100%,16.667% 100%,16.667% 50%,0 50%);' : '';
+      const style = `left:calc(${key.x / model.width * 100}% + var(--key-gap));top:calc(${key.y / model.height * 100}% + var(--key-gap));width:calc(${key.width / model.width * 100}% - 2 * var(--key-gap));height:calc(${key.height / model.height * 100}% - 2 * var(--key-gap));${cutout}`;
+      return `<span class="${keyClasses(code,target)}" data-code="${escapeHtml(code)}"${finger ? ` data-finger="${finger}"` : ''} style="${style}">${escapeHtml(label)}</span>`;
+    }).join('');
+  } else {
+    dom.keyboardPreview.querySelectorAll('[data-code]').forEach(key => {
+      key.className = keyClasses(/** @type {HTMLElement} */ (key).dataset.code,target);
+    });
+  }
+  updateHands();
+}
 
-      return `<div class="keyboard-row">${keys}</div>`;
-    })
-    .join("");
-
-  updateHandGuide(dom.keyboardWorkbench, state.typing.currentTarget, state.guideEnabled);
+function updateHands() {
+  updateHandGuide(dom.keyboardWorkbench, guidanceTarget(), state.guideEnabled && !state.typing.isComplete, { model: getKeyboardModel(dom.keyboardModel.value), pressedCodes });
 }
 
 function renderStorageStatus() {
@@ -254,7 +299,7 @@ function renderStats() {
 }
 
 function renderFeedback() {
-  if (state.typing.isComplete) { dom.feedbackLine.textContent = "Hotovo! Výsledok nájdeš pod cvičením."; dom.feedbackLine.className = "feedback-line"; return; }
+  if (state.typing.isComplete) { dom.feedbackLine.textContent = 'Hotovo! Výsledok nájdeš v prehľade tréningu.'; dom.feedbackLine.className = 'feedback-line'; return; }
   if (!state.typing.lastError) {
     dom.feedbackLine.textContent = state.typing.completed ? "Výborne, pokračuj ďalším znakom." : "Začni zvýrazneným znakom. Máš čas.";
     dom.feedbackLine.className = "feedback-line";
@@ -267,7 +312,7 @@ function renderFeedback() {
 
 function renderFingerGuidance() {
   if (!state.keyboardLayout) return;
-  const target = state.typing.currentTarget;
+  const target = guidanceTarget();
   const guide = getFingerForCode(target.code);
   const colorClass = getFingerClass(guide?.finger);
   dom.practicePanel.classList.toggle("guidance-off", !state.guideEnabled);
@@ -283,12 +328,14 @@ function renderFingerGuidance() {
   dom.fingerName.textContent = getFingerName(guide?.finger);
   const label = state.keyboardLayout.labels[target.code] || target.char;
   const modifiers = getModifierCodes(target);
-  const modifierText = modifiers.map((code) => code.startsWith("Shift")
-    ? ` + ${code === "ShiftLeft" ? "ľavý" : "pravý"} Shift (${getFingerName(getFingerForCode(code).finger).toLowerCase()})`
-    : " + pravý Alt (pravý palec)").join("");
+  const layoutLabels = state.keyboardLayout.labels;
+  const modifierLabel = code => layoutLabels[code] || code;
+  const modifierText = modifiers.map(code => ` + ${modifierLabel(code)}`).join('');
+  const stepCount = state.typing.currentTarget.steps?.length ?? 1;
+  const stepText = stepCount > 1 ? `Krok ${guidanceStep + 1} z ${stepCount}. ${target.steps?.[0]?.dead ? 'Najprv stlač znamienko, potom písmeno. ' : ''}` : '';
   dom.fingerDescription.textContent = guide
-    ? target.code === "Space" ? "Stlač medzerník palcom." : `Kláves ${label}${modifierText}. Potom vráť prst do základnej polohy.`
-    : "Tento znak sa skladá cez viac klávesov podľa jazykového rozloženia.";
+    ? target.code === "Space" ? 'Stlač medzerník palcom.' : `${stepText}Kláves ${label}${modifierText}.`
+    : 'Pre tento znak nie je overený postup na zvolenej klávesnici. Napíš ho svojím systémovým rozložením.';
   dom.guideFooter.textContent = state.guideEnabled ? "Sleduj znak → nájdi prst → stlač kláves" : "Samostatný tréning · pomôcku môžeš kedykoľvek zapnúť";
   dom.upcomingKeys.innerHTML = state.typing.exercise.slice(state.typing.currentIndex + 1, state.typing.currentIndex + 5)
     .map((item) => {
@@ -300,12 +347,15 @@ function renderFingerGuidance() {
   const progress = total ? Math.round(state.typing.currentIndex / total * 100) : 0;
   dom.progressFill.style.width = `${progress}%`;
   dom.exerciseProgress.setAttribute("aria-valuenow", String(progress));
+  const count = state.typing.lesson.sentenceCount ?? 0;
+  const currentSentence = (state.typing.lesson.sentenceEnds ?? []).filter(end => end <= state.typing.currentIndex).length + 1;
+  dom.sentencePosition.textContent = count ? `Veta ${Math.min(currentSentence, count)} zo ${count}` : 'Cvičenie klávesov a slov';
 }
 
 function renderLessonMeta() {
   dom.practiceTitle.textContent = state.typing.lesson.name;
   dom.lessonMeta.textContent = state.typing.lesson.fallback
-    ? 'Pre doteraz prebrané znaky tu nie je vhodná veta. Precvičuješ klávesy alebo slová. Vety všetkých úrovní nájdeš vo voľnom tréningu.'
+    ? 'Pre zvolený počet viet z doteraz prebraných znakov tu nie je dostatok textov. Precvičuješ klávesy alebo slová. Vety všetkých úrovní nájdeš vo voľnom tréningu.'
     : `${state.typing.lesson.phase}: ${state.typing.lesson.description}`;
 }
 
@@ -349,7 +399,7 @@ function renderDifficulty() {
   dom.difficulty.value = String(state.difficulty);
   dom.difficulty.setAttribute('aria-valuetext', `${state.difficulty}. ${rule.name}`);
   dom.difficultyName.textContent = `${state.difficulty} / 4 · ${rule.name}`;
-  dom.difficultyDescription.textContent = `${rule.audience}. Vyber si podľa seba; vek nezisťujeme.`;
+  dom.difficultyDescription.textContent = `${state.difficulty} ${state.difficulty === 1 ? 'veta' : 'vety'} v cvičení · ${rule.audience}.`;
   dom.difficultySample.textContent = state.sentences.find(s => s.difficulty === state.difficulty)?.text ?? '';
   dom.difficultyPending.textContent = state.difficulty !== state.typing.lesson.difficulty ? 'Nová úroveň sa použije pri ďalšom cvičení alebo po stlačení Odznova.' : '';
 }
@@ -359,6 +409,8 @@ function renderResult() {
   dom.resultPanel.hidden = !s.isComplete;
   dom.trainingInput.disabled = s.isComplete || loading;
   dom.lessonSelect.disabled = loading;
+  dom.keyboardLocale.disabled = loading;
+  dom.keyboardPlatform.disabled = loading;
   dom.practicePanel.setAttribute('aria-busy', String(loading));
   dom.deleteProfileButton.disabled = !state.activeProfile;
   const courses = Object.values(state.activeProfile?.courses ?? {});
@@ -366,7 +418,7 @@ function renderResult() {
   const count = summaries.reduce((n, item) => n + item.completedAttempts, 0);
   dom.profileProgress.textContent = state.activeProfile ? `${summaries.length} dokončených lekcií · ${count} dokončených pokusov` : 'Profil je voliteľný. Vytvor si ho pre vlastné nastavenia a progres.';
   if (!s.isComplete || !state.course) return;
-  dom.resultMetrics.textContent = `${s.accuracy} % presnosť · ${s.attempts} pokusov o znak · ${s.errors} chýb · ${(s.durationMs / 1000).toFixed(1)} s aktívneho času`;
+  dom.resultMetrics.textContent = `${s.lesson.sentenceCount ? `${s.lesson.sentenceCount} ${s.lesson.sentenceCount === 1 ? 'veta' : 'vety'} · ` : ''}${s.accuracy} % presnosť · ${s.attempts} pokusov o znak · ${s.errors} chýb · ${(s.durationMs / 1000).toFixed(1)} s aktívneho času`;
   const summary = state.activeProfile?.courses[state.course.id]?.lessons[s.lesson.id];
   dom.resultProgress.textContent = summary
     ? `Táto lekcia: ${summary.completedAttempts} dokončených pokusov. Najlepšia presnosť: ${summary.bestResult.accuracy} %. ${storage.status().persistent ? 'Výsledok je uložený v tomto prehliadači.' : 'Výsledok zostáva v pamäti otvorenej stránky.'}`
@@ -382,6 +434,8 @@ function startExercise(id = state.typing.lesson.id) {
   const base = state.lessons.find(l => l.id === id) ?? state.lessons[0];
   const exercise = prepareExercise(base, state.sentences, state.course.id, state.difficulty, state.keyboardLayout, state.typing.lesson.textId ?? state.activeProfile?.courses[state.course.id]?.lessons[id]?.lastResult.textId);
   state.typing = typing.setLessons([exercise], exercise.id);
+  guidanceStep = 0;
+  pressedCodes.clear();
   dom.lessonSelect.value = exercise.id;
   rememberLesson();
 }
@@ -393,7 +447,7 @@ async function loadActiveCourse(courseId, preferredLessonId) {
   renderResult();
   const resolved = state.courseCatalog.some(c => c.id === courseId) ? courseId : DEFAULT_LAYOUT_ID;
   const course = await loadCourse(resolved, state.courseCatalog);
-  const [layout, response] = await Promise.all([loadKeyboardLayout(course.keyboardLayoutId), fetch(`content/sentences/${resolved}.json`)]);
+  const [layout, response] = await Promise.all([loadKeyboardLayout(dom.keyboardLocale.value || 'sk-sk', /** @type {import('./types').KeyboardPlatform} */ (dom.keyboardPlatform.value || 'mac'), getKeyboardModel(dom.keyboardModel.value).variant), fetch(`content/sentences/${resolved}.json`)]);
   if (!response.ok) throw new Error(`Obsah viet nie je dostupný: ${response.status}`);
   const sentences = await response.json();
   if (sequence !== loadSequence) return;
@@ -407,10 +461,23 @@ async function loadActiveCourse(courseId, preferredLessonId) {
   renderSettingsOptions();
   render();
 }
+async function loadActiveLayout() {
+  const sequence = ++loadSequence;
+  loading = true;
+  renderResult();
+  const layout = await loadKeyboardLayout(dom.keyboardLocale.value, /** @type {import('./types').KeyboardPlatform} */ (dom.keyboardPlatform.value), getKeyboardModel(dom.keyboardModel.value).variant);
+  if (sequence !== loadSequence) return;
+  state.keyboardLayout = layout;
+  state.typing = typing.remapTargets(targetsFromText(state.typing.lesson.text, layout.charMap));
+  guidanceStep = 0;
+  pressedCodes.clear();
+  loading = false;
+  render();
+}
 async function restoreProfile() {
   state.activeProfile = profiles.getActiveProfile();
   if (state.activeProfile) setControlsFromProfile(state.activeProfile);
-  else { state.difficulty = 1; state.guideEnabled = true; dom.keyboardModel.value = 'macbook-air'; }
+  else { state.difficulty = 1; state.guideEnabled = true; dom.keyboardModel.value = 'macbook-air'; dom.keyboardLocale.value = 'sk-sk'; dom.keyboardPlatform.value = 'mac'; }
   await loadActiveCourse(state.activeProfile?.languageLayout ?? DEFAULT_LAYOUT_ID);
 }
 function saveSettings() {
@@ -418,8 +485,9 @@ function saveSettings() {
 }
 const focusTraining = () => dom.trainingInput.focus({ preventScroll: true });
 function acceptText(text) {
-  if (!text || !state.course) return;
+  if (!text || !state.course || loading) return;
   state.typing = typing.handleText(text);
+  guidanceStep = 0;
   const result = typing.claimResult(state.course.id);
   if (result) state.activeProfile = profiles.recordResult(result);
   render();
@@ -473,7 +541,9 @@ function bindEvents() {
     profiles.setActiveProfile(dom.profileSelect.value);
     onAsync(restoreProfile);
   });
-  dom.keyboardModel.addEventListener('change', () => { saveSettings(); render(); });
+  for (const control of [dom.keyboardModel, dom.keyboardLocale, dom.keyboardPlatform]) {
+    control.addEventListener('change', () => { saveSettings(); onAsync(loadActiveLayout); });
+  }
   dom.languageLayout.addEventListener('change', () => {
     const id = dom.languageLayout.value;
     saveSettings();
@@ -498,7 +568,8 @@ function bindEvents() {
     startExercise(state.lessons[Math.min(index + 1, state.lessons.length - 1)].id);
     render(); if (event.detail > 0) focusTraining();
   });
-  new ResizeObserver(() => updateHandGuide(dom.keyboardWorkbench, state.typing.currentTarget, state.guideEnabled)).observe(dom.keyboardWorkbench);
+  new ResizeObserver(updateHands).observe(dom.keyboardWorkbench);
+  dom.typingStrip.addEventListener('click', focusTraining);
   let composing = false, composedInput = '';
   dom.trainingInput.addEventListener('compositionstart', () => { composing = true; });
   dom.trainingInput.addEventListener('compositionend', event => {
@@ -517,15 +588,23 @@ function bindEvents() {
     const active = document.activeElement;
     const tag = active?.tagName ?? '';
     if (dom.deleteDialog.open || (active !== dom.trainingInput && (['INPUT','SELECT','TEXTAREA','BUTTON','SUMMARY','A'].includes(tag) || active instanceof HTMLElement && active.isContentEditable))) return;
+    if (loading || state.typing.isComplete) return;
+    pressedCodes.add(event.code);
+    const stroke = guidanceTarget().steps?.[0];
+    if (stroke?.dead && event.code === stroke.code && getModifierCodes(guidanceTarget()).every(code => pressedCodes.has(code))) guidanceStep = Math.min(guidanceStep + 1, (state.typing.currentTarget.steps?.length ?? 1) - 1);
+    renderFingerGuidance();
+    renderKeyboard();
     if (composing || event.metaKey || event.isComposing || event.repeat || Array.from(event.key).length !== 1) return;
-    const altGraph = event.getModifierState('AltGraph') || event.ctrlKey && event.altKey || event.altKey && state.typing.currentTarget.altGraph && event.key === state.typing.currentTarget.char;
+    const altGraph = event.getModifierState('AltGraph') || event.ctrlKey && event.altKey || event.altKey && event.key === state.typing.currentTarget.char && (state.typing.currentTarget.altGraph || state.typing.currentTarget.steps?.some(step => step.modifiers?.some(code => code.startsWith('Alt'))));
     if ((event.ctrlKey || event.altKey) && !altGraph) return;
     event.preventDefault(); composedInput = ''; acceptText(event.key);
   });
-  document.addEventListener('focusin', event => { if (event.target !== dom.trainingInput) typing.pause(); });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) typing.pause(); });
-  window.addEventListener('blur', () => typing.pause());
-  dom.trainingInput.addEventListener('blur', () => typing.pause());
+  window.addEventListener('keyup', event => { pressedCodes.delete(event.code); renderKeyboard(); });
+  const pauseTraining = () => { typing.pause(); pressedCodes.clear(); guidanceStep = 0; composing = false; composedInput = ''; dom.trainingInput.value = ''; renderKeyboard(); };
+  document.addEventListener('focusin', event => { if (event.target !== dom.trainingInput) pauseTraining(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pauseTraining(); });
+  window.addEventListener('blur', pauseTraining);
+  dom.trainingInput.addEventListener('blur', pauseTraining);
 }
 async function boot() {
   state.courseCatalog = await loadCourseCatalog();

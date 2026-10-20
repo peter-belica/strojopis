@@ -62,3 +62,14 @@ Na samostatný statický hosting stačí preniesť celý obsah `dist/`, vrátane
 - [Snímka skutočne nasadeného webu](screenshots/live-deployment.jpg).
 
 Dokumentácia lokálneho vývoja a jeho podrobného overenia zostáva v [VALIDATION.md](VALIDATION.md). Neúspešný prvý beh počas súbežného dokončovania vývoja nepublikoval web; nasledujúce overené verzie boli publikované automaticky.
+
+
+## Návrat pri chybe a ochrana progresu – 20. októbra 2026
+
+Posledná overená verejná verzia pred týmto vydaním je `57069b80c9c48042cf52f4917e522386974cc4f2`. Skúška `PATH=/usr/local/bin:$PATH node scripts/verify-rollback.js` načítala priamo jej moduly úložiska, profilov a dátového modelu z Gitu. Použila syntetický profil s nastaveniami Windows/španielčina/ANSI, historickým výsledkom a novým výsledkom štyroch viet vo formáte 3; skutočné používateľské údaje nečítala.
+
+Výsledok: stará verzia označila úložisko ako novší chránený formát, odmietla zapamätanie a dovolila vytvoriť dočasný profil aj výsledok. Pôvodný záznam zostal bajtovo nezmenený, rovnako aj cudzí kľúč. Následné otvorenie aktuálnymi modulmi obnovilo celý profil, nastavenia, históriu a rekordy oboch formátov. Skript sa ukončí chybou pri nesplnení ktorejkoľvek podmienky; možno ho zopakovať, ak Git obsahuje uvedený historický commit.
+
+**Hranica návratu:** stará verzia nový progres nezobrazí a neuloží výsledky dočasného tréningu. Používateľ nesmie zvoliť vymazanie chránených údajov ani vymazať údaje prehliadača, ak ich chce obnoviť po oprave. Nevykonávať ručný prepis `schemaVersion` na 2: nebol by to overený prevod dát.
+
+Pri chybe uprednostni opravu kompatibilnú s formátom 3. Ak je potrebný úplný návrat, priprav nový commit na `main` obnovujúci aplikačné a zostavovacie súbory z `57069b8` (vrátane `package.json`, lockfile a obsahu), zachovaj aktuálne záznamy vydania a potom zopakuj kontroly a existujúci workflow. Nepresúvaj históriu `main` ani ručne neprepisuj `gh-pages`. Núdzová stará verzia musí používateľom vysvetliť uvedené obmedzenie a zákaz mazania chráneného záznamu. Po oprave over návrat k formátu 3 a verejné používateľské postupy. Skúška modulov potvrdzuje ochranu dát; nie je vykonaným opätovným nasadením starej stránky.

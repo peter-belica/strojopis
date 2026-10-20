@@ -11,9 +11,12 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "validate:content": "node scripts/validate-content.js",
-    "build": "npm run validate:content && vite build",
+    "validate:licenses": "node scripts/validate-licenses.js",
+    "build": "npm run validate:content && npm run validate:licenses && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "report:agents": "python3 scripts/agent-report.py",
+    "test:report": "python3 -m unittest discover -s tests -p agent_report_test.py"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

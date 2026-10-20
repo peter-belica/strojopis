@@ -1,4 +1,4 @@
-import { COURSE_LESSON_IDS, LANGUAGES, MODELS, validateResult } from './data-model.js';
+import { COURSE_LESSON_IDS, LANGUAGES, MODELS, KEYBOARD_LOCALE_IDS, KEYBOARD_PLATFORM_IDS, resultFormat, validateResult } from './data-model.js';
 /** @typedef {import('./types').Profile} Profile */
 /** @param {ReturnType<typeof import('./storage').createStorage>} storage */
 export function createProfileManager(storage) {
@@ -20,7 +20,7 @@ export function createProfileManager(storage) {
     const stamp = new Date().toISOString();
     const id = `p-${crypto.randomUUID()}`;
     change(data => {
-      data.profiles.push({ id, name: cleaned, keyboardModel: 'macbook-air', languageLayout: 'en-gb', difficulty: 1, guideEnabled: true, ...settings, createdAt: stamp, updatedAt: stamp, courses: {}, history: [] });
+      data.profiles.push({ id, name: cleaned, keyboardModel: 'macbook-air', languageLayout: 'en-gb', keyboardLocale: 'sk-sk', keyboardPlatform: 'mac', difficulty: 1, guideEnabled: true, ...settings, createdAt: stamp, updatedAt: stamp, courses: {}, history: [] });
       data.activeProfileId = id;
     });
     return getActiveProfile();
@@ -31,6 +31,8 @@ export function createProfileManager(storage) {
       if (!p) return;
       if (MODELS.includes(settings.keyboardModel)) p.keyboardModel = settings.keyboardModel;
       if (LANGUAGES.includes(settings.languageLayout)) p.languageLayout = settings.languageLayout;
+      if (KEYBOARD_LOCALE_IDS.includes(settings.keyboardLocale)) p.keyboardLocale = settings.keyboardLocale;
+      if (KEYBOARD_PLATFORM_IDS.includes(settings.keyboardPlatform)) p.keyboardPlatform = settings.keyboardPlatform;
       if ([1,2,3,4].includes(settings.difficulty)) p.difficulty = settings.difficulty;
       if (typeof settings.guideEnabled === 'boolean') p.guideEnabled = settings.guideEnabled;
       p.updatedAt = new Date().toISOString();
@@ -53,9 +55,15 @@ export function createProfileManager(storage) {
       p.courses[valid.language] ??= { lastLessonId: valid.lessonId, lessons: {} };
       const course = p.courses[valid.language];
       const previous = course.lessons[valid.lessonId];
-      const best = previous?.bestResult;
-      const better = !best || valid.accuracy > best.accuracy || (valid.accuracy === best.accuracy && valid.durationMs < best.durationMs);
-      course.lessons[valid.lessonId] = { completedAttempts: (previous?.completedAttempts ?? 0) + 1, bestResult: better ? valid : best, lastResult: valid };
+      const bestByFormat = { ...previous?.bestByFormat };
+      if (previous?.bestResult) bestByFormat[resultFormat(previous.bestResult)] ??= previous.bestResult;
+      const format = resultFormat(valid);
+      const best = bestByFormat[format];
+      // Different random sentences have different lengths. Compare time per character,
+      // and keep old one-sentence formats separate from the longer exercises.
+      const better = !best || valid.accuracy > best.accuracy || (valid.accuracy === best.accuracy && valid.durationMs / valid.length < best.durationMs / best.length);
+      bestByFormat[format] = better ? valid : best;
+      course.lessons[valid.lessonId] = { completedAttempts: (previous?.completedAttempts ?? 0) + 1, bestResult: bestByFormat[format], lastResult: valid, bestByFormat };
       p.history = [...p.history, valid].slice(-100);
       p.updatedAt = valid.completedAt;
     });

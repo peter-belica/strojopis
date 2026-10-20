@@ -22,9 +22,9 @@ Oficiálne podklady: [Vite](https://vite.dev/guide/), [Vitest](https://vitest.de
 | `profiles.js` | Aktívny profil, jeho nastavenia, posledná lekcia podľa kurzu, agregované výsledky a ohraničená história. |
 | `data-model.js` | Verzia formátu, rozsahy a identifikátory, validácia nedôveryhodných údajov a migrácia podporovanej verzie. |
 | `storage.js` | Pamäťový režim, čítanie/zápis `localStorage`, overenie zápisu, bezpečné chyby, migrácia starých cookies a mazanie vlastných údajov. |
-| `keyboard-models.js` | Fyzický tvar MacBook Air a Dell XPS 2018, nezávislý od jazyka. |
-| `keyboard-layouts.js` | Načíta popisy klávesov a známe mapovanie znaku na fyzický kláves s modifikátormi. |
-| `hand-guide.js` | Mapovanie fyzickej klávesy na prst, SVG ilustrácie rúk a spojnica k cieľovému klávesu. SVG znamená škálovateľnú vektorovú grafiku. |
+| `keyboard-models.js` | Geometria MacBook Air M3 a Dell XPS 2018, varianty ISO/ANSI, normalizované súradnice a body stlačenia. |
+| `keyboard-layouts.js` | Načíta a vyrieši národnú mapu podľa systému aj geometrie; priame aj postupné kombinácie klávesov. |
+| `hand-guide.js` | Mapovanie klávesov na prsty, čistý výpočet polohy rúk, animované SVG nad klávesnicou a súčasné kombinácie. SVG znamená škálovateľnú vektorovú grafiku. |
 
 ## Tok vstupu a výsledku
 
@@ -36,7 +36,7 @@ Oficiálne podklady: [Vite](https://vite.dev/guide/), [Vitest](https://vitest.de
 
 Presnosť = `round((attempts - errors) / attempts * 100)`. Bez pokusu sa ukazuje 100 %. Dokončený výsledok musí mať `attempts - errors === length`. Čas začína prvým pokusom, zahŕňa opravy chýb a končí posledným správnym znakom. Skrytie stránky, strata zamerania okna alebo prechod na ovládacie prvky pozastaví meranie; ďalší znak ho obnoví. Údaje obsahujú trvanie v milisekundách aj dátum dokončenia. WPM (words per minute, slová za minútu) sa v tejto verzii nevypočítava.
 
-Najlepší výsledok je najvyššia presnosť; pri rovnakej presnosti vyhrá kratší aktívny čas. Samotné otvorenie alebo reštart lekcie nevytvára dokončený výsledok.
+Rekordy sú oddelené podľa verzie cvičenia, náročnosti a počtu viet v `bestByFormat`. Najlepší výsledok má najvyššiu presnosť; pri rovnakej presnosti vyhrá kratší aktívny čas na znak, pretože náhodné vety majú rôznu dĺžku. Samotné otvorenie alebo reštart lekcie nevytvára dokončený výsledok.
 
 ## Obsah a pedagogické obmedzenie
 
@@ -55,10 +55,10 @@ Nový obsah sa pridáva do JSON a overí `npm run validate:content`. Nový kurz 
 Jediný aktuálny kľúč v `localStorage` je `strojopis_data`:
 
 ```text
-schemaVersion: 2
+schemaVersion: 3
 activeProfileId: string | null
 profiles: [
-  id, name, keyboardModel, languageLayout, difficulty, guideEnabled,
+  id, name, keyboardModel, languageLayout, keyboardLocale, keyboardPlatform, difficulty, guideEnabled,
   createdAt, updatedAt,
   courses: {
     <language>: {
@@ -70,9 +70,9 @@ profiles: [
 ]
 ```
 
-Výsledok obsahuje `id`, `lessonId`, `textId`, jazyk, použitú náročnosť, pokusy, chyby, presnosť, čas, dĺžku textu a dátum dokončenia. Neukladá stlačenia klávesov, vek, e-mail, celý napísaný text ani polohu rozpracovaného znaku. Úložisko je obmedzené na 50 profilov; dĺžky prezývok, identifikátory, kurzy a rozsahy metrík sa validujú.
+Výsledok obsahuje `id`, `lessonId`, prvé `textId`, všetky `textIds`, `sentenceCount`, `exerciseVersion`, jazyk, použitú náročnosť, pokusy, chyby, presnosť, čas, dĺžku textu a dátum dokončenia. Neukladá stlačenia klávesov, vek, e-mail, celý napísaný text ani polohu rozpracovaného znaku. Úložisko je obmedzené na 50 profilov; dĺžky prezývok, identifikátory, kurzy a rozsahy metrík sa validujú.
 
-Verzia 1 je podporovaný starší tvar profilových nastavení bez výsledkov. Migrácia doplní úroveň 1, historické vedenie prstov, dátum a prázdny progres. Poškodený či neplatný záznam a novšia neznáma verzia sa chránia pred prepísaním. Nová relácia môže trénovať v pamäti. Obnovenie zápisu po takom stave vyžaduje vedomé vymazanie vlastných starých údajov v rozhraní.
+Podporované sú staršie verzie 1 a 2. Verzia 1 doplní úroveň 1, historické vedenie prstov, dátum a prázdny progres. Obe staršie verzie dostanú `keyboardLocale` podľa pôvodného jazyka a `keyboardPlatform` podľa modelu (Dell → Windows, MacBook → macOS), pričom verzia 2 zachová výsledky a progres. Čítanie nemení záznam na disku; migrácia sa zapíše pri ďalšom významnom uložení. Poškodený či neplatný záznam a novšia neznáma verzia sa chránia pred prepísaním. Nová relácia môže trénovať v pamäti. Obnovenie zápisu po takom stave vyžaduje vedomé vymazanie vlastných starých údajov v rozhraní.
 
 Bez existujúceho platného záznamu sa trvalo nezapisuje, kým používateľ nezvolí **Zapamätať tréning**. Už existujúci platný záznam obnovuje predchádzajúcu voľbu. Pri každom významnom zápise sa záznam spätne prečíta a porovná. Chyba kapacity, prístupu alebo overenia prepne ďalšiu prácu do pamäte a zobrazí pravdivý oznam. Predchádzajúci úspešný záznam môže zostať na disku, čo oznam netají.
 
@@ -96,8 +96,18 @@ Samotné použitie `localStorage` nevylučuje pôsobnosť čl. 5 ods. 3 ePrivacy
 
 Lokálne profily nie sú chránené prihlasovaním. Ďalší používateľ toho istého profilu prehliadača ich môže vidieť. Vymazanie dát prehliadača, zmena pôvodu alebo zariadenia znemožní prístup k miestnemu progresu; prenos medzi zariadeniami nie je súčasťou prvej verzie.
 
-## Klávesnica a prsty
+## Klávesnica, prsty a dlhšie cvičenia
 
-Fyzický model, jazyk textu a jeho náročnosť sú samostatné osi. `KeyboardEvent.code` označuje fyzický kláves, `key` výsledný znak, popis klávesu slúži na zobrazenie a prst určuje fyzické mapovanie. Modifikátor Shift sa ukazuje opačnej ruke; medzerník pravému palcu. České veľké písmená s diakritikou nemajú vymyslenú kombináciu Shift + číslica: keďže sa bežne skladajú, ich fyzické mapovanie zostáva neznáme.
+Jazyk textu, fyzická geometria, jazyk klávesnice a systém sú nezávislé nastavenia. Päť národných máp pre macOS/Windows obsahuje aj varianty ISO/ANSI; podklady a obmedzenia sú v `KEYBOARD_PROFILES.md`. Zmena mapovania premapuje ciele rozpracovaného textu cez `remapTargets` a zachová pozíciu, výsledky aj čas. Neznáma kombinácia alebo fyzicky chýbajúci kláves nemá vymyslenú nápovedu.
 
-`ResizeObserver` prepočíta spojnicu po zmene veľkosti. Vypnutie vedenia prstov schová ruky, pokyn, spojnicu aj farebné zóny. Voľba patrí každému profilu osobitne. Pri obmedzení animácií v systéme sa efekty nehýbu. Úzky displej má vnútorný posuv klávesnice, nie vodorovný posuv celej stránky.
+Každý znak môže mať `steps`, postup fyzických stlačení s konkrétnymi modifikátormi. Mŕtvy kláves posunie iba krok nápovedy; cvičenie sa posunie až po prijatí správneho výsledného znaku. Držané fyzické klávesy sa sledujú cez keydown/keyup a vyčistia pri strate zamerania. Bežné systémové skratky sa nepreberajú ako text. Shift sa odporúča opačnej ruke, viac modifikátorov dostane samostatné prsty.
+
+Klávesy a ruky zdieľajú normalizovaný súradnicový priestor. SVG vrstva je nad klávesnicou, polopriehľadná a nepreberá kliknutia. `buildHandPose` určuje končeky podľa geometrie, `updateHandGuide` animuje pripojené prsty k novej polohe a ruší starší pohyb. V režime obmedzeného pohybu zobrazí cieľ hneď. Veľkosť SVG sa mení spolu s klávesnicou; vysoký Enter má explicitný bod stlačenia v skutočnom tvare.
+
+Hlavný panel obsahuje iba riadok a klávesnicu. Skutočný prístupný textarea vstup je vizuálne vložený do riadka; stav, pokyny, nastavenia, zapamätanie aj výsledok sú vľavo. Na úzkej obrazovke je tréning pred doplnkovými panelmi. Vypnutie vedenia skryje ruky a nápovedu. Stabilné uzly klávesnice sa pri bežnom znaku nevytvárajú znova.
+
+Úroveň d pripraví d rôznych viet zo zodpovedajúcej náročnosti. `textIds`, `sentenceCount` a kumulatívne `sentenceEnds` určujú identitu a priebeh dávky; `exerciseVersion: 2` odlišuje staré jednovetné výsledky. Medzi vetami je jedna medzera. V úvodnom kurze sa zachová filter naučených znakov; pri nedostatku kompatibilných viet sa bezpečné cvičenie slov/klávesov predĺži d-krát a pravdivo označí ako náhrada, so `sentenceCount: 0`. Samotné dokončenie prvej vety dávku neukončí.
+
+## Report práce agentov
+
+Lokálny report `agent-usage.csv` vzniká cez `npm run report:agents` z metadát a počítadiel samostatných agentov. Neexportuje text ich rozhovorov. Hranice merania, čiastočný záznam koordinátora a význam polí vysvetľuje `AGENT_USAGE.md`.

@@ -1,10 +1,10 @@
-import { selectSentence } from './sentences.js';
+import { selectSentences } from './sentences.js';
 /** @param {string} text @param {import('./types').KeyboardLayout['charMap']} charMap */
 export function targetsFromText(text, charMap) {
   return Array.from(text.normalize('NFC')).map(char => {
     // Missing mappings stay unknown, particularly composed national capitals.
     const mapping = charMap[char] ?? {};
-    return { char, code: mapping.code ?? '', shift: Boolean(mapping.shift), altGraph: Boolean(mapping.altGraph) };
+    return { char, ...mapping, code: mapping.code ?? '', shift: Boolean(mapping.shift), altGraph: Boolean(mapping.altGraph) };
   });
 }
 /** @param {import('./types').Course} course @param {import('./types').KeyboardLayout} layout */
@@ -24,13 +24,25 @@ export function normalizeCourse(course, layout) {
  * @param {number} difficulty
  * @param {import('./types').KeyboardLayout} layout
  * @param {string} [previousId]
+ * @param {() => number} [random]
  * @returns {import('./types').Lesson}
  */
-export function prepareExercise(lesson, sentences, language, difficulty, layout, previousId) {
+export function prepareExercise(lesson, sentences, language, difficulty, layout, previousId, random = Math.random) {
   const free = lesson.id === 'free-practice';
-  const sentence = selectSentence(sentences, { language, difficulty, allowedCharacters: free ? null : lesson.allowedCharacters, previousId });
-  const text = sentence?.text ?? lesson.text;
-  return { ...lesson, text, targets: targetsFromText(text, layout.charMap), textId: sentence?.id ?? lesson.id, difficulty, fallback: !sentence && !free };
+  const selected = selectSentences(sentences, { language, difficulty, allowedCharacters: free ? null : lesson.allowedCharacters, previousId }, random);
+  const sentenceEnds = [];
+  let offset = 0;
+  for (const sentence of selected) {
+    offset += (sentenceEnds.length ? 1 : 0) + Array.from(sentence.text.normalize('NFC')).length;
+    sentenceEnds.push(offset);
+  }
+  // Repeat only the safe lesson drill when there are too few compatible sentences.
+  // A separator is introduced only if space has already been taught.
+  const separator = free || lesson.allowedCharacters?.includes(' ') ? ' ' : '';
+  const text = (selected.length ? selected.map(s => s.text).join(' ') : Array(difficulty).fill(lesson.text).join(separator)).normalize('NFC');
+  return { ...lesson, text, targets: targetsFromText(text, layout.charMap), textId: selected[0]?.id ?? lesson.id,
+    textIds: selected.map(s => s.id), sentenceCount: selected.length, sentenceEnds, exerciseVersion: 2,
+    difficulty, fallback: selected.length === 0 };
 }
 /** @param {import('./types').Course} course @param {import('./types').KeyboardLayout} layout */
 export function validateCourse(course, layout) {

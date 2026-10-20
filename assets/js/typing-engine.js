@@ -52,11 +52,19 @@ export function createTypingEngine(initialLessons = [], clock = () => performanc
     const s = snapshot();
     if (!s.isComplete || claimed) return null;
     claimed = true;
-    return { id: `r-${runId}`, lessonId: lesson.id, textId: lesson.textId ?? lesson.id, language, difficulty: lesson.difficulty ?? 1, attempts, errors, accuracy: s.accuracy, durationMs: elapsed(), length: lesson.targets.length, completedAt: new Date().toISOString() };
+    return { id: `r-${runId}`, lessonId: lesson.id, textId: lesson.textId ?? lesson.id, textIds: lesson.textIds ?? [], sentenceCount: lesson.sentenceCount ?? 0, exerciseVersion: lesson.exerciseVersion ?? 1, language, difficulty: lesson.difficulty ?? 1, attempts, errors, accuracy: s.accuracy, durationMs: elapsed(), length: lesson.targets.length, completedAt: new Date().toISOString() };
   }
   function setLesson(id) { lesson = lessons.find(l => l.id === id) ?? lessons[0] ?? EMPTY; return reset(); }
   /** @param {Lesson[]} next @param {string} [id] */
   function setLessons(next, id) { lessons = next; return setLesson(id); }
+  /** Change the visual input recipe without resetting the text or measurements.
+   * @param {import('./types').Target[]} targets
+   */
+  function remapTargets(targets) {
+    if (targets.length !== lesson.targets.length || targets.some((target, i) => target.char !== lesson.targets[i].char)) throw new Error('Mapovanie musí zachovať text cvičenia.');
+    lesson = { ...lesson, targets };
+    return snapshot();
+  }
   reset();
-  return { snapshot, reset, handleText, handleKeydown, pause, claimResult, setLesson, setLessons };
+  return { snapshot, reset, handleText, handleKeydown, pause, claimResult, setLesson, setLessons, remapTargets };
 }

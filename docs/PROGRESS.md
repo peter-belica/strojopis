@@ -393,3 +393,31 @@ Otvorené problémy:
 Ďalší krok:
 
 - Lokálna implementácia je pripravená na používanie. Prípadné ďalšie zmeny overiť piatimi príkazmi z README; nezamieňať lokálne overenie s kontrolou hostingu.
+
+
+## Checkpoint 2026-10-19 – Čistá plocha, M3 a pohyblivé ruky
+
+- Hlavný panel obsahuje iba prepisovaný riadok a klávesnicu. Vľavo sú metriky, progres, nastavenia, zapamätanie aj výsledok. Vstup je prístupný a začlenený do riadka; na mobile má tréning prednosť.
+- Ruky sú polopriehľadné SVG nad klávesnicou. Pripojené prsty sa presúvajú na spoločné body stlačenia; kombinácie používajú samostatné prsty. Obmedzenie pohybu funguje okamžitou zmenou polohy.
+- M3 ISO má správne samostatné funkčné a číselné riadky, Backspace, vysoký Enter, dodatočný ISO kláves, modifikátory a šípky. Pridané sú ANSI varianty aj odlíšený Dell XPS 2018.
+- Päť jazykových máp pre oba systémy bolo odvodených z natívnych tabuliek Apple a podkladov Microsoftu. Rozdiely medzi britským Mac/Windows a fyzickým ISO/ANSI sa nerozmazávajú do jednej mapy. Presné zdroje a hranice sú v KEYBOARD_PROFILES.md.
+- Úroveň 1/2/3/4 pripravuje 1/2/3/4 rôzne vety. Dávka uchováva identitu a hranice viet, dokončenie až po poslednej. Pri nedostatku naučených znakov sa predĺžia bezpečné skupiny slov/klávesov.
+- Profily majú samostatný jazyk textu, klávesnice, systém a model. Migrácia schémy 1/2 → 3 zachová výsledky. Prehodenie mapy zachová rozpracovaný text a pozíciu. Rekordy sa delia podľa formátu/náročnosti/počtu viet a čas sa porovnáva na znak.
+- Päť špecialistov a koordinátor majú samostatné riadky v agent-usage.csv. Meranie pochádza zo záznamov, chýbajúce hodnoty sú explicitné a koordinátor má čiastočnú snímku.
+- Overenie: 100/100 testov Vitest, 4/4 testov reportu, typová kontrola, validácia 240 viet, build a 57/57 E2E v Chromium/Firefox/WebKit. Najprv bolo potrebné povolenie spustenia prehliadačov mimo sandboxu. Šesť opravených kontrol Shiftu a Tabu prešlo aj samostatne pred posledným úplným behom.
+- Natívna ukážka v Codex prehliadači potvrdila správny posun a metriky; polopriehľadné ruky a celý M3 model sa zmestia do tréningovej plochy. Fyzické overenie na piatich národných klávesniciach a počítači s Windows neprebehlo.
+
+## Checkpoint 2026-10-19 – Ruky podľa obrazovej predlohy
+
+- Jednoduché siluety v odtieni pokožky spájajú zaoblené prsty s plnou dlaňou. Priehľadnosť sa aplikuje na celú siluetu, aby prekrytia jednotlivých tvarov nevytvárali tmavé spoje.
+- Zápästia plynulo miznú do priehľadnosti. Aktívny prst aj cieľový kláves sú fialové; farba prsta sa pri dlani zjemňuje. Animácia a spoločné body stlačenia vrátane kombinácií zostali zachované.
+- Overenie: 8/8 testov polôh, 15/15 prehliadačových kontrol, typová kontrola, validácia obsahu a produkčné zostavenie. Ručne skontrolovaný lokálny náhľad; snímka `screenshots/hand-reference-update.png`.
+
+## Checkpoint 2026-10-19 – Proporcie a kĺbový model rúk
+
+- Nahradené naťahovanie kriviek: Fullik 1.3.3 rieši tri pevné články každého prsta v priestore. Dĺžky a šírky jednotlivých prstov sú odlíšené; ich priemet sa pri ohnutí skracuje. Dlaň sa pri dosahu posúva a pri kombináciách môže natočiť. Pri otáčaní animácia zachová aj rozostupy kĺbov dlane.
+- Dlaň má oblúk kĺbov, samostatné nasadenie palca s mäkkým prechodom a užšie zápästie. Zaoblené články nevytvárajú samopriečne obrysy pri silnom ohnutí. Priehľadnosť a vytratenie zápästí zostali zachované.
+- Široké klávesy sa stláčajú na dostupnej časti klávesu. Požiadavka na dosah do stredu medzerníka alebo pravého Shiftu zbytočne deformovala ruku. Rozdelenie modifikátorov zohľadňuje aj dosah a oddelené prsty.
+- Fullik je pripnutý na konkrétny commit, bez zmien prevzatého modulu a bezplatný na komerčné použitie pod MIT. Distribúcia obsahuje jeho autorské oznámenia. Overených aj 84 existujúcich balíkov. Nová kontrola licencií je súčasťou zostavenia; pravidlo je v AGENTS.md a zdroje v DEPENDENCIES.md.
+- Overenie: 107/107 jednotkových testov, typová kontrola, validácia obsahu/licencií a build. Celý beh 57/57 kontrol v Chromium/Firefox/WebKit a po poslednom spresnení otáčania dlane ďalších 15/15 kontrol rúk. Finálny vizuálny prechod pri palci overený v náhľade.
+- Nová snímka horného radu: `screenshots/anatomical-hands-w.png`. Používateľov pôvodný obrázok nie je distribuovaným grafickým podkladom; ruky sú vlastná vektorová kresba.

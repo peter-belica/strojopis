@@ -1,0 +1,12 @@
+{
+  "name": "fullik",
+  "version": "1.3.3",
+  "license": "MIT",
+  "repository": "https://github.com/lo-th/fullik",
+  "commit": "3f22da98a0fa0051416b20077af5142aec3dfc2e",
+  "files": {
+    "fik.module.js": "7aa7f8119db73f6bcadacc880bf47445334b1d8d7b33d26c3e9696d94e72cc04",
+    "LICENSE": "551f06ddc3dc36b56610aa23db680826ba9d9a02e8f89f7bec05d7fa27401a2b"
+  },
+  "modifications": "Upstream JavaScript and LICENSE unchanged. Local declaration file only."
+}

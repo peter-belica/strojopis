@@ -6,6 +6,13 @@ test.afterEach(({page})=>{ expect(pageErrors.get(page)).toEqual([]); });
 async function ready(page) {
   await page.goto('/');
   await expect(page.locator('#lessonSelect option')).toHaveCount(17);
+  await expect(page.locator('.practice-panel')).toHaveAttribute('aria-busy','false');
+  await openSettings(page);
+}
+async function openSettings(page) {
+  for (const selector of ['.supplemental-settings','.guidance-settings']) {
+    if (await page.locator(selector).getAttribute('open') === null) await page.locator(`${selector} summary`).click();
+  }
 }
 async function createProfile(page, name) {
   if (await page.locator('.profile-settings').getAttribute('open') === null) await page.locator('.profile-settings summary').click();
@@ -29,6 +36,18 @@ async function difficulty(page, value) {
   for(let i=1;i<value;i++) await page.keyboard.press('ArrowRight');
   await expect(page.locator('#difficulty')).toHaveValue(String(value));
   await expect(page.locator('#difficultyName')).toContainText(`${value} / 4`);
+}
+function splitSentenceBatch(value, catalog) {
+  const selected = [];
+  let remaining = value;
+  while (remaining) {
+    const sentence = catalog.find(s=>remaining === s.text || remaining.startsWith(`${s.text} `));
+    expect(sentence,`Unknown sentence prefix: ${remaining.slice(0,70)}`).toBeTruthy();
+    selected.push(sentence);
+    remaining = remaining.slice(sentence.text.length);
+    if (remaining) { expect(remaining[0]).toBe(' '); remaining = remaining.slice(1); }
+  }
+  return selected;
 }
 async function confirmDelete(page, button) {
   await page.locator(button).click();
@@ -93,8 +112,14 @@ test('all difficulty levels work in free practice and changing the slider preser
       const after = await text(page);
       await expect(page.locator('#difficultyName')).toContainText(`${level} / 4`);
       const words = after.trim().split(/\s+/).length;
-      expect(words).toBeGreaterThanOrEqual([3,6,10,12][level-1]);
-      expect(words).toBeLessThanOrEqual([7,12,20,30][level-1]);
+      expect(words).toBeGreaterThanOrEqual(level * [3,6,10,12][level-1]);
+      expect(words).toBeLessThanOrEqual(level * [7,12,20,30][level-1]);
+      await expect(page.locator('#sentencePosition')).toHaveText(`Veta 1 zo ${level}`);
+      const catalog = await page.evaluate(async language=>(await fetch(`content/sentences/${language}.json`)).json(),language);
+      const sentences = splitSentenceBatch(after,catalog.filter(s=>s.difficulty === level));
+      expect(sentences).toHaveLength(level);
+      expect(new Set(sentences.map(s=>s.id)).size).toBe(level);
+      expect(sentences.map(s=>s.text).join(' ')).toBe(after);
       await page.locator('#trainingInput').focus();
       await page.keyboard.insertText(after[0]);
       const inProgress = await text(page);
@@ -106,7 +131,7 @@ test('all difficulty levels work in free practice and changing the slider preser
   }
 });
 
-test('incorrect input, native modifiers, composed national input and form focus are isolated', async ({page}) => {
+test('incorrect input, ignored shortcut keys, synthetic composition order and form focus are isolated', async ({page}) => {
   await ready(page);
   await page.locator('#trainingInput').focus();
   await page.keyboard.press('Shift'); await page.keyboard.press('Control');
@@ -243,22 +268,124 @@ test('main controls can be operated with keyboard and respect reduced motion',as
   const tabKey = process.platform === 'darwin' && testInfo.project.name === 'webkit' ? 'Alt+Tab' : 'Tab';
   await page.emulateMedia({reducedMotion:'reduce'});
   await ready(page);
-  await page.keyboard.press(tabKey); await expect(page.getByRole('link',{name:'Strojopis – domov'})).toBeFocused();
-  await page.keyboard.press(tabKey); await expect(page.locator('#rememberButton')).toBeFocused();
-  await page.keyboard.press(tabKey); await expect(page.locator('#languageLayout')).toBeFocused();
-  await page.keyboard.press(tabKey); await expect(page.locator('#lessonSelect')).toBeFocused();
+  // Settings disclosure summaries take part in the native tab order. Locate each
+  // control by bounded traversal so adding another accessible control is harmless.
+  const focusWithTab = async (selector, reverse=false) => {
+    for (let i=0;i<45;i++) {
+      if (await page.locator(selector).evaluate(el=>el === document.activeElement)) return;
+      await page.keyboard.press(reverse ? (tabKey === 'Alt+Tab' ? 'Alt+Shift+Tab' : 'Shift+Tab') : tabKey);
+    }
+    await expect(page.locator(selector)).toBeFocused();
+  };
+  await page.locator('a.brand').focus();
+  await expect(page.locator('a.brand')).toBeFocused();
+  await focusWithTab('#resetButton');
+  await focusWithTab('#languageLayout');
+  await focusWithTab('#lessonSelect');
   // Native select type-ahead works in both headless tests and system menus.
   await page.keyboard.press('v');
   await expect(page.locator('#lessonSelect')).toHaveValue('free-practice');
-  await page.keyboard.press(tabKey); await expect(page.locator('#difficulty')).toBeFocused();
+  await focusWithTab('#difficulty');
   await page.keyboard.press('End'); await expect(page.locator('#difficulty')).toHaveValue('4');
   expect(await page.locator('#difficulty').evaluate(el=>getComputedStyle(el).outlineStyle)).toBe('solid');
-  await page.keyboard.press(tabKey); await expect(page.locator('#keyboardModel')).toBeFocused();
-  await page.keyboard.press(tabKey); await expect(page.locator('.profile-settings summary')).toBeFocused();
-  await page.keyboard.press('Enter'); await page.keyboard.press(tabKey);
-  await expect(page.locator('#profileName')).toBeFocused(); await page.keyboard.type('Klavesnica');
-  await page.keyboard.press(tabKey); await page.keyboard.press('Enter');
+  await focusWithTab('#keyboardLocale');
+  await focusWithTab('#keyboardPlatform');
+  await focusWithTab('#keyboardModel');
+  await focusWithTab('#guideToggle');
+  await focusWithTab('.profile-settings summary');
+  await page.keyboard.press('Enter');
+  await focusWithTab('#profileName'); await page.keyboard.type('Klavesnica');
+  await focusWithTab('#profileForm button'); await page.keyboard.press('Enter');
   await expect(page.locator('#activeProfileChip')).toContainText('Klavesnica');
-  const animation = await page.locator('.finger-tip-ring').first().evaluate(el=>getComputedStyle(el).animationName);
+  // Creating a profile returns focus to the final training input. The memory
+  // button is earlier in DOM order; reverse traversal avoids browser chrome.
+  await focusWithTab('#rememberButton',true);
+  const animation = await page.locator('.overlay-contact').first().evaluate(el=>getComputedStyle(el).animationName);
   expect(animation).toBe('none');
+});
+
+test('practice surface contains only the text row and keyboard while information stays in the sidebar',async ({page})=>{
+  await ready(page);
+  await expect(page.locator('.practice-panel > *')).toHaveCount(2);
+  await expect(page.locator('.practice-panel > :first-child')).toHaveClass('exercise-card');
+  await expect(page.locator('.practice-panel > :last-child')).toHaveClass('keyboard-stage');
+  for (const id of ['practiceTitle','exercisePosition','sentencePosition','exerciseProgress','feedbackLine','statAccuracy','statErrors','resultPanel','languageLayout','lessonSelect','difficulty','keyboardModel','keyboardLocale','keyboardPlatform','guideToggle','fingerInstruction','profileForm']) {
+    await expect(page.locator(`.side-panel #${id}`)).toHaveCount(1);
+  }
+  const row=await page.locator('.exercise-card').boundingBox();
+  const keyboard=await page.locator('.keyboard-stage').boundingBox();
+  expect(keyboard.y).toBeGreaterThan(row.y + row.height);
+  expect(keyboard.y - row.y - row.height).toBeLessThanOrEqual(33);
+  await expect(page.locator('#trainingInput')).toHaveAttribute('aria-label',/Píš zvýraznené znaky/);
+});
+
+test('keyboard language, system and hardware preserve active course text, position and errors',async ({page})=>{
+  await ready(page); await page.locator('#rememberButton').click(); await createProfile(page,'Rozloženia');
+  const original=await text(page);
+  await page.locator('#trainingInput').focus();
+  await page.keyboard.insertText('x');
+  await page.keyboard.insertText(original[0]);
+  const position=await page.locator('#exercisePosition').textContent();
+  const errors=await page.locator('#statErrors').textContent();
+  expect(errors).toBe('1');
+  for (const locale of ['cs-cz','es-es','en-us','en-gb','sk-sk']) {
+    await page.locator('#keyboardLocale').selectOption(locale);
+    await expect(page.locator('.practice-panel')).toHaveAttribute('aria-busy','false');
+    expect(await text(page)).toBe(original);
+    await expect(page.locator('#exercisePosition')).toHaveText(position);
+    await expect(page.locator('#statErrors')).toHaveText(errors);
+    await expect(page.locator('#languageLayout')).toHaveValue('en-gb');
+    for (const platform of ['windows','mac']) {
+      await page.locator('#keyboardPlatform').selectOption(platform);
+      await expect(page.locator('.practice-panel')).toHaveAttribute('aria-busy','false');
+      expect(await text(page)).toBe(original);
+      await expect(page.locator('#exercisePosition')).toHaveText(position);
+      await expect(page.locator('#statErrors')).toHaveText(errors);
+      await expect(page.locator('#keyboardLocale')).toHaveValue(locale);
+    }
+  }
+  await page.locator('#keyboardModel').selectOption('dell-xps-2018');
+  expect(await text(page)).toBe(original);
+  await expect(page.locator('#exercisePosition')).toHaveText(position);
+  await expect(page.locator('#statErrors')).toHaveText(errors);
+  await page.locator('#keyboardLocale').selectOption('es-es');
+  await page.locator('#keyboardPlatform').selectOption('windows');
+  await page.locator('#languageLayout').selectOption('cs-cz');
+  await expect(page.locator('.practice-panel')).toHaveAttribute('aria-busy','false');
+  await expect(page.locator('#keyboardLocale')).toHaveValue('es-es');
+  await expect(page.locator('#keyboardPlatform')).toHaveValue('windows');
+  await page.reload(); await openSettings(page);
+  await expect(page.locator('#keyboardLocale')).toHaveValue('es-es');
+  await expect(page.locator('#keyboardPlatform')).toHaveValue('windows');
+  await expect(page.locator('#keyboardModel')).toHaveValue('dell-xps-2018');
+  await expect(page.locator('#languageLayout')).toHaveValue('cs-cz');
+});
+
+test('level four records a result only after all four complete sentences',async ({page})=>{
+  await ready(page); await page.locator('#rememberButton').click(); await createProfile(page,'Štyri vety');
+  await page.locator('#lessonSelect').selectOption('free-practice');
+  await difficulty(page,4); await page.locator('#resetButton').click();
+  const value=await text(page);
+  const catalog=await page.evaluate(async ()=>(await fetch('content/sentences/en-gb.json')).json());
+  const sentences=splitSentenceBatch(value,catalog.filter(s=>s.difficulty === 4));
+  expect(sentences).toHaveLength(4);
+  await page.locator('#trainingInput').focus();
+  // Native text insertion exercises input handling; it does not emulate OS layouts.
+  for (let index=0;index<sentences.length;index++) {
+    if (index) await page.keyboard.insertText(' ');
+    await page.keyboard.insertText(sentences[index].text);
+    if (index < sentences.length - 1) {
+      await expect(page.locator('#resultPanel')).toBeHidden();
+      await expect(page.locator('#sentencePosition')).toHaveText(`Veta ${index + 2} zo 4`);
+      expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).profiles[0].history.length,key)).toBe(0);
+    }
+  }
+  await expect(page.locator('#resultPanel')).toBeVisible();
+  await expect(page.locator('.typing-token.is-done')).toHaveCount(Array.from(value).length);
+  await expect(page.locator('#sentencePosition')).toHaveText('Veta 4 zo 4');
+  await expect(page.locator('#resultMetrics')).toContainText('4 vety');
+  const history=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).profiles[0].history,key);
+  expect(history).toHaveLength(1);
+  expect(history[0]).toMatchObject({difficulty:4,sentenceCount:4,exerciseVersion:2,length:Array.from(value).length,errors:0});
+  expect(history[0].textIds).toEqual(sentences.map(s=>s.id));
 });

@@ -36,7 +36,34 @@ export function validateSentences(sentences) {
  */
 export function selectSentence(sentences, { language, difficulty, allowedCharacters = null, previousId = null }, random = Math.random) {
   const allowed = allowedCharacters === null ? null : new Set(allowedCharacters);
-  const candidates = sentences.filter(s => s.language === language && s.difficulty === difficulty && (!allowed || Array.from(s.text).every(c => allowed.has(c))));
+  const candidates = sentences.filter(s => s.language === language && s.difficulty === difficulty && (!allowed || Array.from(s.text.normalize('NFC')).every(c => allowed.has(c))));
   const fresh = candidates.length > 1 ? candidates.filter(s => s.id !== previousId) : candidates;
   return fresh[Math.min(fresh.length - 1, Math.max(0, Math.floor(random() * fresh.length)))] ?? null;
+}
+/** Select a complete batch without replacement. An insufficient pool returns no sentences,
+ * allowing the caller to present an honest drill instead of a shorter sentence exercise.
+ * @param {import('./types').Sentence[]} sentences
+ * @param {{language: import('./types').Language, difficulty:number, allowedCharacters?:string[]|null, previousId?:string|null}} options
+ * @param {() => number} random
+ */
+export function selectSentences(sentences, options, random = Math.random) {
+  const allowed = options.allowedCharacters == null ? null : new Set(options.allowedCharacters);
+  if (options.difficulty > 1 && allowed && !allowed.has(' ')) return [];
+  const ids = new Set(), texts = new Set();
+  let remaining = sentences.filter(s => {
+    const text = s.text.normalize('NFC');
+    if (s.language !== options.language || s.difficulty !== options.difficulty ||
+      (allowed && !Array.from(text).every(c => allowed.has(c))) || ids.has(s.id) || texts.has(text)) return false;
+    ids.add(s.id); texts.add(text);
+    return true;
+  });
+  if (remaining.length < options.difficulty) return [];
+  const selected = [];
+  while (selected.length < options.difficulty) {
+    const next = selectSentence(remaining, { ...options, previousId: selected.length ? null : options.previousId }, random);
+    if (!next) return [];
+    selected.push(next);
+    remaining = remaining.filter(s => s.id !== next.id);
+  }
+  return selected;
 }

@@ -4,7 +4,11 @@
 
 [![Build a publikovanie](https://github.com/peter-belica/strojopis/actions/workflows/pages.yml/badge.svg)](https://github.com/peter-belica/strojopis/actions/workflows/pages.yml) · [Hotový build v repozitári](https://github.com/peter-belica/strojopis/tree/gh-pages) · [Publikovanie a princíp zostavenia](docs/DEPLOYMENT.md)
 
-Lokálna aplikácia na precvičovanie písania s mapou klávesnice a prepínateľným vedením prstov. Rozhranie je slovenské. Obsahuje český a britský anglický kurz po 16 postupných lekciách a samostatný voľný tréning. Pre každý jazyk sú pripravené štyri úrovne po 30 pôvodných vetách: spolu 240 viet.
+[Riadenie vydania: úlohy, zodpovednosti a výsledky kontrol](docs/ONLINE_PLAN.md). Verejná verzia a aktuálne miestne úpravy majú oddelený stav; dokončenie vydania potvrdzuje až kontrola na verejnej adrese.
+
+Lokálna aplikácia na precvičovanie písania s animovanými polopriehľadnými rukami nad klávesnicou. Hlavná plocha obsahuje prepisovaný riadok a klávesnicu; nastavenia, pokyny a výsledky sú vľavo. Rozhranie je slovenské. Český a britský anglický kurz majú po 16 postupných lekciách a voľný tréning. Náročnosť 1–4 znamená 1–4 rôzne vety v cvičení zo zásoby 240 viet.
+
+Fyzická klávesnica je nezávislá od jazyka textu aj systémového mapovania. Referencia je MacBook Air M3 ISO s vysokým Enterom; dostupné sú aj ANSI a Dell XPS 2018. Slovenčina, čeština, španielčina zo Španielska, US a britské rozloženie majú samostatné profily pre macOS a Windows, vrátane kombinácií a mŕtvych klávesov. [Pôvod máp a hranice overenia](docs/KEYBOARD_PROFILES.md).
 
 Aplikácia nepotrebuje backend, účet ani platenú službu. Všetky zdroje vrátane textov a ikon sa podávajú lokálne. Internet je potrebný na inštaláciu vývojových nástrojov; pri tréningu stačí bežiaci statický server.
 
@@ -28,6 +32,7 @@ npm test
 npm run validate:content
 npm run build
 npm run test:e2e
+npm run test:report
 ```
 
 E2E (end-to-end, celý používateľský postup) spúšťa Chromium, Firefox a WebKit nad **produkčným `dist/`**, nie vývojovým serverom. Pred E2E preto vždy zostav aktuálny kód. Testovací port 4174 musí byť voľný. Výsledky sú v `playwright-report/`, snímky responzivity v `test-results/`.
@@ -45,11 +50,19 @@ Otvor [http://127.0.0.1:4173](http://127.0.0.1:4173). Hosting potrebuje iba obsa
 1. Otvor **Tvoj profil**, zadaj prezývku a vytvor profil. Bez ďalšej voľby zostávajú údaje iba v otvorenej stránke.
 2. Ak chceš pokračovať aj po zatvorení, vyber **Zapamätať tréning**. Vysvetlenie účelu je zobrazené pred prvým uložením.
 3. Vyber kurz a **Voľný tréning viet**. Posuvníkom si vyskúšaj všetky štyri úrovne. **Odznova** použije novú úroveň; rozpracovaný text sa pri samotnom posune nemení.
-4. Píš do poľa pod cvičením alebo mimo ovládacích prvkov. Chyba nechá kurzor na rovnakom znaku. Po poslednom znaku sa zobrazí výsledok a voľby opakovať alebo pokračovať.
+4. Klikni na prepisovaný riadok a píš. Chyba nechá kurzor na rovnakom znaku. Po poslednom znaku celej dávky viet sa vľavo zobrazí výsledok a voľby opakovať alebo pokračovať.
 5. Vyber inú lekciu, prepni jazyk a vráť sa späť. Každý kurz si drží vlastné miesto. Pri zapamätaní sa po opätovnom otvorení obnoví profil aj progres.
 6. Vytvor druhý profil a zvoľ mu inú náročnosť, klávesnicu a vedenie prstov. Prepnutie profilov obnoví ich vlastné nastavenia.
 
-Na malej obrazovke môžeš klávesnicu posúvať vo vnútri jej rámu. Hlavné použitie je počítač s fyzickou klávesnicou. Pri chýbajúcom fyzickom mapovaní zloženého znaku aplikácia vysvetlí obmedzenie pomôcky.
+Klávesnica sa prispôsobuje šírke panela. Hlavné použitie je počítač s fyzickou klávesnicou. Pri chýbajúcom overenom mapovaní znaku aplikácia vysvetlí obmedzenie pomôcky. Zmena jazyka klávesnice, systému alebo fyzického modelu zachová rozpracovaný text aj jeho pozíciu.
+
+## Práca agentov a spotreba
+
+[CSV report po úlohách agentov](docs/agent-usage.csv) obsahuje model, skutočnú úroveň uvažovania, stav, čas a zaznamenané počítadlá tokenov. [Metodika merania](docs/AGENT_USAGE.md) vysvetľuje čiastočné snímky a nedostupné údaje. Obnovenie z lokálnych záznamov tohto chatu: `npm run report:agents`. Report neexportuje text konverzácií.
+
+## Knižnice a licencie
+
+Kĺbový model rúk používa Fullik 1.3.3 s bezplatnou licenciou MIT povoľujúcou komerčné použitie. Články prstov sa nepredlžujú; ohýbajú sa v priestore a dosah dopĺňa pohyb dlane. [Zdroje a licencie všetkých závislostí](docs/DEPENDENCIES.md) zahŕňajú aj kontrolu pri zostavení: `npm run validate:licenses`. Autorské oznámenia sa dodávajú v `THIRD_PARTY_NOTICES.txt` aj v produkčnom zostavení.
 
 ## Údaje a metriky
 

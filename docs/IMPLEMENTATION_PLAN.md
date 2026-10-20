@@ -1,5 +1,19 @@
 # Implementačný plán
 
+Aktuálne úlohy vydania, ich vlastníkov a podmienky dokončenia riadi [plán vydania online](ONLINE_PLAN.md). Tento dokument zachováva plán a históriu implementácie.
+
+## Aktualizácia 19. októbra 2026
+
+Zapracované pripomienky používateľa:
+
+1. Hlavná plocha obsahuje iba prepisovaný riadok a klávesnicu; informácie, nastavenia, zapamätanie a výsledky sú v bočnom paneli.
+2. Polopriehľadné spojené ruky sú nad klávesnicou, prsty sa presúvajú podľa spoločnej geometrie. Kombinácie majú samostatné prsty, mŕtve klávesy samostatné kroky; systémové obmedzenie pohybu sa rešpektuje.
+3. Referenčný model je MacBook Air M3 ISO s vysokým Enterom. Štyri fyzické modely a desať systémových máp pokrývajú slovenské, české, španielske, americké a britské rozloženie na macOS/Windows, s vyriešením ISO/ANSI.
+4. Úrovne 1–4 pripravujú 1–4 rôzne vety; úvodné bezpečné cvičenia sa primerane predĺžia. Výsledok vznikne až po celej dávke. Schéma 3 zachová staré profily aj oddelené rekordy.
+5. Práca bola rozdelená na šesť úloh vrátane koordinátora. Živé míľniky sú v chate, merania v `agent-usage.csv`; hranice vysvetľuje `AGENT_USAGE.md`.
+
+Overenie: 100 testov pravidiel a dát, 4 testy reportu, typová kontrola, 240 viet, úspešné zostavenie a 57/57 kontrol v troch prehliadačoch. Pôvod máp a hranice fyzického overenia sú v `KEYBOARD_PROFILES.md`. Nasledujúci text dokumentuje pôvodnú fázu projektu.
+
 Platný rozsah určuje `AUTONOMOUS_DEVELOPMENT.md`. Starší plán s cookies, CDN a pevným americkým rozložením bol nahradený 15. októbra 2026. CDN znamená sieť na podávanie cudzích zdrojov; výsledná aplikácia ju nepotrebuje.
 
 | Míľnik | Výstup | Overiteľná podmienka |

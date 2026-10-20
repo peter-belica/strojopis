@@ -81,3 +81,32 @@ Toto je natívne ovládanie v dostupnom prehliadači, nie ručné overenie každ
 - Hlavné použitie je desktop s fyzickou klávesnicou. Malý displej má čitateľné ovládanie a vnútorný posuv klávesnice; samostatná dotyková výučba nie je súčasťou tejto verzie.
 
 Žiadna povinná podmienka lokálneho zadania nezostala nesplnená. Uvedené hranice overenia sa neprezentujú ako potvrdenie nezmeraných fyzických rozložení alebo verejného hostingu.
+
+
+## Aktualizácia – 19. októbra 2026
+
+Nové zdroje boli zostavené cez Vite a testované nad aktuálnym dist:
+
+| Kontrola | Výsledok |
+| --- | --- |
+| npm test | 100/100, 7 súborov |
+| npm run typecheck | Bez diagnostických chýb |
+| npm run validate:content | 240 viet, 16 lekcií v každom z dvoch kurzov |
+| npm run build | Úspech, lokálne zdroje a všetkých 10 systémových profilov |
+| npm run test:report | 4/4 testy časových hraníc, duplicít, resetu a nedostupných počítadiel |
+| npm run test:e2e | 57/57, 19 postupov × Chromium/Firefox/WebKit; posledný beh 45,8 s |
+| git diff --check | Bez problémov |
+
+Testy navyše pokrývajú presný počet rôznych viet, bezpečné náhradné cvičenia, dokončenie až po celej dávke, migráciu schémy 3, nezávislé mapovanie bez resetu textu, všetkých 20 kombinácií systém/jazyk/geometria, tvar Enteru, existenciu klávesov a dosah končekov prstov. Klávesnica a ruky zdieľajú súradnice aj pri 390/1366 px; celé rozhranie sa overilo aj pri 768 px. Systémové obmedzenie pohybu, Shift/Option aj klávesnicové ovládanie prešli vo všetkých troch prehliadačoch. E2E znamená end-to-end, kontrolu celého používateľského postupu.
+
+Prvý pokus o spustenie testovacích prehliadačov zamietol sandbox; finálne behy boli povolené mimo neho. Dve chyby automatizácie sa opravili: fyzický KeyL pri držanom Shifte namiesto požiadavky na doslovné malé l a poradie Tabu podľa presunutých ovládacích prvkov. Ich 6 kontrol následne prešlo a po finálnom zostavení prešlo všetkých 57.
+
+Hranice: syntetické udalosti a natívne textové vloženie v testoch nie sú fyzickým overením národného vstupu. Apple mapy sa overili natívnym prekladom; Windows mapy tabuľkami výrobcu. Fyzické testy všetkých klávesníc a systémov sa netvrdia. Podrobné zdroje sú v KEYBOARD_PROFILES.md. Spotreba modelov je zaznamenaná v agent-usage.csv s metodikou AGENT_USAGE.md; záznam koordinátora sa končí pred záverečnou odpoveďou.
+
+Vizuálna úprava rúk podľa používateľovej predlohy: po poslednej zmene prešlo 8/8 testov `hand-guide`, typová kontrola, validácia obsahu, produkčné zostavenie a 15/15 kontrol `keyboard.spec.js` (19,7 s) v Chromium/Firefox/WebKit. Tieto kontroly opätovne overili pohyb na stredy klávesov pri šírkach 390/1366 px, základnú polohu, obmedzenie pohybu a súčasné modifikátory. Vzhľad siluet a vytratenie zápästí sa ručne overili v lokálnom náhľade na porte 4185; dôkaz je `screenshots/hand-reference-update.png`.
+
+Následná oprava proporcií používa Fullik a pevné články v troch rozmeroch. Prešlo 107/107 jednotkových testov, typová kontrola, validácia obsahu a licencií, produkčné zostavenie a celý beh 57/57 prehliadačových kontrol (1,2 minúty). Po spresnení interpolácie otáčania dlane prešlo ďalších 15/15 prehliadačových kontrol rúk (42,7 sekundy). Posledný mäkký prechod pri nasadení palca je výhradne vizuálny; po jeho pridaní znovu prešla typová kontrola a build, vzhľad overený v náhľade.
+
+Nové invarianty kontrolujú dĺžku každého článku v troch rozmeroch, odchýlku končeka od kontaktu pod 0,002 klávesovej jednotky, polohu nad klávesnicou, odlíšené proporcie prstov, posun dlane pri vzdialenom dosahu a zachovanie šírky dlane počas otáčania. Rozsah: všetky podporované fyzické klávesy na štyroch hardvérových modeloch a kombinácie až piatich kontaktov. Testy sú rozdelené podľa hardvéru, aby ich súhrnný čas pri súčasnom behu prehliadačov nespôsoboval falošný časový limit. Kontakty širokých klávesov sa kontrolujú vo vnútri klávesu, bežné písmená zostávajú presne v strede. Overuje sa skutočný koncový bod vypočítaného článku, nie iba požadovaný cieľ.
+
+Licenčná kontrola overila 84 záznamov v package-lock.json (MIT/Apache-2.0/MPL-2.0/ISC/BSD-3-Clause) a Fullik 1.3.3 (MIT), kontrolné súčty prevzatých súborov a úplné oznámenie v produkčnom zostavení. Metodika a povinnosti sú v DEPENDENCIES.md. Snímka `screenshots/anatomical-hands-w.png` zachytáva dosah na W, pri ktorom bolo naťahovanie pôvodného modelu výrazné.

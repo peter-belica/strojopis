@@ -69,7 +69,8 @@ export function createStorage(options = {}) {
     for (const [id, p, sourceKey] of legacyProfiles) {
       try {
         const stamp = new Date().toISOString();
-        const profile = validateProfile({ ...p, id, languageLayout: ['cs-cz','en-gb'].includes(p.languageLayout) ? p.languageLayout : 'en-gb', keyboardModel: p.keyboardModel ?? 'macbook-air', difficulty: 1, guideEnabled: guide, courses: {}, history: [], createdAt: p.createdAt ?? stamp, updatedAt: stamp });
+        const languageLayout = ['cs-cz','en-gb'].includes(p.languageLayout) ? p.languageLayout : 'en-gb';
+        const profile = validateProfile({ ...p, id, languageLayout, keyboardLocale: languageLayout, keyboardPlatform: p.keyboardModel?.startsWith('dell-') ? 'windows' : 'mac', keyboardModel: p.keyboardModel ?? 'macbook-air', difficulty: 1, guideEnabled: guide, courses: {}, history: [], createdAt: p.createdAt ?? stamp, updatedAt: stamp });
         if (!profiles.some(item => item.id === profile.id)) profiles.push(profile);
         migratedKeys.push(sourceKey);
       } catch { /* Invalid legacy profiles remain untouched. */ }
