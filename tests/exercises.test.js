@@ -8,18 +8,19 @@ const read = path => JSON.parse(readFileSync(new URL(`../content/${path}`, impor
 const corpus = ['cs-cz', 'en-gb'].flatMap(language => read(`sentences/${language}.json`));
 const base = { id: 'free-practice', name: 'Practice', phase: '', description: '', text: 'safe drill', targets: [] };
 
-test.each(['cs-cz', 'en-gb'])('each difficulty selects exactly that many distinct sentences: %s', language => {
+test.each(['cs-cz', 'en-gb'])('difficulty levels select 3, 6, 9 and 12 distinct sentences: %s', language => {
   const layout = read(`keyboard-layouts/${language}.json`);
   for (const difficulty of [1, 2, 3, 4]) {
+    const count = difficulty * 3;
     const exercise = prepareExercise(base, corpus, language, difficulty, layout, undefined, () => 0);
     const sentences = exercise.textIds.map(id => corpus.find(s => s.id === id));
-    expect(sentences).toHaveLength(difficulty);
-    expect(new Set(exercise.textIds).size).toBe(difficulty);
+    expect(sentences).toHaveLength(count);
+    expect(new Set(exercise.textIds).size).toBe(count);
     expect(sentences.every(s => s.language === language && s.difficulty === difficulty)).toBe(true);
     expect(exercise.text).toBe(sentences.map(s => s.text).join(' '));
     expect(exercise.targets.map(t => t.char).join('')).toBe(exercise.text);
-    expect(exercise.targets).toHaveLength(sentences.reduce((n, s) => n + Array.from(s.text).length, 0) + difficulty - 1);
-    expect(exercise).toMatchObject({ textId: sentences[0].id, sentenceCount: difficulty, exerciseVersion: 2, fallback: false });
+    expect(exercise.targets).toHaveLength(sentences.reduce((n, s) => n + Array.from(s.text).length, 0) + count - 1);
+    expect(exercise).toMatchObject({ textId: sentences[0].id, sentenceCount: count, exerciseVersion: 3, fallback: false });
     let offset = 0;
     expect(exercise.sentenceEnds).toEqual(sentences.map((s, i) => offset += Array.from(s.text).length + (i ? 1 : 0)));
     for (const boundary of exercise.sentenceEnds.slice(0, -1)) expect(exercise.targets[boundary].char).toBe(' ');
@@ -33,8 +34,8 @@ test('selection is deterministic with an injected generator and never duplicates
   const first = selectSentences(corpus, options, () => 0);
   expect(selectSentences(corpus, options, () => 0)).toEqual(first);
   expect(selectSentences(corpus, options, () => 0.99)).not.toEqual(first);
-  const pool = corpus.filter(s => s.language === 'en-gb' && s.difficulty === 4).slice(0, 4);
-  expect(new Set(selectSentences(pool, { ...options, previousId: pool[0].id }, () => 0).map(s => s.id)).size).toBe(4);
+  const pool = corpus.filter(s => s.language === 'en-gb' && s.difficulty === 4).slice(0, 12);
+  expect(new Set(selectSentences(pool, { ...options, previousId: pool[0].id }, () => 0).map(s => s.id)).size).toBe(12);
 });
 
 test.each(['cs-cz', 'en-gb'])('early drills scale safely at every difficulty: %s', language => {
@@ -42,35 +43,35 @@ test.each(['cs-cz', 'en-gb'])('early drills scale safely at every difficulty: %s
   const lesson = normalizeCourse(read(`courses/${language}.json`), layout)[0];
   for (const difficulty of [1, 2, 3, 4]) {
     const exercise = prepareExercise(lesson, corpus, language, difficulty, layout, undefined, () => 0);
-    expect(exercise).toMatchObject({ fallback: true, textIds: [], sentenceCount: 0, sentenceEnds: [], exerciseVersion: 2 });
-    expect(exercise.text).toBe(Array(difficulty).fill(lesson.text).join(' '));
+    expect(exercise).toMatchObject({ fallback: true, textIds: [], sentenceCount: 0, sentenceEnds: [], exerciseVersion: 3 });
+    expect(exercise.text).toBe(Array(difficulty * 3).fill(lesson.text).join(' '));
     expect(Array.from(exercise.text).every(c => lesson.allowedCharacters.includes(c))).toBe(true);
   }
 });
 
 test('an insufficient pool falls back completely, including when some compatible sentences exist', () => {
   const layout = read('keyboard-layouts/en-gb.json');
-  for (const difficulty of [2, 3, 4]) {
-    const pool = corpus.filter(s => s.language === 'en-gb' && s.difficulty === difficulty).slice(0, difficulty - 1);
+  for (const difficulty of [1, 2, 3, 4]) {
+    const pool = corpus.filter(s => s.language === 'en-gb' && s.difficulty === difficulty).slice(0, difficulty * 3 - 1);
     const lesson = { ...base, id: 'progressive', allowedCharacters: [...new Set('safe drill' + pool.map(s => s.text).join(''))] };
     const exercise = prepareExercise(lesson, pool, 'en-gb', difficulty, layout, undefined, () => 0);
     expect(exercise).toMatchObject({ fallback: true, sentenceCount: 0, textIds: [], sentenceEnds: [], textId: lesson.id });
-    expect(exercise.text).toBe(Array(difficulty).fill(lesson.text).join(' '));
+    expect(exercise.text).toBe(Array(difficulty * 3).fill(lesson.text).join(' '));
   }
 });
 
 test('fallback never adds an untaught separator', () => {
   const lesson = { ...base, id: 'early', text: 'fff', allowedCharacters: ['f'] };
-  expect(prepareExercise(lesson, [], 'en-gb', 4, { charMap: {} }).text).toBe('ffffffffffff');
+  expect(prepareExercise(lesson, [], 'en-gb', 4, { charMap: {} }).text).toBe('f'.repeat(36));
 });
 
 test('progressive batches require every taught character, including the joining space', () => {
   const pool = [
     { id: 'one', language: 'en-gb', difficulty: 2, text: 'A.', topics: [] },
-    { id: 'two', language: 'en-gb', difficulty: 2, text: 'B.', topics: [] }
+    ...['B', 'C', 'D', 'E', 'F'].map(char => ({ id: char.toLowerCase(), language: 'en-gb', difficulty: 2, text: `${char}.`, topics: [] }))
   ];
-  const options = { language: 'en-gb', difficulty: 2, allowedCharacters: ['A', 'B', '.', ' '] };
-  expect(selectSentences(pool, options, () => 0)).toHaveLength(2);
+  const options = { language: 'en-gb', difficulty: 2, allowedCharacters: ['A', 'B', 'C', 'D', 'E', 'F', '.', ' '] };
+  expect(selectSentences(pool, options, () => 0)).toHaveLength(6);
   for (const excluded of options.allowedCharacters) {
     expect(selectSentences(pool, { ...options, allowedCharacters: options.allowedCharacters.filter(c => c !== excluded) }, () => 0)).toEqual([]);
   }
@@ -81,11 +82,11 @@ test('NFC character boundaries and keyboard stroke sequences survive exercise pr
   const layout = { charMap: { 'á': { code: 'KeyA', steps } } };
   const sentences = [
     { id: 'one', language: 'en-gb', difficulty: 2, text: 'a\u0301.', topics: [] },
-    { id: 'two', language: 'en-gb', difficulty: 2, text: 'B.', topics: [] }
+    ...['B', 'C', 'D', 'E', 'F'].map(char => ({ id: char.toLowerCase(), language: 'en-gb', difficulty: 2, text: `${char}.`, topics: [] }))
   ];
   const exercise = prepareExercise(base, sentences, 'en-gb', 2, layout, undefined, () => 0);
-  expect(exercise.text).toBe('á. B.');
-  expect(exercise.sentenceEnds).toEqual([2, 5]);
+  expect(exercise.text).toBe('á. B. C. D. E. F.');
+  expect(exercise.sentenceEnds).toEqual([2, 5, 8, 11, 14, 17]);
   expect(exercise.targets[0].steps).toEqual(steps);
   expect(targetsFromText('á', layout.charMap)[0].steps).toEqual(steps);
 });

@@ -1,4 +1,4 @@
-import { LANGUAGES } from './data-model.js';
+import { LANGUAGES, SENTENCE_COUNTS } from './data-model.js';
 export const DIFFICULTIES = [
   { name: 'Veľmi jednoduché', audience: 'orientačne 6–8 rokov', min: 3, max: 7 },
   { name: 'Jednoduché', audience: 'orientačne 8–12 rokov', min: 6, max: 12 },
@@ -47,8 +47,10 @@ export function selectSentence(sentences, { language, difficulty, allowedCharact
  * @param {() => number} random
  */
 export function selectSentences(sentences, options, random = Math.random) {
+  const count = SENTENCE_COUNTS[options.difficulty - 1];
+  if (!count) return [];
   const allowed = options.allowedCharacters == null ? null : new Set(options.allowedCharacters);
-  if (options.difficulty > 1 && allowed && !allowed.has(' ')) return [];
+  if (allowed && !allowed.has(' ')) return [];
   const ids = new Set(), texts = new Set();
   let remaining = sentences.filter(s => {
     const text = s.text.normalize('NFC');
@@ -57,9 +59,9 @@ export function selectSentences(sentences, options, random = Math.random) {
     ids.add(s.id); texts.add(text);
     return true;
   });
-  if (remaining.length < options.difficulty) return [];
+  if (remaining.length < count) return [];
   const selected = [];
-  while (selected.length < options.difficulty) {
+  while (selected.length < count) {
     const next = selectSentence(remaining, { ...options, previousId: selected.length ? null : options.previousId }, random);
     if (!next) return [];
     selected.push(next);

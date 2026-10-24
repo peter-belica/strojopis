@@ -11,7 +11,7 @@ test('schema 2 migrates keyboard settings without changing courses or deleting h
   const data = original.storage.read(); data.schemaVersion = 2;
   delete data.profiles[0].keyboardLocale; delete data.profiles[0].keyboardPlatform;
   const upgraded = parseData(JSON.stringify(data));
-  expect(upgraded.schemaVersion).toBe(3);
+  expect(upgraded.schemaVersion).toBe(4);
   expect(upgraded.profiles[0]).toMatchObject({ languageLayout:'cs-cz', keyboardLocale:'cs-cz', keyboardPlatform:'windows' });
   expect(upgraded.profiles[0].history).toHaveLength(1);
   expect(upgraded.profiles[0].courses['en-gb'].lessons['home-left'].completedAttempts).toBe(1);
@@ -53,4 +53,29 @@ test('new result metadata rejects truncated or contradictory sentence identities
   const { profiles }=setup(); profiles.createProfile('Validácia');
   expect(() => profiles.recordResult(result(1,{exerciseVersion:2,difficulty:4,sentenceCount:4,textId:'a',textIds:['a']}))).toThrow();
   expect(() => profiles.recordResult(result(1,{exerciseVersion:2,difficulty:2,sentenceCount:2,textId:'a',textIds:['a','a']}))).toThrow();
+});
+
+test('schema 3 history and records survive migration, longer exercise completion and reopening', () => {
+  const original = setup(); original.profiles.createProfile('História');
+  const old = result(1, { difficulty:4, exerciseVersion:2, sentenceCount:4, textIds:['a','b','c','d'],textId:'a' });
+  original.profiles.recordResult(old);
+  const legacy = original.storage.read(); legacy.schemaVersion = 3;
+  const restored = setup({ strojopis_data: JSON.stringify(legacy) });
+  expect(restored.profiles.getActiveProfile()).toEqual(legacy.profiles[0]);
+  const longer = result(2, { difficulty:4, exerciseVersion:3, sentenceCount:12, textId:'sentence-0', textIds:Array.from({length:12}, (_, i) => `sentence-${i}`) });
+  restored.profiles.recordResult(longer);
+  const reopened = setup({ strojopis_data: restored.local.getItem('strojopis_data') });
+  const profile = reopened.profiles.getActiveProfile();
+  expect(profile.history).toEqual([old, longer]);
+  expect(profile.courses['en-gb'].lessons['home-left'].bestByFormat).toEqual({ [resultFormat(old)]:old, [resultFormat(longer)]:longer });
+  expect(reopened.storage.read().schemaVersion).toBe(4);
+});
+
+test.each([1, 2, 3, 4])('longer result metadata requires the complete sentence count for level %s', difficulty => {
+  const { profiles } = setup(); profiles.createProfile('Počty viet');
+  const count = difficulty * 3;
+  const complete = result(1, { difficulty, exerciseVersion:3, sentenceCount:count, textId:'sentence-0', textIds:Array.from({length:count}, (_, i) => `sentence-${i}`) });
+  expect(() => profiles.recordResult({ ...complete, sentenceCount:count - 1, textIds:complete.textIds.slice(0, -1) })).toThrow();
+  expect(() => profiles.recordResult({ ...complete, textIds:complete.textIds.slice(0, -1) })).toThrow();
+  expect(() => profiles.recordResult(complete)).not.toThrow();
 });

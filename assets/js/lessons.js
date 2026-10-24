@@ -1,4 +1,5 @@
 import { selectSentences } from './sentences.js';
+import { SENTENCE_COUNTS } from './data-model.js';
 /** @param {string} text @param {import('./types').KeyboardLayout['charMap']} charMap */
 export function targetsFromText(text, charMap) {
   return Array.from(text.normalize('NFC')).map(char => {
@@ -39,9 +40,9 @@ export function prepareExercise(lesson, sentences, language, difficulty, layout,
   // Repeat only the safe lesson drill when there are too few compatible sentences.
   // A separator is introduced only if space has already been taught.
   const separator = free || lesson.allowedCharacters?.includes(' ') ? ' ' : '';
-  const text = (selected.length ? selected.map(s => s.text).join(' ') : Array(difficulty).fill(lesson.text).join(separator)).normalize('NFC');
+  const text = (selected.length ? selected.map(s => s.text).join(' ') : Array(SENTENCE_COUNTS[difficulty - 1]).fill(lesson.text).join(separator)).normalize('NFC');
   return { ...lesson, text, targets: targetsFromText(text, layout.charMap), textId: selected[0]?.id ?? lesson.id,
-    textIds: selected.map(s => s.id), sentenceCount: selected.length, sentenceEnds, exerciseVersion: 2,
+    textIds: selected.map(s => s.id), sentenceCount: selected.length, sentenceEnds, exerciseVersion: 3,
     difficulty, fallback: selected.length === 0 };
 }
 /** @param {import('./types').Course} course @param {import('./types').KeyboardLayout} layout */

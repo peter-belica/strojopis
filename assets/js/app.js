@@ -8,6 +8,7 @@ import { getFingerForCode, getFingerName, getFingerClass, getModifierCodes, rend
 
 import { prepareExercise, targetsFromText } from './lessons.js';
 import { DIFFICULTIES } from './sentences.js';
+import { SENTENCE_COUNTS } from './data-model.js';
 
 const storage = createStorage();
 const profiles = createProfileManager(storage);
@@ -151,6 +152,7 @@ function renderTypingStrip() {
   if (stripRunId !== state.typing.runId) {
     stripRunId = state.typing.runId;
     renderedTokenIndex = -1;
+    dom.typingStrip.scrollTop = 0;
     dom.typingStrip.innerHTML = state.typing.exercise
     .map((target, index) => {
       const classes = ["typing-token"];
@@ -185,11 +187,21 @@ function renderTypingStrip() {
   }
   renderedTokenIndex = state.typing.currentIndex;
 
-  const currentToken = dom.typingStrip.querySelector(".typing-token.is-current");
-  if (currentToken) {
-    dom.typingStrip.scrollLeft = /** @type {HTMLElement} */ (currentToken).offsetLeft - dom.typingStrip.offsetLeft - dom.typingStrip.clientWidth / 2 + currentToken.clientWidth / 2;
+  keepCurrentTokenVisible();
+}
+
+function keepCurrentTokenVisible() {
+  const token = /** @type {HTMLElement|null} */ (dom.typingStrip.querySelector('.typing-token.is-current'));
+  if (!token) return;
+  const style = getComputedStyle(dom.typingStrip);
+  const topPadding = parseFloat(style.paddingTop);
+  const bottomPadding = parseFloat(style.paddingBottom);
+  if (token.offsetTop < dom.typingStrip.scrollTop + topPadding ||
+      token.offsetTop + token.offsetHeight > dom.typingStrip.scrollTop + dom.typingStrip.clientHeight - bottomPadding) {
+    dom.typingStrip.scrollTop = token.offsetTop - topPadding - token.offsetHeight - parseFloat(style.rowGap);
   }
 }
+new ResizeObserver(keepCurrentTokenVisible).observe(dom.typingStrip);
 
 let guidanceStep = 0;
 const pressedCodes = new Set();
@@ -399,7 +411,8 @@ function renderDifficulty() {
   dom.difficulty.value = String(state.difficulty);
   dom.difficulty.setAttribute('aria-valuetext', `${state.difficulty}. ${rule.name}`);
   dom.difficultyName.textContent = `${state.difficulty} / 4 · ${rule.name}`;
-  dom.difficultyDescription.textContent = `${state.difficulty} ${state.difficulty === 1 ? 'veta' : 'vety'} v cvičení · ${rule.audience}.`;
+  const count = SENTENCE_COUNTS[state.difficulty - 1];
+  dom.difficultyDescription.textContent = `${count} ${count < 5 ? 'vety' : 'viet'} v cvičení · ${rule.audience}.`;
   dom.difficultySample.textContent = state.sentences.find(s => s.difficulty === state.difficulty)?.text ?? '';
   dom.difficultyPending.textContent = state.difficulty !== state.typing.lesson.difficulty ? 'Nová úroveň sa použije pri ďalšom cvičení alebo po stlačení Odznova.' : '';
 }
@@ -418,7 +431,7 @@ function renderResult() {
   const count = summaries.reduce((n, item) => n + item.completedAttempts, 0);
   dom.profileProgress.textContent = state.activeProfile ? `${summaries.length} dokončených lekcií · ${count} dokončených pokusov` : 'Profil je voliteľný. Vytvor si ho pre vlastné nastavenia a progres.';
   if (!s.isComplete || !state.course) return;
-  dom.resultMetrics.textContent = `${s.lesson.sentenceCount ? `${s.lesson.sentenceCount} ${s.lesson.sentenceCount === 1 ? 'veta' : 'vety'} · ` : ''}${s.accuracy} % presnosť · ${s.attempts} pokusov o znak · ${s.errors} chýb · ${(s.durationMs / 1000).toFixed(1)} s aktívneho času`;
+  dom.resultMetrics.textContent = `${s.lesson.sentenceCount ? `${s.lesson.sentenceCount} ${s.lesson.sentenceCount < 5 ? 'vety' : 'viet'} · ` : ''}${s.accuracy} % presnosť · ${s.attempts} pokusov o znak · ${s.errors} chýb · ${(s.durationMs / 1000).toFixed(1)} s aktívneho času`;
   const summary = state.activeProfile?.courses[state.course.id]?.lessons[s.lesson.id];
   dom.resultProgress.textContent = summary
     ? `Táto lekcia: ${summary.completedAttempts} dokončených pokusov. Najlepšia presnosť: ${summary.bestResult.accuracy} %. ${storage.status().persistent ? 'Výsledok je uložený v tomto prehliadači.' : 'Výsledok zostáva v pamäti otvorenej stránky.'}`

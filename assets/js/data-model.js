@@ -1,7 +1,8 @@
 /** @typedef {import('./types').AppData} AppData */
 /** @typedef {import('./types').Profile} Profile */
 /** @typedef {import('./types').TrainingResult} TrainingResult */
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
+export const SENTENCE_COUNTS = [3, 6, 9, 12];
 export const LANGUAGES = ['cs-cz', 'en-gb'];
 export const KEYBOARD_LOCALE_IDS = ['sk-sk', 'cs-cz', 'es-es', 'en-us', 'en-gb'];
 export const KEYBOARD_PLATFORM_IDS = ['mac', 'windows'];
@@ -11,7 +12,7 @@ export const COURSE_LESSON_IDS = {
   'en-gb': LESSON_IDS.filter(id => !['vowels-diacritics', 'caron-diacritics'].includes(id)),
   'cs-cz': LESSON_IDS.filter(id => !['space-rhythm', 'apostrophes'].includes(id))
 };
-export const emptyData = () => /** @type {AppData} */ ({ schemaVersion: 3, activeProfileId: null, profiles: [] });
+export const emptyData = () => /** @type {AppData} */ ({ schemaVersion: SCHEMA_VERSION, activeProfileId: null, profiles: [] });
 export const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const integer = (n, min, max) => Number.isInteger(n) && n >= min && n <= max;
 const identifier = value => typeof value === 'string' && /^[a-z0-9][a-z0-9-]{0,79}$/.test(value);
@@ -27,9 +28,10 @@ export function validateResult(r, language) {
   const exerciseVersion = r.exerciseVersion ?? 1;
   const sentenceCount = r.sentenceCount ?? 0;
   const textIds = r.textIds ?? [];
-  requireValue(integer(exerciseVersion, 1, 2) && integer(sentenceCount, 0, 4), 'Neplatný formát cvičenia.');
-  requireValue(Array.isArray(textIds) && textIds.length <= 4 && textIds.every(identifier) && new Set(textIds).size === textIds.length, 'Neplatné vety cvičenia.');
-  requireValue(exerciseVersion === 1 || textIds.length === sentenceCount && (sentenceCount === 0 || sentenceCount === r.difficulty) && (!sentenceCount || textIds[0] === r.textId), 'Nesúlad počtu viet.');
+  requireValue(integer(exerciseVersion, 1, 3) && integer(sentenceCount, 0, exerciseVersion === 3 ? 12 : 4), 'Neplatný formát cvičenia.');
+  requireValue(Array.isArray(textIds) && textIds.length <= (exerciseVersion === 3 ? 12 : 4) && textIds.every(identifier) && new Set(textIds).size === textIds.length, 'Neplatné vety cvičenia.');
+  const expectedCount = exerciseVersion === 3 ? SENTENCE_COUNTS[r.difficulty - 1] : r.difficulty;
+  requireValue(exerciseVersion === 1 || textIds.length === sentenceCount && (sentenceCount === 0 || sentenceCount === expectedCount) && (!sentenceCount || textIds[0] === r.textId), 'Nesúlad počtu viet.');
   return { id: r.id, lessonId: r.lessonId, textId: r.textId, textIds: [...textIds], sentenceCount, exerciseVersion, language, difficulty: r.difficulty, attempts: r.attempts, errors: r.errors, length: r.length, accuracy: r.accuracy, durationMs: r.durationMs, completedAt: r.completedAt };
 }
 
@@ -74,12 +76,12 @@ export function parseData(raw) {
   const data = JSON.parse(raw);
   requireValue(isObject(data), 'Neplatný záznam.');
   if (data.schemaVersion > SCHEMA_VERSION) throw new Error('future-version');
-  requireValue([1, 2, 3].includes(data.schemaVersion) && Array.isArray(data.profiles) && data.profiles.length <= 50, 'Nepodporovaný formát.');
+  requireValue([1, 2, 3, 4].includes(data.schemaVersion) && Array.isArray(data.profiles) && data.profiles.length <= 50, 'Nepodporovaný formát.');
   const profiles = data.profiles.map(rawProfile => {
     const p = data.schemaVersion === 1 ? { ...rawProfile, updatedAt: rawProfile.updatedAt ?? rawProfile.createdAt, difficulty: rawProfile.difficulty ?? 1, guideEnabled: rawProfile.guideEnabled ?? data.fingerGuide ?? true, courses: {}, history: [] } : rawProfile;
     return validateProfile(data.schemaVersion < 3 ? { ...p, keyboardLocale: p.languageLayout, keyboardPlatform: p.keyboardModel?.startsWith('dell-') ? 'windows' : 'mac' } : p);
   });
   requireValue(new Set(profiles.map(p => p.id)).size === profiles.length, 'Opakované profily.');
   requireValue(data.activeProfileId === null || profiles.some(p => p.id === data.activeProfileId), 'Neplatný aktívny profil.');
-  return { schemaVersion: 3, activeProfileId: data.activeProfileId, profiles };
+  return { schemaVersion: SCHEMA_VERSION, activeProfileId: data.activeProfileId, profiles };
 }

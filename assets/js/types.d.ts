@@ -9,7 +9,7 @@ export interface TrainingResult { id: string; lessonId: string; textId: string; 
 export interface Summary { completedAttempts: number; bestResult: TrainingResult; lastResult: TrainingResult; bestByFormat?: Record<string, TrainingResult> }
 export interface CourseProgress { lastLessonId: string; lessons: Record<string, Summary> }
 export interface Profile { id: string; name: string; keyboardModel: string; languageLayout: Language; keyboardLocale: KeyboardLocale; keyboardPlatform: KeyboardPlatform; difficulty: number; guideEnabled: boolean; createdAt: string; updatedAt: string; courses: Partial<Record<Language, CourseProgress>>; history: TrainingResult[] }
-export interface AppData { schemaVersion: 3; activeProfileId: string | null; profiles: Profile[] }
+export interface AppData { schemaVersion: 4; activeProfileId: string | null; profiles: Profile[] }
 export interface Sentence { id: string; language: Language; difficulty: number; text: string; topics: string[] }
 export interface KeyboardLayout { id: string; name: string; platform?: KeyboardPlatform; labels: Record<string, string>; charMap: Record<string, KeyboardMapping> }
 export interface KeyGeometry { code: string; x: number; y: number; width: number; height: number; shape?: string; label?: string; pressX?: number; pressY?: number }

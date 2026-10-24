@@ -53,8 +53,25 @@ h1 { font-size:clamp(23px,2.3vw,32px); letter-spacing:-1px; }
 .practice-panel { display:flex; flex-direction:column; gap:32px; padding:28px 24px 36px; min-height:470px; }
 .exercise-card { position:relative; flex:none; width:100%; min-width:0; padding:13px 0; border-color:#e3e9de; border-radius:12px; background:#fafbf7; }
 .exercise-card:focus-within { outline:3px solid #308eae; outline-offset:4px; }
-.typing-strip { padding:3px 14px 10px; scroll-padding-inline:14px; }
-/* A native input covers the target row. It stays focusable for keyboard,
+.typing-strip {
+  --token-width:39px;
+  --token-height:48px;
+  --row-gap:10px;
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,var(--token-width));
+  grid-auto-rows:var(--token-height);
+  gap:var(--row-gap) 8px;
+  align-content:start;
+  height:calc(3 * var(--token-height) + 2 * var(--row-gap) + 13px);
+  padding:3px 14px 10px;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  white-space:normal;
+}
+.typing-strip .typing-token { height:var(--token-height); }
+/* A native input covers the target window. It stays focusable for keyboard,
    assistive technology, composition, and mobile software keyboards. */
 #trainingInput { position:absolute; inset:0; display:block; width:100%; height:100%; min-height:0; margin:0; padding:0; resize:none; border:0; border-radius:12px; background:transparent; color:transparent; caret-color:transparent; font:inherit; opacity:0; overflow:hidden; }
 #trainingInput:focus { outline:0; }
@@ -110,7 +127,7 @@ h1 { font-size:clamp(23px,2.3vw,32px); letter-spacing:-1px; }
   .memory-card .btn { flex:0 0 100px; font-size:10px; padding:8px; }
   .practice-panel { padding:16px 10px; gap:20px; border-radius:13px; }
   .exercise-card { padding:9px 0; }
-  .typing-strip { padding-inline:9px; gap:6px; }
+  .typing-strip { --token-width:34px; --token-height:43px; padding-inline:9px; column-gap:6px; }
   .typing-token { flex-basis:34px; height:43px; font-size:23px; }
   .keyboard-stage { padding:14px 4px 23px; overflow:hidden; }
   .keyboard-preview { border-radius:7px; }

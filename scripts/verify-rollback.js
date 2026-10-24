@@ -10,7 +10,7 @@ import { createStorage, STORAGE_KEY } from '../assets/js/storage.js';
 import { createProfileManager } from '../assets/js/profiles.js';
 import { fakeLocal, result } from '../tests/helpers.js';
 
-const previous = process.argv[2] ?? '57069b80c9c48042cf52f4917e522386974cc4f2';
+const previous = process.argv[2] ?? '7b40fcbc978e9e02a50bac1ba60331953c3ac964';
 const resolved = execFileSync('git', ['rev-parse', '--verify', `${previous}^{commit}`], { encoding: 'utf8' }).trim();
 const temporary = await mkdtemp(join(tmpdir(), 'strojopis-rollback-'));
 try {
@@ -28,8 +28,9 @@ try {
   profiles.createProfile('Rollback fixture', { keyboardLocale: 'es-es', keyboardPlatform: 'windows', keyboardModel: 'dell-xps-2018-ansi' });
   profiles.recordResult(result(1));
   profiles.recordResult(result(2, { difficulty: 4, exerciseVersion: 2, sentenceCount: 4, textId: 'sentence-a', textIds: ['sentence-a', 'sentence-b', 'sentence-c', 'sentence-d'] }));
+  profiles.recordResult(result(4, { difficulty: 4, exerciseVersion: 3, sentenceCount: 12, textId: 'sentence-0', textIds: Array.from({length:12}, (_, i) => `sentence-${i}`) }));
   const saved = local.getItem(STORAGE_KEY);
-  assert.equal(JSON.parse(saved).schemaVersion, 3);
+  assert.equal(JSON.parse(saved).schemaVersion, 4);
 
   const rolledBack = oldStorageModule.createStorage(options);
   assert.deepEqual(rolledBack.status(), { persistent: false, blocked: true, reason: 'future' });
@@ -45,10 +46,10 @@ try {
   const restored = createStorage(options);
   assert.deepEqual(restored.status(), { persistent: true, blocked: false, reason: 'saved' });
   assert.deepEqual(restored.read(), current.read());
-  assert.equal(restored.read().profiles[0].history.length, 2);
+  assert.equal(restored.read().profiles[0].history.length, 3);
   assert.equal(local.getItem(STORAGE_KEY), saved);
-  console.log(`OK: rollback ${resolved} protects schema 3 byte-for-byte, permits temporary training, and current code restores settings, history and both result formats.`);
-  console.log('Limit: the old app cannot display schema 3 progress; temporary old-session results are not persisted. Do not clear protected data.');
+  console.log(`OK: rollback ${resolved} protects schema 4 byte-for-byte, permits temporary training, and current code restores settings, history and all result formats.`);
+  console.log('Limit: the old app cannot display schema 4 progress; temporary old-session results are not persisted. Do not clear protected data.');
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }

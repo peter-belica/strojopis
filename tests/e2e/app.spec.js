@@ -111,14 +111,15 @@ test('all difficulty levels work in free practice and changing the slider preser
       await page.locator('#resetButton').click();
       const after = await text(page);
       await expect(page.locator('#difficultyName')).toContainText(`${level} / 4`);
+      await expect(page.locator('#difficultyDescription')).toContainText(`${level * 3} ${level === 1 ? 'vety' : 'viet'} v cvičení`);
       const words = after.trim().split(/\s+/).length;
-      expect(words).toBeGreaterThanOrEqual(level * [3,6,10,12][level-1]);
-      expect(words).toBeLessThanOrEqual(level * [7,12,20,30][level-1]);
-      await expect(page.locator('#sentencePosition')).toHaveText(`Veta 1 zo ${level}`);
+      expect(words).toBeGreaterThanOrEqual(level * 3 * [3,6,10,12][level-1]);
+      expect(words).toBeLessThanOrEqual(level * 3 * [7,12,20,30][level-1]);
+      await expect(page.locator('#sentencePosition')).toHaveText(`Veta 1 zo ${level * 3}`);
       const catalog = await page.evaluate(async language=>(await fetch(`content/sentences/${language}.json`)).json(),language);
       const sentences = splitSentenceBatch(after,catalog.filter(s=>s.difficulty === level));
-      expect(sentences).toHaveLength(level);
-      expect(new Set(sentences.map(s=>s.id)).size).toBe(level);
+      expect(sentences).toHaveLength(level * 3);
+      expect(new Set(sentences.map(s=>s.id)).size).toBe(level * 3);
       expect(sentences.map(s=>s.text).join(' ')).toBe(after);
       await page.locator('#trainingInput').focus();
       await page.keyboard.insertText(after[0]);
@@ -361,14 +362,59 @@ test('keyboard language, system and hardware preserve active course text, positi
   await expect(page.locator('#languageLayout')).toHaveValue('cs-cz');
 });
 
-test('level four records a result only after all four complete sentences',async ({page})=>{
-  await ready(page); await page.locator('#rememberButton').click(); await createProfile(page,'Štyri vety');
+test('the text window shows three rows and keeps the current character visible across scrolling and resizing', async ({page}) => {
+  await ready(page);
+  await page.locator('#lessonSelect').selectOption('free-practice');
+  await difficulty(page, 4);
+  await page.locator('#resetButton').click();
+  const value = await text(page);
+  const geometry = () => page.locator('#typingStrip').evaluate(strip => {
+    const current = strip.querySelector('.is-current');
+    const first = strip.querySelector('.typing-token');
+    const style = getComputedStyle(strip);
+    const rect = strip.getBoundingClientRect();
+    const token = current.getBoundingClientRect();
+    const top = rect.top + parseFloat(style.paddingTop);
+    const bottom = rect.bottom - parseFloat(style.paddingBottom);
+    return {
+      rows: (strip.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom) + parseFloat(style.rowGap)) / (first.offsetHeight + parseFloat(style.rowGap)),
+      visibleRows: new Set([...strip.children].filter(child => {
+        const r = child.getBoundingClientRect();
+        return r.top >= top - 1 && r.bottom <= bottom + 1;
+      }).map(child => child.offsetTop)).size,
+      currentVisible: token.top >= top - 1 && token.bottom <= bottom + 1,
+      horizontalOverflow: strip.scrollWidth > strip.clientWidth,
+      scrollTop: strip.scrollTop,
+      pageOverflow: document.documentElement.scrollWidth > innerWidth
+    };
+  });
+  let position = 0;
+  for (const width of [1366, 390, 768, 1366]) {
+    await page.setViewportSize({width, height:1000});
+    await expect.poll(async () => (await geometry()).currentVisible).toBe(true);
+    expect(await geometry()).toMatchObject({rows:3, visibleRows:3, horizontalOverflow:false, pageOverflow:false});
+    const next = position + 120;
+    await page.locator('#trainingInput').focus();
+    await page.keyboard.insertText(value.slice(position, next));
+    position = next;
+    await expect.poll(async () => (await geometry()).currentVisible).toBe(true);
+    expect((await geometry()).scrollTop).toBeGreaterThan(0);
+    await page.keyboard.insertText('§');
+    await expect(page.locator('#exercisePosition')).toContainText(`${position + 1} /`);
+    expect((await geometry()).currentVisible).toBe(true);
+  }
+  await page.locator('#resetButton').click();
+  expect((await geometry()).scrollTop).toBe(0);
+});
+
+test('level four records a result only after all twelve complete sentences',async ({page})=>{
+  await ready(page); await page.locator('#rememberButton').click(); await createProfile(page,'Dvanásť viet');
   await page.locator('#lessonSelect').selectOption('free-practice');
   await difficulty(page,4); await page.locator('#resetButton').click();
   const value=await text(page);
   const catalog=await page.evaluate(async ()=>(await fetch('content/sentences/en-gb.json')).json());
   const sentences=splitSentenceBatch(value,catalog.filter(s=>s.difficulty === 4));
-  expect(sentences).toHaveLength(4);
+  expect(sentences).toHaveLength(12);
   await page.locator('#trainingInput').focus();
   // Native text insertion exercises input handling; it does not emulate OS layouts.
   for (let index=0;index<sentences.length;index++) {
@@ -376,16 +422,16 @@ test('level four records a result only after all four complete sentences',async 
     await page.keyboard.insertText(sentences[index].text);
     if (index < sentences.length - 1) {
       await expect(page.locator('#resultPanel')).toBeHidden();
-      await expect(page.locator('#sentencePosition')).toHaveText(`Veta ${index + 2} zo 4`);
+      await expect(page.locator('#sentencePosition')).toHaveText(`Veta ${index + 2} zo 12`);
       expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).profiles[0].history.length,key)).toBe(0);
     }
   }
   await expect(page.locator('#resultPanel')).toBeVisible();
   await expect(page.locator('.typing-token.is-done')).toHaveCount(Array.from(value).length);
-  await expect(page.locator('#sentencePosition')).toHaveText('Veta 4 zo 4');
-  await expect(page.locator('#resultMetrics')).toContainText('4 vety');
+  await expect(page.locator('#sentencePosition')).toHaveText('Veta 12 zo 12');
+  await expect(page.locator('#resultMetrics')).toContainText('12 viet');
   const history=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).profiles[0].history,key);
   expect(history).toHaveLength(1);
-  expect(history[0]).toMatchObject({difficulty:4,sentenceCount:4,exerciseVersion:2,length:Array.from(value).length,errors:0});
+  expect(history[0]).toMatchObject({difficulty:4,sentenceCount:12,exerciseVersion:3,length:Array.from(value).length,errors:0});
   expect(history[0].textIds).toEqual(sentences.map(s=>s.id));
 });
