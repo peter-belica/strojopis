@@ -26,7 +26,15 @@ h1 { font-size:clamp(23px,2.3vw,32px); letter-spacing:-1px; }
 .session-position { margin-bottom:14px; }
 .session-metrics { margin-bottom:10px; }
 .session-metrics b { color:var(--ink); margin-left:4px; font-size:14px; font-variant-numeric:tabular-nums; }
-.session-summary .progress-track { height:5px; border-radius:4px; overflow:hidden; margin-bottom:10px; }
+.character-counts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:0 0 14px; }
+.character-counts div { padding:10px; border-radius:8px; background:#f5f8f2; }
+.character-counts dt { color:var(--muted); font-size:10px; line-height:1.5; }
+.character-counts dd { margin:4px 0 0; font-size:22px; font-weight:750; font-variant-numeric:tabular-nums; }
+.character-counts div:last-child dd { color:var(--accent); }
+.session-progress-label { display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; margin-bottom:7px; font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.session-progress-label b { color:var(--ink); }
+.session-summary .progress-track { height:12px; border-radius:6px; overflow:hidden; margin-bottom:12px; }
+.character-count-help { color:var(--muted); font-size:10px; line-height:1.5; margin:0 0 10px; }
 .session-summary .feedback-line { font-size:11px; line-height:1.5; }
 .side-panel details>summary { cursor:pointer; font-size:12px; font-weight:650; line-height:1.5; }
 .side-panel details[open]>summary { margin-bottom:10px; }

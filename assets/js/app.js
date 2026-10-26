@@ -36,6 +36,10 @@ const dom = {
   statLanguage: /** @type {HTMLElement} */ (document.querySelector("#statLanguage")),
   statAccuracy: /** @type {HTMLElement} */ (document.querySelector("#statAccuracy")),
   statErrors: /** @type {HTMLElement} */ (document.querySelector("#statErrors")),
+  statTotal: /** @type {HTMLElement} */ (document.querySelector('#statTotal')),
+  statCorrect: /** @type {HTMLElement} */ (document.querySelector('#statCorrect')),
+  statRemaining: /** @type {HTMLElement} */ (document.querySelector('#statRemaining')),
+  progressPercent: /** @type {HTMLElement} */ (document.querySelector('#progressPercent')),
   resetButton: /** @type {HTMLButtonElement} */ (document.querySelector("#resetButton")),
   practicePanel: /** @type {HTMLElement} */ (document.querySelector(".practice-panel")),
   practiceTitle: /** @type {HTMLElement} */ (document.querySelector("#practiceTitle")),
@@ -308,6 +312,23 @@ function renderStats() {
   dom.statLanguage.textContent = layout ? layout.name : "-";
   dom.statAccuracy.textContent = `${state.typing.accuracy}%`;
   dom.statErrors.textContent = String(state.typing.errors);
+  const total = state.typing.exercise.length;
+  const completed = state.typing.completed;
+  const remaining = total - completed;
+  const progress = total ? completed / total * 100 : 0;
+  dom.statTotal.textContent = String(total);
+  dom.statCorrect.textContent = String(completed);
+  dom.statRemaining.textContent = characterCountLabel(remaining);
+  dom.progressPercent.textContent = `${Math.floor(progress)} %`;
+  dom.progressFill.style.width = `${progress}%`;
+  dom.exerciseProgress.setAttribute('aria-valuemax', String(total || 1));
+  dom.exerciseProgress.setAttribute('aria-valuenow', String(completed));
+  dom.exerciseProgress.setAttribute('aria-valuetext', `Správne ${completed} z ${total} znakov. Zostáva ${characterCountLabel(remaining)}.`);
+}
+
+/** @param {number} count */
+function characterCountLabel(count) {
+  return `${count} ${count === 1 ? 'znak' : count >= 2 && count <= 4 ? 'znaky' : 'znakov'}`;
 }
 
 function renderFeedback() {
@@ -356,9 +377,6 @@ function renderFingerGuidance() {
     }).join("") || '<span class="helper-text">Koniec cvičenia</span>';
   const total = state.typing.exercise.length;
   dom.exercisePosition.textContent = `${Math.min(state.typing.currentIndex + 1, total)} / ${total}`;
-  const progress = total ? Math.round(state.typing.currentIndex / total * 100) : 0;
-  dom.progressFill.style.width = `${progress}%`;
-  dom.exerciseProgress.setAttribute("aria-valuenow", String(progress));
   const count = state.typing.lesson.sentenceCount ?? 0;
   const currentSentence = (state.typing.lesson.sentenceEnds ?? []).filter(end => end <= state.typing.currentIndex).length + 1;
   dom.sentencePosition.textContent = count ? `Veta ${Math.min(currentSentence, count)} zo ${count}` : 'Cvičenie klávesov a slov';
@@ -381,9 +399,7 @@ function renderSettingsOptions() {
     .map((course) => `<option value="${escapeHtml(course.id)}">${escapeHtml(course.name)}</option>`)
     .join("");
 
-  dom.lessonSelect.innerHTML = state.lessons
-    .map((lesson) => `<option value="${escapeHtml(lesson.id)}">${escapeHtml(lesson.name)}</option>`)
-    .join("");
+  renderLessonOptions();
 
   setControlsFromProfile(state.activeProfile);
   if (!state.activeProfile) {
@@ -407,6 +423,10 @@ function render() {
 }
 
 function renderDifficulty() {
+  if (previewDifficulty !== state.difficulty && state.course && state.keyboardLayout) {
+    prepareLessonPreviews();
+    renderLessonOptions();
+  }
   const rule = DIFFICULTIES[state.difficulty - 1];
   dom.difficulty.value = String(state.difficulty);
   dom.difficulty.setAttribute('aria-valuetext', `${state.difficulty}. ${rule.name}`);
@@ -442,14 +462,41 @@ function rememberLesson() {
   if (!state.course) return;
   state.activeProfile = profiles.selectLesson(state.course.id, state.typing.lesson.id);
 }
-function startExercise(id = state.typing.lesson.id) {
+/** @type {Map<string, import('./types').Lesson>} */
+let lessonPreviews = new Map();
+let previewDifficulty = 0;
+
+/** Prepare the exact texts advertised in the lesson picker; choosing one reuses it. */
+function prepareLessonPreviews() {
   if (!state.course || !state.keyboardLayout) return;
+  const language = state.course.id;
+  const layout = state.keyboardLayout;
+  lessonPreviews = new Map(state.lessons.map(lesson => [lesson.id,
+    prepareExercise(lesson, state.sentences, language, state.difficulty, layout,
+      lesson.id === state.typing.lesson.id ? state.typing.lesson.textId : state.activeProfile?.courses[language]?.lessons[lesson.id]?.lastResult.textId)
+  ]));
+  previewDifficulty = state.difficulty;
+}
+
+function renderLessonOptions() {
+  dom.lessonSelect.innerHTML = state.lessons.map(lesson => {
+    const length = lesson.id === state.typing.lesson.id ? state.typing.exercise.length : lessonPreviews.get(lesson.id)?.targets.length ?? 0;
+    return `<option value="${escapeHtml(lesson.id)}">${escapeHtml(lesson.name)} · ${characterCountLabel(length)}</option>`;
+  }).join('');
+  dom.lessonSelect.value = state.typing.lesson.id;
+}
+
+function startExercise(id = state.typing.lesson.id, fresh = false) {
+  if (!state.course || !state.keyboardLayout) return;
+  if (previewDifficulty !== state.difficulty) prepareLessonPreviews();
   const base = state.lessons.find(l => l.id === id) ?? state.lessons[0];
-  const exercise = prepareExercise(base, state.sentences, state.course.id, state.difficulty, state.keyboardLayout, state.typing.lesson.textId ?? state.activeProfile?.courses[state.course.id]?.lessons[id]?.lastResult.textId);
+  const prepared = (!fresh && lessonPreviews.get(base.id)) || prepareExercise(base, state.sentences, state.course.id, state.difficulty, state.keyboardLayout, state.typing.lesson.textId ?? state.activeProfile?.courses[state.course.id]?.lessons[id]?.lastResult.textId);
+  const exercise = { ...prepared, targets: targetsFromText(prepared.text, state.keyboardLayout.charMap) };
+  lessonPreviews.set(base.id, exercise);
   state.typing = typing.setLessons([exercise], exercise.id);
   guidanceStep = 0;
   pressedCodes.clear();
-  dom.lessonSelect.value = exercise.id;
+  renderLessonOptions();
   rememberLesson();
 }
 let loadSequence = 0;
@@ -468,6 +515,7 @@ async function loadActiveCourse(courseId, preferredLessonId) {
   state.keyboardLayout = layout;
   state.sentences = sentences;
   state.lessons = [...prepareLessons(course, layout), { id: 'free-practice', name: 'Voľný tréning viet', phase: 'Vety bez obmedzenia klávesov', description: 'Pripravené vety podľa jazyka a náročnosti.', text: '', targets: [] }];
+  prepareLessonPreviews();
   loading = false;
   const last = preferredLessonId ?? state.activeProfile?.courses[resolved]?.lastLessonId;
   startExercise(last ?? state.lessons[0].id);
@@ -573,12 +621,13 @@ function bindEvents() {
     saveSettings(); render();
     if (event.detail > 0) focusTraining();
   });
-  const restart = event => { startExercise(); render(); if (event.detail > 0) focusTraining(); };
+  const restart = event => { startExercise(state.typing.lesson.id, true); render(); if (event.detail > 0) focusTraining(); };
   dom.resetButton.addEventListener('click', restart);
   dom.repeatButton.addEventListener('click', restart);
   dom.nextButton.addEventListener('click', event => {
     const index = state.lessons.findIndex(l => l.id === state.typing.lesson.id);
-    startExercise(state.lessons[Math.min(index + 1, state.lessons.length - 1)].id);
+    const nextId = state.lessons[Math.min(index + 1, state.lessons.length - 1)].id;
+    startExercise(nextId, nextId === state.typing.lesson.id);
     render(); if (event.detail > 0) focusTraining();
   });
   new ResizeObserver(updateHands).observe(dom.keyboardWorkbench);

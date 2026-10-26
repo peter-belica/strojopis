@@ -362,6 +362,72 @@ test('keyboard language, system and hardware preserve active course text, positi
   await expect(page.locator('#languageLayout')).toHaveValue('cs-cz');
 });
 
+test('every lesson advertises its exact length before selection in both courses', async ({page}) => {
+  await ready(page);
+  for (const language of ['en-gb', 'cs-cz']) {
+    await page.locator('#languageLayout').selectOption(language);
+    await expect(page.locator('.practice-panel')).toHaveAttribute('aria-busy', 'false');
+    const options = await page.locator('#lessonSelect option').evaluateAll(options => options.map(option => ({id:option.value, label:option.textContent})));
+    expect(options).toHaveLength(17);
+    for (const option of options) {
+      const advertised = Number(option.label.match(/· (\d+) znakov$/)?.[1]);
+      expect(advertised).toBeGreaterThan(0);
+      await page.locator('#lessonSelect').selectOption(option.id);
+      expect(Array.from(await text(page)).length).toBe(advertised);
+      await expect(page.locator('#statTotal')).toHaveText(String(advertised));
+      await expect(page.locator('#statCorrect')).toHaveText('0');
+      await expect(page.locator('#statRemaining')).toHaveText(`${advertised} znakov`);
+      await expect(page.locator('#exerciseProgress')).toHaveAttribute('aria-valuemax', String(advertised));
+      await expect(page.locator('#exerciseProgress')).toHaveAttribute('aria-valuenow', '0');
+    }
+  }
+  // Pending difficulty updates future previews while the active text keeps its exact count.
+  const running = await text(page);
+  await difficulty(page, 4);
+  expect(await text(page)).toBe(running);
+  await expect(page.locator('#lessonSelect option:checked')).toContainText(`${Array.from(running).length} znakov`);
+  const advertised = await page.locator('#lessonSelect option[value="home-left"]').textContent();
+  await page.locator('#lessonSelect').selectOption('home-left');
+  expect(Array.from(await text(page)).length).toBe(Number(advertised.match(/· (\d+) znakov$/)[1]));
+});
+
+test('remaining character progress advances only on correct input and resets for each lesson', async ({page}, testInfo) => {
+  await ready(page);
+  const original = await text(page);
+  const total = Array.from(original).length;
+  await page.locator('#trainingInput').focus();
+  await page.keyboard.insertText('§');
+  await expect(page.locator('#statErrors')).toHaveText('1');
+  await expect(page.locator('#statCorrect')).toHaveText('0');
+  await expect(page.locator('#statRemaining')).toHaveText(`${total} znakov`);
+  await expect(page.locator('#exerciseProgress')).toHaveAttribute('aria-valuenow', '0');
+  await page.keyboard.insertText(original.slice(0, 5));
+  await expect(page.locator('#statCorrect')).toHaveText('5');
+  await expect(page.locator('#statRemaining')).toHaveText(`${total - 5} znakov`);
+  await expect(page.locator('#exerciseProgress')).toHaveAttribute('aria-valuenow', '5');
+  await expect(page.locator('#exerciseProgress')).toHaveAttribute('aria-valuetext', `Správne 5 z ${total} znakov. Zostáva ${total - 5} znakov.`);
+  await expect(page.locator('#progressPercent')).toHaveText(`${Math.floor(5 / total * 100)} %`);
+  await page.setViewportSize({width:1366, height:1000});
+  await page.screenshot({path:testInfo.outputPath('lesson-progress.png')});
+  await page.keyboard.insertText(original.slice(5, -1));
+  await expect(page.locator('#statRemaining')).toHaveText('1 znak');
+  await expect(page.locator('#progressPercent')).not.toHaveText('100 %');
+  await page.keyboard.insertText(original.slice(-1));
+  await expect(page.locator('#resultPanel')).toBeVisible();
+  await expect(page.locator('#statCorrect')).toHaveText(String(total));
+  await expect(page.locator('#statRemaining')).toHaveText('0 znakov');
+  await expect(page.locator('#exerciseProgress')).toHaveAttribute('aria-valuenow', String(total));
+  await expect(page.locator('#progressPercent')).toHaveText('100 %');
+  await page.locator('#resetButton').click();
+  await expect(page.locator('#statCorrect')).toHaveText('0');
+  await expect(page.locator('#statErrors')).toHaveText('0');
+  await expect(page.locator('#progressPercent')).toHaveText('0 %');
+  await page.locator('#lessonSelect').selectOption('home-right');
+  const nextTotal = Array.from(await text(page)).length;
+  await expect(page.locator('#statTotal')).toHaveText(String(nextTotal));
+  await expect(page.locator('#statRemaining')).toHaveText(`${nextTotal} znakov`);
+});
+
 test('the text window shows three rows and keeps the current character visible across scrolling and resizing', async ({page}) => {
   await ready(page);
   await page.locator('#lessonSelect').selectOption('free-practice');
@@ -434,4 +500,9 @@ test('level four records a result only after all twelve complete sentences',asyn
   expect(history).toHaveLength(1);
   expect(history[0]).toMatchObject({difficulty:4,sentenceCount:12,exerciseVersion:3,length:Array.from(value).length,errors:0});
   expect(history[0].textIds).toEqual(sentences.map(s=>s.id));
+  await page.locator('#nextButton').click();
+  const nextText = await text(page);
+  expect(nextText).not.toBe(value);
+  await expect(page.locator('#statCorrect')).toHaveText('0');
+  await expect(page.locator('#statRemaining')).toHaveText(`${Array.from(nextText).length} znakov`);
 });

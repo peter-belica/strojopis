@@ -23,8 +23,11 @@
           <section class="panel-block session-summary" aria-label="Priebeh cvičenia">
             <div class="practice-header"><div><p class="section-kicker">TVOJ TRÉNING</p><h2 id="practiceTitle">Základná poloha</h2></div><button class="btn btn-outline" id="resetButton" type="button"><span aria-hidden="true">↺</span> Odznova</button></div>
             <div class="session-position"><span>Znak <b id="exercisePosition">1 / 1</b></span><span id="sentencePosition" role="status">Veta 1 / 1</span></div>
+            <dl class="character-counts" aria-label="Počty znakov v lekcii" aria-describedby="characterCountHelp"><div><dt>Celkovo znakov</dt><dd id="statTotal">0</dd></div><div><dt>Správne napísané</dt><dd id="statCorrect">0</dd></div></dl>
+            <div class="session-progress-label"><span>Zostáva <b id="statRemaining">0 znakov</b></span><span id="progressPercent">0 %</span></div>
+            <div class="progress-track" role="progressbar" aria-label="Postup v cvičení" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" id="exerciseProgress"><span id="progressFill"></span></div>
             <div class="session-metrics"><span>Presnosť <b id="statAccuracy">100%</b></span><span>Chyby <b id="statErrors">0</b></span></div>
-            <div class="progress-track" role="progressbar" aria-label="Postup v cvičení" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="exerciseProgress"><span id="progressFill"></span></div>
+            <p class="character-count-help" id="characterCountHelp">Počítajú sa aj medzery a interpunkcia.</p>
             <p class="feedback-line" id="feedbackLine" role="status">Stlač zvýraznený znak.</p>
           </section>
           <section id="resultPanel" class="result-panel" aria-labelledby="resultTitle" hidden><h3 id="resultTitle" tabindex="-1">✓ Cvičenie dokončené</h3><p id="resultMetrics"></p><p id="resultProgress"></p><div class="result-actions"><button id="repeatButton" class="btn" type="button">Opakovať lekciu</button><button id="nextButton" class="btn btn-primary" type="button">Pokračovať</button></div></section>
