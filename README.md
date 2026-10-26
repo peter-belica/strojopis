@@ -37,6 +37,8 @@ npm run test:report
 
 E2E (end-to-end, celý používateľský postup) spúšťa Chromium, Firefox a WebKit nad **produkčným `dist/`**, nie vývojovým serverom. Pred E2E preto vždy zostav aktuálny kód. Testovací port 4174 musí byť voľný. Výsledky sú v `playwright-report/`, snímky responzivity v `test-results/`.
 
+GitHub používa Ubuntu 24.04 a systémové balíčky pre prehliadače sťahuje z hlavného Ubuntu archívu cez HTTPS. Toto nastavenie rieši [prekročenie limitu pri pomalom sťahovaní z Azure mirroru 26. 10. 2026](https://github.com/peter-belica/strojopis/actions/runs/40316543479); kontroly typov, obsahu, licencií a všetky testy zostávajú súčasťou publikovania.
+
 Produkčnú ukážku spustíš:
 
 ```bash
