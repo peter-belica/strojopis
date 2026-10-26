@@ -4,6 +4,7 @@ import { KEYBOARD_MODELS, getKeyboardModel } from "./keyboard-models.js";
 import { DEFAULT_LAYOUT_ID, loadKeyboardLayout } from "./keyboard-layouts.js";
 import { loadCourse, loadCourseCatalog, prepareLessons } from "./lesson-loader.js";
 import { createTypingEngine } from "./typing-engine.js";
+import { getSpeedFeedback, SPEEDOMETER_MAX } from './speed-feedback.js';
 import { getFingerForCode, getFingerName, getFingerClass, getModifierCodes, renderHandIllustrations, updateHandGuide } from "./hand-guide.js";
 
 import { prepareExercise, targetsFromText } from './lessons.js';
@@ -40,6 +41,12 @@ const dom = {
   statCorrect: /** @type {HTMLElement} */ (document.querySelector('#statCorrect')),
   statRemaining: /** @type {HTMLElement} */ (document.querySelector('#statRemaining')),
   progressPercent: /** @type {HTMLElement} */ (document.querySelector('#progressPercent')),
+  speedPanel: /** @type {HTMLElement} */ (document.querySelector('#speedPanel')),
+  speedMeter: /** @type {HTMLElement} */ (document.querySelector('#speedMeter')),
+  speedValue: /** @type {HTMLElement} */ (document.querySelector('#speedValue')),
+  speedAverage: /** @type {HTMLElement} */ (document.querySelector('#speedAverage')),
+  speedStatus: /** @type {HTMLElement} */ (document.querySelector('#speedStatus')),
+  speedCaption: /** @type {HTMLElement} */ (document.querySelector('#speedCaption')),
   resetButton: /** @type {HTMLButtonElement} */ (document.querySelector("#resetButton")),
   practicePanel: /** @type {HTMLElement} */ (document.querySelector(".practice-panel")),
   practiceTitle: /** @type {HTMLElement} */ (document.querySelector("#practiceTitle")),
@@ -331,6 +338,23 @@ function characterCountLabel(count) {
   return `${count} ${count === 1 ? 'znak' : count >= 2 && count <= 4 ? 'znaky' : 'znakov'}`;
 }
 
+function renderSpeed(snapshot = state.typing) {
+  const feedback = getSpeedFeedback(snapshot);
+  dom.speedPanel.dataset.pace = feedback.pace;
+  dom.speedPanel.dataset.moving = String(feedback.moving);
+  dom.speedPanel.style.setProperty('--speed-fill', String(feedback.fill));
+  dom.speedPanel.style.setProperty('--needle-angle', `${feedback.fill * 1.8}deg`);
+  dom.speedPanel.style.setProperty('--step-duration', `${feedback.stepSeconds}s`);
+  dom.speedPanel.style.setProperty('--stride', `${feedback.stride}deg`);
+  dom.speedPanel.style.setProperty('--runner-lean', `${feedback.lean}deg`);
+  dom.speedValue.textContent = String(feedback.value);
+  dom.speedAverage.textContent = `${snapshot.averageCpm} znakov/min`;
+  if (dom.speedStatus.textContent !== feedback.label) dom.speedStatus.textContent = feedback.label;
+  dom.speedCaption.textContent = snapshot.isComplete ? 'Priemer dokončenej lekcie' : 'Aktuálne tempo';
+  dom.speedMeter.setAttribute('aria-valuenow', String(Math.min(feedback.value, SPEEDOMETER_MAX)));
+  dom.speedMeter.setAttribute('aria-valuetext', `${snapshot.isComplete ? 'Priemer' : 'Aktuálne'} ${feedback.value} správnych znakov za minútu.`);
+}
+
 function renderFeedback() {
   if (state.typing.isComplete) { dom.feedbackLine.textContent = 'Hotovo! Výsledok nájdeš v prehľade tréningu.'; dom.feedbackLine.className = 'feedback-line'; return; }
   if (!state.typing.lastError) {
@@ -413,6 +437,7 @@ function render() {
   renderStorageStatus();
   renderProfileSelect();
   renderStats();
+  renderSpeed();
   renderLessonMeta();
   renderFeedback();
   renderTypingStrip();
@@ -451,7 +476,7 @@ function renderResult() {
   const count = summaries.reduce((n, item) => n + item.completedAttempts, 0);
   dom.profileProgress.textContent = state.activeProfile ? `${summaries.length} dokončených lekcií · ${count} dokončených pokusov` : 'Profil je voliteľný. Vytvor si ho pre vlastné nastavenia a progres.';
   if (!s.isComplete || !state.course) return;
-  dom.resultMetrics.textContent = `${s.lesson.sentenceCount ? `${s.lesson.sentenceCount} ${s.lesson.sentenceCount < 5 ? 'vety' : 'viet'} · ` : ''}${s.accuracy} % presnosť · ${s.attempts} pokusov o znak · ${s.errors} chýb · ${(s.durationMs / 1000).toFixed(1)} s aktívneho času`;
+  dom.resultMetrics.textContent = `${s.lesson.sentenceCount ? `${s.lesson.sentenceCount} ${s.lesson.sentenceCount < 5 ? 'vety' : 'viet'} · ` : ''}${s.accuracy} % presnosť · ${s.averageCpm} správnych znakov/min · ${s.attempts} pokusov o znak · ${s.errors} chýb · ${(s.durationMs / 1000).toFixed(1)} s aktívneho času`;
   const summary = state.activeProfile?.courses[state.course.id]?.lessons[s.lesson.id];
   dom.resultProgress.textContent = summary
     ? `Táto lekcia: ${summary.completedAttempts} dokončených pokusov. Najlepšia presnosť: ${summary.bestResult.accuracy} %. ${storage.status().persistent ? 'Výsledok je uložený v tomto prehliadači.' : 'Výsledok zostáva v pamäti otvorenej stránky.'}`
@@ -662,7 +687,7 @@ function bindEvents() {
     event.preventDefault(); composedInput = ''; acceptText(event.key);
   });
   window.addEventListener('keyup', event => { pressedCodes.delete(event.code); renderKeyboard(); });
-  const pauseTraining = () => { typing.pause(); pressedCodes.clear(); guidanceStep = 0; composing = false; composedInput = ''; dom.trainingInput.value = ''; renderKeyboard(); };
+  const pauseTraining = () => { typing.pause(); pressedCodes.clear(); guidanceStep = 0; composing = false; composedInput = ''; dom.trainingInput.value = ''; renderKeyboard(); renderSpeed(typing.snapshot()); };
   document.addEventListener('focusin', event => { if (event.target !== dom.trainingInput) pauseTraining(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) pauseTraining(); });
   window.addEventListener('blur', pauseTraining);
@@ -673,6 +698,8 @@ async function boot() {
   renderHandIllustrations(dom.handGuide);
   await restoreProfile();
   bindEvents();
+  // Refresh the needle even when no key is pressed, so a stopped typist stops the runner.
+  window.setInterval(() => { if (!document.hidden && !loading) renderSpeed(typing.snapshot()); }, 250);
   render();
 }
 boot().catch(showLoadError);

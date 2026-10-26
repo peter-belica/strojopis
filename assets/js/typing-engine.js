@@ -1,5 +1,8 @@
 /** @typedef {import('./types').Lesson} Lesson */
 const EMPTY = { id: 'empty', name: 'Načítavam', phase: '', description: '', text: '', targets: [] };
+const SPEED_WINDOW_MS = 5000, SPEED_IDLE_MS = 2000;
+/** Correct characters per active minute; the first second is a measurement warm-up. */
+export const charactersPerMinute = (characters, durationMs) => durationMs >= 1000 ? Math.round(characters * 60000 / durationMs) : 0;
 /** Pure training state; no DOM or persistence.
  * @param {Lesson[]} initialLessons
  * @param {() => number} clock
@@ -14,24 +17,40 @@ export function createTypingEngine(initialLessons = [], clock = () => performanc
   /** @type {string[]} */ let results = [];
   let runId = crypto.randomUUID();
   let claimed = false;
+  /** @type {number[]} */ let correctTimes = [];
+  /** @type {number|null} */ let paceStartedAt = null;
+  /** @type {number|null} */ let lastCorrectAt = null;
   const elapsed = () => Math.round(finishedMs ?? (activeMs + (startedAt === null ? 0 : Math.max(0, clock() - startedAt))));
   function snapshot() {
-    return { lesson, exercise: lesson.targets, currentIndex: index, currentTarget: lesson.targets[index] ?? { char: '', code: '' }, attempts, errors, completed: index, isComplete: lesson.targets.length > 0 && index === lesson.targets.length, accuracy: attempts ? Math.round((attempts - errors) / attempts * 100) : 100, lastError, results: [...results], durationMs: elapsed(), runId };
+    const now = clock(), durationMs = elapsed();
+    const isComplete = lesson.targets.length > 0 && index === lesson.targets.length;
+    const speedDuration = paceStartedAt === null ? 0 : Math.min(SPEED_WINDOW_MS, now - paceStartedAt);
+    const moving = startedAt !== null && lastCorrectAt !== null && now - lastCorrectAt < SPEED_IDLE_MS && !isComplete;
+    const currentCpm = moving ? charactersPerMinute(correctTimes.filter(time => time > now - SPEED_WINDOW_MS).length, speedDuration) : 0;
+    return { lesson, exercise: lesson.targets, currentIndex: index, currentTarget: lesson.targets[index] ?? { char: '', code: '' }, attempts, errors, completed: index, isComplete, accuracy: attempts ? Math.round((attempts - errors) / attempts * 100) : 100, lastError, results: [...results], durationMs, runId, currentCpm, averageCpm: charactersPerMinute(index, durationMs), isPaused: attempts > 0 && startedAt === null && !isComplete };
   }
   function reset() {
     index = attempts = errors = activeMs = 0;
     startedAt = finishedMs = lastError = null;
     results = lesson.targets.map(() => 'pending');
     runId = crypto.randomUUID(); claimed = false;
+    correctTimes = []; paceStartedAt = lastCorrectAt = null;
     return snapshot();
   }
   /** @param {string} text */
   function handleText(text) {
     for (const char of Array.from(text.normalize('NFC'))) {
       if (!lesson.targets.length || snapshot().isComplete) break;
-      startedAt ??= clock();
+      const now = clock();
+      startedAt ??= now;
+      paceStartedAt ??= now;
       attempts++;
       if (char === lesson.targets[index].char) {
+        if (lastCorrectAt === null || now - lastCorrectAt >= SPEED_IDLE_MS) {
+          correctTimes = []; paceStartedAt = now;
+        }
+        correctTimes = correctTimes.filter(time => time > now - SPEED_WINDOW_MS);
+        correctTimes.push(now); lastCorrectAt = now;
         results[index++] = 'done'; lastError = null;
         if (index === lesson.targets.length) { finishedMs = elapsed(); startedAt = null; }
       } else {
@@ -46,7 +65,10 @@ export function createTypingEngine(initialLessons = [], clock = () => performanc
     return handleText(event.key);
   }
   // Hidden tabs and unfocused windows do not add to active completion time.
-  function pause() { if (startedAt !== null) { activeMs += Math.max(0, clock() - startedAt); startedAt = null; } }
+  function pause() {
+    if (startedAt !== null) { activeMs += Math.max(0, clock() - startedAt); startedAt = null; }
+    correctTimes = []; paceStartedAt = lastCorrectAt = null;
+  }
   /** @param {import('./types').Language} language @returns {import('./types').TrainingResult|null} */
   function claimResult(language) {
     const s = snapshot();

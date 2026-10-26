@@ -68,6 +68,6 @@ Kĺbový model rúk používa Fullik 1.3.3 s bezplatnou licenciou MIT povoľujú
 
 Zapamätanie používa `localStorage` iba v tomto prehliadači. Ukladá prezývku, nastavenia, poslednú lekciu v každom kurze, súhrny výsledkov a najviac 100 posledných výsledkov na profil. Profily nemajú prihlasovanie ani synchronizáciu. Vlastné údaje môžeš vymazať v rozhraní; mazanie vyžaduje potvrdenie. Pri chybe úložiska tréning funguje v pamäti a oznam vysvetlí, že nové zmeny sa nezachovajú.
 
-Presnosť = správne znaky / všetky pokusy × 100, zaokrúhlená na celé percentá. Čas začína prvým pokusom; prestávky pri strate zamerania alebo skrytí stránky sa nepočítajú. Rýchlosť v slovách za minútu sa nezobrazuje.
+Presnosť = správne znaky / všetky pokusy × 100, zaokrúhlená na celé percentá. Čas začína prvým pokusom; prestávky pri strate zamerania alebo skrytí stránky sa nepočítajú. Rýchlomer ukazuje správne znaky za minútu z posledných piatich sekúnd; prvá sekunda slúži na rozbehnutie merania. Po dvoch sekundách bez správneho znaku sa panáčik zastaví. Jeho chôdza, beh a šprint reagujú na aktuálne tempo. Priemer za celú lekciu zostáva zobrazený aj vo výsledku a vypočíta sa zo správnych znakov a aktívneho času. Pri systémovom obmedzení pohybu sa animácia vypne, číselná rýchlosť zostáva dostupná.
 
 Podrobnosti: [architektúra](docs/ARCHITECTURE.md), [plán](docs/IMPLEMENTATION_PLAN.md), [história práce](docs/PROGRESS.md), [výsledky overenia](docs/VALIDATION.md), [úplné zadanie](docs/AUTONOMOUS_DEVELOPMENT.md).

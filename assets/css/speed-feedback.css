@@ -1,0 +1,65 @@
+.speed-panel {
+  --speed-fill:0;
+  --needle-angle:0deg;
+  --step-duration:.55s;
+  --stride:20deg;
+  --runner-lean:0deg;
+  background:linear-gradient(145deg,#fff 35%,#f7f9f0);
+}
+.speed-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.speed-heading h2 { margin:0; font-size:14px; }
+.speed-live-dot { width:7px; height:7px; border-radius:50%; background:#bdc8b5; }
+.speed-panel[data-moving="true"] .speed-live-dot { background:var(--accent); box-shadow:0 0 0 4px #e8f2e5; }
+.speed-visuals { display:grid; grid-template-columns:minmax(0,1fr) 105px; align-items:center; gap:4px; margin-top:10px; }
+.speed-reading { min-width:0; text-align:center; }
+.speed-dial { display:block; width:100%; max-width:155px; margin:auto; overflow:visible; }
+.dial-track,.dial-fill { fill:none; stroke-width:10; stroke-linecap:round; }
+.dial-track { stroke:#e7eddf; }
+.dial-fill { stroke:#3c9176; stroke-dasharray:var(--speed-fill) 100; transition:stroke-dasharray .3s; }
+.dial-ticks { fill:none; stroke:#9caa96; stroke-width:1.5; stroke-linecap:round; }
+.speed-dial text { fill:#7a8580; font:9px ui-monospace,monospace; }
+.dial-needle { transform-origin:80px 84px; transform:rotate(var(--needle-angle)); transition:transform .3s ease-out; fill:#355b4e; }
+.dial-needle circle { fill:#355b4e; stroke:#fff; stroke-width:2; }
+.speed-number { display:flex; flex-direction:column; align-items:center; gap:1px; margin-top:-8px; }
+#speedValue { font-size:29px; line-height:1.1; font-weight:800; letter-spacing:-1px; color:var(--accent); font-variant-numeric:tabular-nums; }
+.speed-unit,.speed-caption { font-size:9px; color:var(--muted); }
+.speed-caption { margin:5px 0 0; line-height:1.5; }
+.runner-scene { position:relative; width:105px; height:157px; isolation:isolate; }
+.runner-hill { position:absolute; z-index:-1; left:2px; top:30px; width:100px; height:110px; border-radius:55% 45% 40% 45%; background:#edf2df; transform:rotate(-8deg); }
+.runner-avatar { display:block; width:105px; height:145px; position:relative; z-index:1; }
+.runner-shadow { fill:#b2c4a4; opacity:.35; }
+.runner-ground { position:absolute; left:6px; right:1px; top:135px; height:2px; background:#c9d4bd; border-radius:2px; }
+.runner-spark { position:absolute; color:#d2b565; font-size:12px; }
+.runner-spark-one { left:9px; top:22px; }
+.runner-spark-two { right:0; top:61px; font-size:8px; color:#8cb39b; }
+.runner-body { transform-origin:60px 93px; }
+.runner-arm,.runner-leg { transform-origin:0 0; }
+.runner-shin { transform-origin:0 17px; }
+.runner-arm-back { transform:rotate(10deg); }
+.runner-arm-front { transform:rotate(-8deg); }
+.runner-forearm { transform-origin:0 0; }
+.runner-trail { display:none; position:absolute; left:-3px; top:112px; width:20px; height:2px; border-radius:2px; background:#b9c8ad; box-shadow:-5px 6px 0 #d9e1cc; }
+.speed-panel[data-moving="true"] .runner-body { transform:rotate(var(--runner-lean)); }
+.speed-panel[data-moving="true"] .runner-bounce { animation:runner-bounce var(--step-duration) ease-in-out infinite; }
+.speed-panel[data-moving="true"] .runner-arm,.speed-panel[data-moving="true"] .runner-leg { animation:runner-stride var(--step-duration) ease-in-out infinite alternate; }
+.speed-panel[data-moving="true"] .runner-leg-back,.speed-panel[data-moving="true"] .runner-arm-front { animation-delay:calc(-1 * var(--step-duration)); }
+.speed-panel[data-pace="run"] .runner-forearm,.speed-panel[data-pace="sprint"] .runner-forearm { transform:translate(0,17px) rotate(-65deg); }
+.speed-panel[data-pace="run"] .runner-shin,.speed-panel[data-pace="sprint"] .runner-shin { animation:runner-knee var(--step-duration) ease-in-out infinite alternate; }
+.speed-panel[data-moving="true"] .runner-leg-back .runner-shin { animation-delay:calc(-1 * var(--step-duration)); }
+.speed-panel[data-pace="run"] .runner-trail,.speed-panel[data-pace="sprint"] .runner-trail { display:block; animation:runner-wind var(--step-duration) linear infinite; }
+.speed-panel[data-pace="sprint"] .runner-hill { background:#e7efce; }
+.speed-panel[data-pace="complete"] .runner-arm-back { transform:rotate(145deg); }
+.speed-panel[data-pace="complete"] .runner-arm-front { transform:rotate(-145deg); }
+.speed-panel[data-pace="complete"] .runner-spark { color:#c28b35; font-size:16px; }
+.speed-status { margin:6px 0 10px; color:var(--accent); font-size:11px; font-weight:700; text-align:center; }
+.speed-average { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px; margin:0; border-top:1px solid #e5eadf; padding-top:10px; font-size:10px; color:var(--muted); }
+.speed-average b { color:var(--ink); font-variant-numeric:tabular-nums; }
+.speed-help { font-size:9px; line-height:1.6; color:var(--muted); margin:8px 0 0; }
+@keyframes runner-stride { from { transform:rotate(calc(-1 * var(--stride))); } to { transform:rotate(var(--stride)); } }
+@keyframes runner-bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-3px); } }
+@keyframes runner-wind { from { transform:translateX(5px); opacity:.7; } to { transform:translateX(-7px); opacity:0; } }
+@keyframes runner-knee { from { transform:rotate(0deg); } to { transform:rotate(-55deg); } }
+@media(min-width:481px) and (max-width:800px) { .speed-panel { grid-column:1; } }
+@media(prefers-reduced-motion:reduce) {
+  .speed-panel * { animation:none!important; transition:none!important; }
+}
